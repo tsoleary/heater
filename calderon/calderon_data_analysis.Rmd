@@ -1,0 +1,34 @@
+---
+title: "Calderon et al 2022 data"
+subtitle: "Playing with Seurat data"
+author: "TS O'Leary"
+date: 'September 23, 2022'
+output:
+  rmarkdown::html_document:
+    theme: sandstone
+    toc: true
+    toc_float: true
+---
+
+
+
+```{r setup, include = FALSE}
+# don't show echos, warnings, or messages
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE,
+                      comment = "")
+
+# Load packages
+require(tidyverse)
+require(Seurat)
+
+# Load data
+dat <- readRDS("calderon/data/main.Rds")
+```
+
+
+```{r}
+str(dat)
+```
+
