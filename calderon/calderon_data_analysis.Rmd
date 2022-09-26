@@ -1,5 +1,5 @@
 ---
-title: "Calderon et al 2022 data"
+title: "Embryogenesis continuum -- Calderon et al 2022 "
 subtitle: "Playing with Seurat data"
 author: "TS O'Leary"
 date: 'September 23, 2022'
@@ -13,22 +13,146 @@ output:
 
 
 ```{r setup, include = FALSE}
-# don't show echos, warnings, or messages
-knitr::opts_chunk$set(echo = FALSE, 
-                      warning = FALSE, 
+# Don't show echos, warnings, or messages
+knitr::opts_chunk$set(warning = FALSE, 
                       message = FALSE,
                       comment = "")
+```
 
+# scRNA data
+
+## Load packages and data
+
+```{r}
 # Load packages
 require(tidyverse)
 require(Seurat)
 
 # Load data
-dat <- readRDS("calderon/data/main.Rds")
+dat <- readRDS(here::here("calderon/data/main.Rds"))
 ```
 
+## Information on data structure of Seurat object
 
 ```{r}
+class(dat)
+
 str(dat)
+
+head(dat)
+
+# Print dimensions
+# Rows = genes; columns = cells
+dim(dat)
 ```
+
+## Metadata
+```{r}
+# Metadata of each cell
+glimpse(dat@meta.data)
+
+# Number of cells per experiment
+dat@meta.data %>% 
+  count(orig.ident)
+
+# Number of cells per time window
+dat@meta.data %>% 
+  count(time)
+
+# Number of cells in each time window
+dat@meta.data %>%
+  count(seurat_clusters)
+```
+
+## Visualize clusters
+
+```{r}
+# UMAP with clusters labeled with number
+DimPlot(dat, 
+        label = TRUE)
+```
+
+## Subset data 5 - 6 hr embryos
+
+```{r}
+# Subset the data to between 5 and 6 hours according to the NNv1 model
+dat_5 <- subset(dat, NNv1_age > 5 & NNv1_age < 6)
+
+# Total number of cells included in this time point
+length(Cells(dat_5))
+```
+
+
+### Make new UMAP
+
+Need to re-scale and re-cluster etc. when subsetted to create a new UMAP. See the functions below.
+
+```{r}
+# Remove the old features in the dat object from the dat_5
+# Slim down Seurat object so it doesn't carry over the dat from all data
+dat_5 <- DietSeurat(dat_5)
+
+# Scales and centers the data of just the subset dat_5
+dat_5 <- ScaleData(FindVariableFeatures(NormalizeData(dat_5), 
+                                        selection.method = 'vst'))
+
+# Returns PCA -- uses pc.genes 2000 variable features -- need to look into 
+#   the pc.genes and VariableFeatures more
+# Output in dat_5@reductions$pca
+dat_5 <- RunPCA(dat_5, 
+                pc.genes = VariableFeatures(dat_5))
+
+# Returns UMAP
+# Output in dat_5@reductions$umap
+dat_5 <- RunUMAP(dat_5, 
+                 dims = 1:50, 
+                 n.neighbors = 10, 
+                 n.components = 2)
+
+# Nearest-neighbor graph construction
+# Output in dat_5@graphs$RNA_nn; dat_5@graphs$RNA_snn
+dat_5 <- FindNeighbors(dat_5, 
+                       reduction = "umap", 
+                       dims = 1:2)
+
+# Identify Clusters of cells -- need to calculate the K-nearest neighbors first
+# Output in seurat_clusters metadata
+dat_5 <- FindClusters(dat_5, 
+                      resolution = 0.08)
+```
+
+### Plot new UMAP
+
+```{r}
+DimPlot(dat_5) + 
+  guides(color = "none")
+```
+
+## Find all marker genes
+
+```{r}
+# Find the 
+dat_5_markers <- FindAllMarkers(dat_5,
+                                only.pos = TRUE, 
+                                min.pct = 0.25, 
+                                logfc.threshold = 0.25)
+
+# Save just the top 10 markers
+top_10_markers <- dat_5_markers %>%
+    group_by(cluster) %>%
+    slice_max(n = 10, 
+              order_by = avg_log2FC)
+```
+
+# Add more stuff
+
+Other things to try:
+
+- Marker gene annotation -- Automated & Manual Supplementary Methods & Table
+- Differential expression between two different time windows
+- See the number of genes that meet the 0.02 count per per cell for differential expression per Joe Boyd
+- ATAC-Seq data
+- 
+
+
 
