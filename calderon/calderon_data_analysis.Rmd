@@ -1,5 +1,5 @@
 ---
-title: "Embryogenesis continuum -- Calderon et al 2022 "
+title: "Embryogenesis continuum -- Calderon et al. 2022"
 subtitle: "Playing with Seurat data"
 author: "TS O'Leary"
 date: 'September 23, 2022'
@@ -19,7 +19,9 @@ knitr::opts_chunk$set(warning = FALSE,
                       comment = "")
 ```
 
-# scRNA data
+
+
+# **scRNA data**
 
 ## Load packages and data
 
@@ -27,18 +29,22 @@ knitr::opts_chunk$set(warning = FALSE,
 # Load packages
 require(tidyverse)
 require(Seurat)
+require(SingleR)
 
 # Load data
 dat <- readRDS(here::here("calderon/data/main.Rds"))
 ```
 
-## Information on data structure of Seurat object
+## Data structure of Seurat object
 
 ```{r}
+# Class
 class(dat)
 
+# Structure of data
 str(dat)
 
+# Peak at the data
 head(dat)
 
 # Print dimensions
@@ -46,7 +52,7 @@ head(dat)
 dim(dat)
 ```
 
-## Metadata
+## Metadata per cell
 ```{r}
 # Metadata of each cell
 glimpse(dat@meta.data)
@@ -144,12 +150,225 @@ top_10_markers <- dat_5_markers %>%
               order_by = avg_log2FC)
 ```
 
+## Annotation of cell types and tissues
+
+> For cluster annotation, we used the Berkeley Drosophila Genome Project (BDGP) database,
+which includes gene expression patterns of approximately 8600 genes in drosophila staged
+embryos as detected by in situ hybridization (20, 21, 58). The BDGP database gives a stagespecific expression pattern (“term”) for each tested gene during embryogenesis. We used Fisher’s
+test to look for enrichment of BDGP gene expression terms in each cluster’s marker genes. Top
+ten terms per cluster were examined. To pick a specific term out of the top ten, we further examined
+the BDGP terms of the top 20 marker genes for each cluster.
+
+However, there do seem to be resources out there to automate the annotation process. For example, [`SingleR`](http://bioconductor.org/books/release/SingleRBook/).
+
+### Annotations from Calderon RNA-Seq data
+
+```{r}
+# This meta data has the annotations for each cell
+rna_meta <- readRDS(here::here("calderon/data/rna_meta.rds"))
+colnames(rna_meta)
+
+# Added information in the rna_meta data
+setdiff(colnames(rna_meta), colnames(dat@meta.data))
+
+# List of the manual annotations
+unique(rna_meta$germ_layer)
+unique(rna_meta$manual_annot)
+```
+
+Can I use this meta data to now annotate the dat_5 and dat_10 subsample clusters?
+
+## `SingleR` for annotation of cells
+
+```{r}
+# Establish a reference object from the Calderon data
+
+# Need to create a SummarizedExperiment object from dat object
+dat@meta.data$manual_annot <- rna_meta$manual_annot
+dat@meta.data$germ_layer <- rna_meta$germ_layer
+
+
+# Create reference data set -- use just 7 hour embryos to annotate
+# 16,
+ref_sce <- as.SingleCellExperiment(DietSeurat(subset(dat, NNv1_age > 7 & NNv1_age < 8)))
+ref_sce <- scuttle::logNormCounts(ref_sce)
+```
+
+
+```{r}
+# Convert to a single cell experiment object for annotations
+sce_comb <- as.SingleCellExperiment(DietSeurat(dat_comb))
+
+# Create logNormCounts for data
+sce_comb <- scuttle::logNormCounts(sce_comb)
+```
+
+Is there a way to do this within the Seurat workflow instead of converting briefly to the SingleCellExperiment object class?
+
+```{r, eval = FALSE}
+# # Run SingleR to create annotation labels for each cell
+# annot <- SingleR(test = sce_comb,
+#                  assay.type.test = 1,
+#                  ref = ref_sce,
+#                  labels = ref_sce$manual_annot)
+#
+# # This took ~ 1 hr to run so saved this as an annot file to load later
+# # Should consider scheduling this through slurm next time
+# saveRDS(annot, here::here("calderon/data/tso_annot_sce_comb.rds"))
+```
+
+
+```{r}
+# Load annot data
+annot <- readRDS(here::here("calderon/data/tso_annot_sce_comb.rds"))
+
+# Annotation diagnostics
+plotScoreHeatmap(annot)
+```
+
+```{r}
+# Set the annotations back in the Seurat object for later
+dat_comb@meta.data$annot <- annot$pruned.labels
+```
+
+```{r}
+DimPlot(dat_comb,
+        group.by = "annot",
+        split.by = "time")
+```
+
+
+# **Differential expression analysis**
+
+Trying differential expression in 5 hr embryos vs. 6 hr embryos.
+
+## Integrate the data sets
+
+```{r}
+# Create data subset and clear other info
+dat_5 <- DietSeurat(subset(dat, NNv1_age > 5.45 & NNv1_age < 5.55))
+dat_10 <- DietSeurat(subset(dat, NNv1_age > 10.1 & NNv1_age < 10.9))
+
+# Perform integration
+dat_anchors <- FindIntegrationAnchors(object.list = list(dat_5, dat_10), 
+                                      dims = 1:20)
+dat_comb <- IntegrateData(anchorset = dat_anchors,
+                          dims = 1:20)
+```
+
+## Perform an integrated analysis
+
+```{r}
+# Set default to integrated
+DefaultAssay(dat_comb) <- "integrated"
+
+# Run the standard workflow for visualization and clustering
+dat_comb <- ScaleData(dat_comb, verbose = FALSE)
+dat_comb <- RunPCA(dat_comb, npcs = 30, verbose = FALSE)
+
+# t-SNE and Clustering
+dat_comb <- RunUMAP(dat_comb, reduction = "pca", dims = 1:20)
+dat_comb <- FindNeighbors(dat_comb, reduction = "pca", dims = 1:20)
+dat_comb <- FindClusters(dat_comb, resolution = 0.5)
+
+# Split the data by the two time windows for plotting
+# Not sure if this info exists somewhere else?
+dat_comb@meta.data <- dat_comb@meta.data %>%
+  mutate(time = ifelse(NNv1_age < 6, "5", "10"))
+```
+
+```{r}
+DimPlot(dat_comb,
+        group.by = "time")
+
+DimPlot(dat_comb,
+        label = TRUE)
+
+DimPlot(dat_comb,
+        split.by = "time")
+```
+
+# Counts
+
+```{r}
+# Number of cells per time window
+dat_comb@meta.data %>% 
+  count(time)
+
+# Number of cells in cluster
+dat_comb@meta.data %>%
+  count(seurat_clusters)
+
+# Number of cells per time window and cluster
+dat_comb@meta.data %>% 
+  count(time, seurat_clusters) %>%
+  pivot_wider(values_from = n,
+              names_from = time)
+```
+
+```{r}
+# Plot
+dat_comb@meta.data %>% 
+  count(time, seurat_clusters) %>%
+  mutate(time = fct_relevel(time, c("5", "10"))) %>%
+  ggplot() +
+  geom_col(aes(x = seurat_clusters,
+               y = n,
+               fill = time),
+           position = "dodge") +
+  scale_fill_manual(values = c("#888888", "#444444")) +
+  theme_minimal()
+```
+
+
+## Conserved cell type markers
+
+```{r}
+# Set default assay back to RNA
+DefaultAssay(dat_comb) <- "RNA"
+
+# Find the conserved markers between conditions
+markers <- FindConservedMarkers(dat_comb,
+                                ident.1 = 6, # looking for differences in cluster 6 only
+                                grouping.var = "time",
+                                verbose = FALSE)
+```
+
+# **ATAC-Seq data**
+
+```{r}
+atac <- readRDS(here::here("calderon/data/exp1_hrs03-07_b1_gene_activity_counts.rds"))
+```
+
+## Data structure of Seurat object
+
+```{r}
+# Class
+class(atac)
+
+# Structure of data
+str(atac)
+
+# Peak at the data
+head(atac)
+
+# Print dimensions
+# Rows = genes; columns = cells
+dim(atac)
+```
+
+## Metadata per cell
+```{r}
+# metadata
+```
+
+
+
 # Add more stuff
 
 Other things to try:
 
-- Marker gene annotation -- Automated & Manual Supplementary Methods & Table
-- Differential expression between two different time windows
+- Try RNA-Seq quality control filtering etc.
 - See the number of genes that meet the 0.02 count per per cell for differential expression per Joe Boyd
 - ATAC-Seq data
 - 
