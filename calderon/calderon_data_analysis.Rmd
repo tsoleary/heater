@@ -10,16 +10,12 @@ output:
     toc_float: true
 ---
 
-
-
 ```{r setup, include = FALSE}
 # Don't show echos, warnings, or messages
 knitr::opts_chunk$set(warning = FALSE, 
                       message = FALSE,
                       comment = "")
 ```
-
-
 
 # **scRNA data**
 
@@ -59,15 +55,15 @@ glimpse(dat@meta.data)
 
 # Number of cells per experiment
 dat@meta.data %>% 
-  count(orig.ident)
+  dplyr::count(orig.ident)
 
 # Number of cells per time window
 dat@meta.data %>% 
-  count(time)
+  dplyr::count(time)
 
 # Number of cells in each time window
 dat@meta.data %>%
-  count(seurat_clusters)
+  dplyr::count(seurat_clusters)
 ```
 
 ## Visualize clusters
@@ -80,24 +76,18 @@ DimPlot(dat,
 
 ## Subset data 5 - 6 hr embryos
 
-```{r}
+```{r, eval = FALSE}
 # Subset the data to between 5 and 6 hours according to the NNv1 model
-dat_5 <- subset(dat, NNv1_age > 5 & NNv1_age < 6)
-
-# Total number of cells included in this time point
-length(Cells(dat_5))
+# Remove the old features in the dat object from the dat_5
+# Slim down Seurat object so it doesn't carry over the dat from all data
+dat_5 <- DietSeurat(subset(dat, NNv1_age > 5 & NNv1_age < 6))
 ```
-
 
 ### Make new UMAP
 
 Need to re-scale and re-cluster etc. when subsetted to create a new UMAP. See the functions below.
 
-```{r}
-# Remove the old features in the dat object from the dat_5
-# Slim down Seurat object so it doesn't carry over the dat from all data
-dat_5 <- DietSeurat(dat_5)
-
+```{r, eval = FALSE}
 # Scales and centers the data of just the subset dat_5
 dat_5 <- ScaleData(FindVariableFeatures(NormalizeData(dat_5), 
                                         selection.method = 'vst'))
@@ -129,25 +119,186 @@ dat_5 <- FindClusters(dat_5,
 
 ### Plot new UMAP
 
-```{r}
-DimPlot(dat_5) + 
-  guides(color = "none")
+```{r, eval = FALSE, echo = FALSE}
+# Save dat_5
+saveRDS(dat_5, here::here("calderon/data/dat_5.rds"))
 ```
 
-## Find all marker genes
+```{r, echo = FALSE}
+# Read in dat_5
+dat_5 <- readRDS(here::here("calderon/data/dat_5.rds"))
+```
 
 ```{r}
-# Find the 
+DimPlot(dat_5)
+```
+
+## Find all marker genes of each cluster
+
+```{r, eval = FALSE}
+# Find the markers for each cluster
 dat_5_markers <- FindAllMarkers(dat_5,
                                 only.pos = TRUE, 
                                 min.pct = 0.25, 
                                 logfc.threshold = 0.25)
-
 # Save just the top 10 markers
 top_10_markers <- dat_5_markers %>%
     group_by(cluster) %>%
     slice_max(n = 10, 
               order_by = avg_log2FC)
+```
+
+```{r, eval = FALSE, echo = FALSE}
+saveRDS(top_10_markers, here::here("calderon/data/top_10_markers.rds"))
+```
+
+```{r, echo = FALSE}
+top_10_markers <- readRDS(here::here("calderon/data/top_10_markers.rds"))
+```
+
+```{r}
+# Print out the top 2 markers just to look at
+top_10_markers %>%
+  slice_max(n = 2, 
+            order_by = avg_log2FC) %>%
+  select(gene, everything())
+```
+
+# **Differential expression analysis**
+
+Trying differential expression in 5 hr embryos vs. 6 hr embryos.
+
+## Integrate the data sets
+
+```{r, eval = FALSE}
+# Create data subset and clear other info
+dat_5 <- DietSeurat(subset(dat, NNv1_age > 5.45 & NNv1_age < 5.55))
+dat_10 <- DietSeurat(subset(dat, NNv1_age > 10.1 & NNv1_age < 10.9))
+
+# Perform integration
+dat_anchors <- FindIntegrationAnchors(object.list = list(dat_5, dat_10), 
+                                      dims = 1:20)
+dat_comb <- IntegrateData(anchorset = dat_anchors,
+                          dims = 1:20)
+```
+
+## Perform an integrated analysis
+
+```{r, eval = FALSE}
+# Set default to integrated
+DefaultAssay(dat_comb) <- "integrated"
+
+# Run the standard workflow for visualization and clustering
+dat_comb <- ScaleData(dat_comb, verbose = FALSE)
+dat_comb <- RunPCA(dat_comb, npcs = 30, verbose = FALSE)
+
+# t-SNE and Clustering
+dat_comb <- RunUMAP(dat_comb, reduction = "pca", dims = 1:20)
+dat_comb <- FindNeighbors(dat_comb, reduction = "pca", dims = 1:20)
+dat_comb <- FindClusters(dat_comb, resolution = 0.5)
+
+# Split the data by the two time windows for plotting
+# Not sure if this info exists somewhere else?
+dat_comb@meta.data <- dat_comb@meta.data %>%
+  mutate(time = ifelse(NNv1_age < 6, "5", "10"))
+```
+
+```{r, eval = FALSE, echo = FALSE}
+saveRDS(dat_comb, here::here("calderon/data/dat_comb.rds"))
+```
+
+```{r, echo = FALSE}
+dat_comb <- readRDS(here::here("calderon/data/dat_comb.rds"))
+```
+
+```{r}
+DimPlot(dat_comb,
+        group.by = "time")
+
+DimPlot(dat_comb,
+        label = TRUE)
+
+DimPlot(dat_comb,
+        split.by = "time")
+```
+
+# Counts
+
+```{r}
+# Number of cells per time window
+dat_comb@meta.data %>% 
+  dplyr::count(time)
+
+# Number of cells in cluster
+dat_comb@meta.data %>%
+  dplyr::count(seurat_clusters)
+
+# Number of cells per time window and cluster
+dat_comb@meta.data %>% 
+  dplyr::count(time, seurat_clusters) %>%
+  pivot_wider(values_from = n,
+              names_from = time)
+```
+
+```{r}
+# Plot the number of cells in each cluster
+dat_comb@meta.data %>% 
+  dplyr::count(time, seurat_clusters) %>%
+  mutate(time = fct_relevel(time, c("5", "10"))) %>%
+  ggplot() +
+  geom_col(aes(x = seurat_clusters,
+               y = n,
+               fill = time),
+           position = "dodge") +
+  scale_fill_manual(values = c("#888888", "#444444")) +
+  theme_minimal()
+```
+
+
+## Differential expression between clusters
+
+```{r, eval = FALSE}
+# Set default assay back to RNA
+DefaultAssay(dat_comb) <- "RNA"
+
+# Find the conserved markers between conditions ----
+
+# Initialize list to save markers for each cluster comparison
+markers_all <- list()
+
+# Loop through all clusters to find markers in each cluster
+for (i in levels(dat_comb$seurat_clusters)) {
+  # Find the conserved markers between 5 hr and 10 hr embryos
+  marker <- FindConservedMarkers(dat_comb,
+                                 ident.1 = i,
+                                 grouping.var = "time",
+                                 verbose = FALSE)
+  # Save markers in the list
+  markers_all[[i]] <- marker
+}
+
+# Combine into a single data_frame
+dat_comb_cluster_degs <- bind_rows(markers_all, .id = "cluster")
+```
+
+```{r, eval = FALSE, echo = FALSE}
+# Save dat_comb_cluster_degs
+saveRDS(dat_comb_cluster_degs, 
+        here::here("calderon/data/dat_comb_cluster_degs_5_10.rds"))
+```
+
+```{r, echo = FALSE}
+# Save dat_comb_cluster_degs
+dat_comb_cluster_degs <- 
+  readRDS(here::here("calderon/data/dat_comb_cluster_degs_5_10.rds"))
+```
+
+```{r}
+# Count the number of DEGs per cluster
+dat_comb_cluster_degs %>%
+  group_by(cluster) %>%
+  tally() %>%
+  arrange(desc(n))
 ```
 
 ## Annotation of cell types and tissues
@@ -176,26 +327,26 @@ unique(rna_meta$germ_layer)
 unique(rna_meta$manual_annot)
 ```
 
-Can I use this meta data to now annotate the dat_5 and dat_10 subsample clusters?
-
 ## `SingleR` for annotation of cells
 
 ```{r}
 # Establish a reference object from the Calderon data
 
 # Need to create a SummarizedExperiment object from dat object
+# Add the rna_meta annotations from the Calderon data
 dat@meta.data$manual_annot <- rna_meta$manual_annot
 dat@meta.data$germ_layer <- rna_meta$germ_layer
+```
 
-
-# Create reference data set -- use just 7 hour embryos to annotate
-# 16,
-ref_sce <- as.SingleCellExperiment(DietSeurat(subset(dat, NNv1_age > 7 & NNv1_age < 8)))
+```{r, eval = FALSE}
+# Create reference data set -- use just 7 hour embryos to annotate 
+ref_sce <- as.SingleCellExperiment(DietSeurat(subset(dat, NNv1_age > 7 & 
+                                                       NNv1_age < 8)))
 ref_sce <- scuttle::logNormCounts(ref_sce)
 ```
 
 
-```{r}
+```{r, eval = FALSE}
 # Convert to a single cell experiment object for annotations
 sce_comb <- as.SingleCellExperiment(DietSeurat(dat_comb))
 
@@ -203,175 +354,93 @@ sce_comb <- as.SingleCellExperiment(DietSeurat(dat_comb))
 sce_comb <- scuttle::logNormCounts(sce_comb)
 ```
 
-Is there a way to do this within the Seurat workflow instead of converting briefly to the SingleCellExperiment object class?
+Create annotation labels for each cell with `SingleR`.
 
 ```{r, eval = FALSE}
-# # Run SingleR to create annotation labels for each cell
-# annot <- SingleR(test = sce_comb,
-#                  assay.type.test = 1,
-#                  ref = ref_sce,
-#                  labels = ref_sce$manual_annot)
-#
-# # This took ~ 1 hr to run so saved this as an annot file to load later
-# # Should consider scheduling this through slurm next time
-# saveRDS(annot, here::here("calderon/data/tso_annot_sce_comb.rds"))
+# Run SingleR to create annotation labels for each cell
+annot <- SingleR(test = sce_comb,
+                 assay.type.test = 1,
+                 ref = ref_sce,
+                 labels = ref_sce$manual_annot)
 ```
 
+```{r, echo = FALSE}
+# SingleR took ~ 1 hr to run so saved this as an annot file to load later
+# Should consider scheduling this through slurm next time
+# saveRDS(annot, here::here("calderon/data/tso_annot_sce_comb.rds"))
 
-```{r}
 # Load annot data
 annot <- readRDS(here::here("calderon/data/tso_annot_sce_comb.rds"))
+```
 
+### Check annotations
+
+```{r}
 # Annotation diagnostics
 plotScoreHeatmap(annot)
 ```
 
-```{r}
+```{r, eval = FALSE}
 # Set the annotations back in the Seurat object for later
 dat_comb@meta.data$annot <- annot$pruned.labels
 ```
 
 ```{r}
+# Count the number of cells in each annotation
+dat_comb@meta.data %>%
+  group_by(time, annot) %>%
+  tally() %>%
+  pivot_wider(values_from = n,
+              names_from = time) %>%
+  arrange(desc(`5`)) %>%
+  select(annot, `5`, `10`) %>%
+  print(n = 37)
+```
+
+```{r}
+# Plot all the annotations on a UMAP for 5 and 10 hour embryos
 DimPlot(dat_comb,
         group.by = "annot",
         split.by = "time")
 ```
 
 
-# **Differential expression analysis**
+<!-- # **ATAC-Seq data** -->
 
-Trying differential expression in 5 hr embryos vs. 6 hr embryos.
+<!-- ```{r} -->
+<!-- atac <- readRDS(here::here("calderon/data/exp1_hrs03-07_b1_gene_activity_counts.rds")) -->
+<!-- ``` -->
 
-## Integrate the data sets
+<!-- ## Data structure of Seurat object -->
 
-```{r}
-# Create data subset and clear other info
-dat_5 <- DietSeurat(subset(dat, NNv1_age > 5.45 & NNv1_age < 5.55))
-dat_10 <- DietSeurat(subset(dat, NNv1_age > 10.1 & NNv1_age < 10.9))
+<!-- ```{r} -->
+<!-- # Class -->
+<!-- class(atac) -->
 
-# Perform integration
-dat_anchors <- FindIntegrationAnchors(object.list = list(dat_5, dat_10), 
-                                      dims = 1:20)
-dat_comb <- IntegrateData(anchorset = dat_anchors,
-                          dims = 1:20)
-```
+<!-- # Structure of data -->
+<!-- str(atac) -->
 
-## Perform an integrated analysis
+<!-- # Peak at the data -->
+<!-- head(atac) -->
 
-```{r}
-# Set default to integrated
-DefaultAssay(dat_comb) <- "integrated"
+<!-- # Print dimensions -->
+<!-- # Rows = genes; columns = cells -->
+<!-- dim(atac) -->
+<!-- ``` -->
 
-# Run the standard workflow for visualization and clustering
-dat_comb <- ScaleData(dat_comb, verbose = FALSE)
-dat_comb <- RunPCA(dat_comb, npcs = 30, verbose = FALSE)
-
-# t-SNE and Clustering
-dat_comb <- RunUMAP(dat_comb, reduction = "pca", dims = 1:20)
-dat_comb <- FindNeighbors(dat_comb, reduction = "pca", dims = 1:20)
-dat_comb <- FindClusters(dat_comb, resolution = 0.5)
-
-# Split the data by the two time windows for plotting
-# Not sure if this info exists somewhere else?
-dat_comb@meta.data <- dat_comb@meta.data %>%
-  mutate(time = ifelse(NNv1_age < 6, "5", "10"))
-```
-
-```{r}
-DimPlot(dat_comb,
-        group.by = "time")
-
-DimPlot(dat_comb,
-        label = TRUE)
-
-DimPlot(dat_comb,
-        split.by = "time")
-```
-
-# Counts
-
-```{r}
-# Number of cells per time window
-dat_comb@meta.data %>% 
-  count(time)
-
-# Number of cells in cluster
-dat_comb@meta.data %>%
-  count(seurat_clusters)
-
-# Number of cells per time window and cluster
-dat_comb@meta.data %>% 
-  count(time, seurat_clusters) %>%
-  pivot_wider(values_from = n,
-              names_from = time)
-```
-
-```{r}
-# Plot
-dat_comb@meta.data %>% 
-  count(time, seurat_clusters) %>%
-  mutate(time = fct_relevel(time, c("5", "10"))) %>%
-  ggplot() +
-  geom_col(aes(x = seurat_clusters,
-               y = n,
-               fill = time),
-           position = "dodge") +
-  scale_fill_manual(values = c("#888888", "#444444")) +
-  theme_minimal()
-```
-
-
-## Conserved cell type markers
-
-```{r}
-# Set default assay back to RNA
-DefaultAssay(dat_comb) <- "RNA"
-
-# Find the conserved markers between conditions
-markers <- FindConservedMarkers(dat_comb,
-                                ident.1 = 6, # looking for differences in cluster 6 only
-                                grouping.var = "time",
-                                verbose = FALSE)
-```
-
-# **ATAC-Seq data**
-
-```{r}
-atac <- readRDS(here::here("calderon/data/exp1_hrs03-07_b1_gene_activity_counts.rds"))
-```
-
-## Data structure of Seurat object
-
-```{r}
-# Class
-class(atac)
-
-# Structure of data
-str(atac)
-
-# Peak at the data
-head(atac)
-
-# Print dimensions
-# Rows = genes; columns = cells
-dim(atac)
-```
-
-## Metadata per cell
-```{r}
-# metadata
-```
+<!-- ## Metadata per cell -->
+<!-- ```{r} -->
+<!-- # metadata -->
+<!-- ``` -->
 
 
 
-# Add more stuff
+<!-- # Add more stuff -->
 
-Other things to try:
+<!-- Other things to try: -->
 
-- Try RNA-Seq quality control filtering etc.
-- See the number of genes that meet the 0.02 count per per cell for differential expression per Joe Boyd
-- ATAC-Seq data
-- 
-
+<!-- - Try RNA-Seq quality control filtering etc. -->
+<!-- - See the number of genes that meet the 0.02 count per per cell for differential expression per Joe Boyd -->
+<!-- - ATAC-Seq data -->
 
 
