@@ -1,0 +1,71 @@
+---
+title: "Final Sample Nuceli Concentration"
+subtitle: "HEATER Project"
+author: "TS O'Leary"
+output:
+  rmarkdown::html_document:
+    theme: sandstone
+    toc: true
+    toc_float: true
+---
+
+
+
+```{r setup, include = FALSE}
+# don't show echos, warnings, or messages
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE,
+                      comment = "")
+
+# Load packages
+require(tidyverse)
+require(kableExtra)
+
+# Load data
+dat <- read_csv(here::here("nuclei_count/counts_06FEB2023.csv")) %>%
+  mutate(Slice = str_remove_all(Slice, ".tif")) %>%
+  separate(Slice, into = c("sample", "rep"), sep = "_")
+```
+
+# Data & Calculations
+
+## Raw data
+```{r}
+dat %>%
+  mutate(nuc_conc = Count/0.1) %>%
+  select(sample, rep, Count, nuc_conc) %>%
+  kable() %>%
+  kable_styling("striped") %>%
+  scroll_box(width = "100%", height = "100%")
+```
+
+## Average and SD
+
+```{r}
+dat %>%
+  mutate(nuc_conc = Count/0.1) %>%
+  group_by(sample) %>%
+  summarise(nuc_conc_avg = mean(nuc_conc),
+            nuc_conc_sd = sd(nuc_conc)) %>%
+  kable() %>%
+  kable_styling("striped") %>%
+  scroll_box(width = "100%", height = "100%")
+```
+
+## Average Concentration
+
+```{r}
+dat_dil <- dat %>%
+  mutate(nuc_conc = Count/0.1) %>%
+  group_by(sample) %>%
+  summarise(nuc_conc_avg = mean(nuc_conc)) %>%
+  mutate(nuc_uL = round(4000*1.61/nuc_conc_avg, 2),
+         dil_buffer_uL = round(5 - nuc_uL, 2))
+
+dat_dil %>%
+  kable() %>%
+  kable_styling("striped") %>%
+  scroll_box(width = "100%", height = "100%")
+```
+
