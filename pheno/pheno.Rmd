@@ -1,19 +1,37 @@
-# ------------------------------------------------------------------------------
-# Acclimation Phenotypes for Guest Lecture
-# October 20, 2022
-# TS O'Leary
-# ------------------------------------------------------------------------------
+---
+title: "HEATER: Acclimation Phenotypes"
+author: "TS O'Leary"
+date: 'February 23, 2023'
+output:
+  rmarkdown::html_document:
+    theme: sandstone
+    toc: true
+    toc_float: true
+---
 
-# Load libraries
+
+
+```{r setup, include = FALSE}
+# don't show echos, warnings, or messages
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE,
+                      comment = "")
+
+# Load packages
 require(tidyverse)
+require(kableExtra)
 
 # Load data
 dat <- read_csv(here::here("pheno/data/embryo_acc_pheno.csv"))
 dat_new <- read_csv(here::here("pheno/data/acclimation_survival_new_geno_summer_2022.csv"))
 dat_ph <- read_csv(here::here("pheno/data/acclimation_pupation_new_geno_summer_2022.csv"))
 dat_ws <- read_csv(here::here("pheno/data/acclimation_walking_speed_new_geno_summer_2022.csv"))
+```
 
+# Canton S survival
 
+```{r}
 # Plot Canton S survival data
 dat %>%
   filter(Genotype == "CantonS") %>%
@@ -43,6 +61,11 @@ dat %>%
         panel.grid.minor.y = element_line(color = "grey90", 
                                           size = 0.5))
 
+```
+
+## All old genotypes
+
+```{r}
 # Plot data for individual genotypes
 dat %>% 
   mutate(Genotype = factor(Genotype, 
@@ -77,28 +100,34 @@ dat %>%
                                           size = 0.5)) +
   facet_wrap(~ Genotype,
              nrow = 2) 
+```
 
-# Diurnal variation in all these places
-bio <- read_csv("~/R/projects/ox_stress/exp_design/lockwood_lab_stocks_bioclim.csv")
-bio %>%
-  distinct(Locale, .keep_all = TRUE) %>%
-  select(Locale, bio2) %>%
-  mutate(Mean_Diurnal_Range = bio2/10)
+```{r}
+# # Diurnal variation in all these places
+# bio <- read_csv("~/R/projects/ox_stress/exp_design/lockwood_lab_stocks_bioclim.csv")
+# bio %>%
+#   distinct(Locale, .keep_all = TRUE) %>%
+#   select(Locale, bio2) %>%
+#   mutate(Mean_Diurnal_Range = bio2/10)
 
+# # Analyze results
+# mod <- dat %>%
+#   filter(Genotype == "CantonS") %>%
+#   filter(Temp == 38.75) %>%
+#   glm(Survival ~ Acclimation, 
+#       weights = Number_Eggs,
+#       family = quasibinomial,
+#       data = .) 
+# 
+# summary(mod)
+# broom::tidy(mod)
+```
 
+# New genotypes
 
-# Analyze results
-mod <- dat %>%
-  filter(Genotype == "CantonS") %>%
-  filter(Temp == 38.75) %>%
-  glm(Survival ~ Acclimation, 
-      weights = Number_Eggs,
-      family = quasibinomial,
-      data = .) 
+Data that Emily collected in the summer of 2022.
 
-summary(mod)
-broom::tidy(mod)
-
+```{r}
 # New genotypes ----------------------------------------------------------------
 dat_new %>% 
   mutate(Genotype = factor(Genotype,
@@ -131,7 +160,11 @@ dat_new %>%
         panel.grid.minor.y = element_line(color = "grey90", 
                                           size = 0.5)) +
   facet_wrap(~ Genotype, nrow = 3) 
+```
 
+## Egg-to-pupa survival
+
+```{r}
 # Egg-to-pupa survival
 dat_new %>%
   mutate(Genotype = factor(Genotype,
@@ -164,7 +197,11 @@ dat_new %>%
         panel.grid.minor.y = element_line(color = "grey90", 
                                           size = 0.5)) +
   facet_wrap(~ Genotype, nrow = 3) 
+```
 
+## Egg-to-adult survival
+
+```{r}
 # Egg-to-adult survival
 dat_new %>% 
   mutate(Genotype = factor(Genotype,
@@ -197,8 +234,11 @@ dat_new %>%
         panel.grid.minor.y = element_line(color = "grey90", 
                                           size = 0.5)) +
   facet_wrap(~ Genotype, nrow = 3) 
+```
 
+## Pupation height
 
+```{r}
 # Pupation height
 dat_ph %>%
   mutate(Genotype = factor(Genotype,
@@ -229,9 +269,16 @@ dat_ph %>%
         panel.grid.minor.y = element_line(color = "grey90", 
                                           size = 0.5)) +
   facet_wrap(~ Genotype, nrow = 3) 
+```
 
+## Walking speed
+
+```{r}
 # Walking speed
 dat_ws %>%
+  mutate(Genotype = factor(Genotype,
+                                levels = c("FRMO01", "FRMO02", "JPOK",
+                                           "JPSC", "GH169", "GH174"))) %>%
   dplyr::filter(Stage == "Early") %>%
   mutate(Acclimation = paste0(Acclimation, "°C")) %>%
   ggplot(aes(x = Acclimation,
@@ -257,3 +304,4 @@ dat_ws %>%
         panel.grid.minor.y = element_line(color = "grey90", 
                                           size = 0.5)) +
   facet_wrap(~ Genotype, nrow = 3) 
+```
