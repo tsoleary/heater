@@ -4,4 +4,10 @@ heater.Rproj
 .RData
 .Ruserdata
 calderon/data/*
+calderon/dbDir/*
+calderon/scenic/int/*
+*.out
+output/*
+int/*
+pbmc/data/*
 .DS_store

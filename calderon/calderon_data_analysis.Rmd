@@ -166,7 +166,7 @@ top_10_markers %>%
 
 # **Differential expression analysis**
 
-Trying differential expression in 5 hr embryos vs. 6 hr embryos.
+Trying differential expression in 5 hr embryos vs. 10 hr embryos.
 
 ## Integrate the data sets
 
@@ -222,7 +222,7 @@ DimPlot(dat_comb,
         split.by = "time")
 ```
 
-# Counts
+### Counts
 
 ```{r}
 # Number of cells per time window
@@ -255,7 +255,7 @@ dat_comb@meta.data %>%
 ```
 
 
-## Differential expression between clusters
+## Conserved expression between clusters
 
 ```{r, eval = FALSE}
 # Set default assay back to RNA
@@ -268,38 +268,214 @@ markers_all <- list()
 
 # Loop through all clusters to find markers in each cluster
 for (i in levels(dat_comb$seurat_clusters)) {
+  print(paste("begin", i))
   # Find the conserved markers between 5 hr and 10 hr embryos
   marker <- FindConservedMarkers(dat_comb,
                                  ident.1 = i,
                                  grouping.var = "time",
                                  verbose = FALSE)
   # Save markers in the list
-  markers_all[[i]] <- marker
+  markers_all[[i]] <- marker %>% rownames_to_column("gene")
+  print(paste("end", i))
 }
 
 # Combine into a single data_frame
-dat_comb_cluster_degs <- bind_rows(markers_all, .id = "cluster")
+dat_comb_cluster_con <- bind_rows(markers_all, .id = "cluster")
 ```
 
 ```{r, eval = FALSE, echo = FALSE}
-# Save dat_comb_cluster_degs
-saveRDS(dat_comb_cluster_degs, 
-        here::here("calderon/data/dat_comb_cluster_degs_5_10.rds"))
+# Save dat_comb_cluster_con
+saveRDS(dat_comb_cluster_con, 
+        here::here("calderon/data/dat_comb_cluster_con_5_10.rds"))
 ```
 
 ```{r, echo = FALSE}
-# Save dat_comb_cluster_degs
-dat_comb_cluster_degs <- 
-  readRDS(here::here("calderon/data/dat_comb_cluster_degs_5_10.rds"))
+# Save dat_comb_cluster_con
+dat_comb_cluster_con <- 
+  readRDS(here::here("calderon/data/dat_comb_cluster_con_5_10.rds"))
 ```
 
 ```{r}
-# Count the number of DEGs per cluster
-dat_comb_cluster_degs %>%
+# Count the number of conserved genes per cluster
+dat_comb_cluster_con %>%
   group_by(cluster) %>%
   tally() %>%
   arrange(desc(n))
 ```
+
+## Visualize conserved expression
+
+### UMAP
+
+```{r}
+# List of the top gene in each cluster
+top_1 <- dat_comb_cluster_con %>%
+  group_by(cluster) %>%
+  slice_min(n = 1, minimump_p_val, with_ties = FALSE)
+
+top_2 <- dat_comb_cluster_con %>%
+  group_by(cluster) %>%
+  slice_min(n = 2, minimump_p_val, with_ties = FALSE)
+
+# Reset the default assay to RNA for plotting purposes
+DefaultAssay(dat_comb) <- "RNA"
+
+FeaturePlot(dat_comb,
+            features = top_1$gene[1:2],
+            split.by = "time", 
+            max.cutoff = 3)
+```
+
+### Dot Plot between clusters
+
+```{r}
+DotPlot(dat_comb, 
+        features = top_1$gene, 
+        cols = c("blue", "red"), 
+        dot.scale = 8, 
+    split.by = "time") +
+  RotatedAxis()
+```
+
+### Violin Plot
+
+```{r}
+VlnPlot(dat_comb, 
+        top_1$gene[4:6], 
+        split.by = "time", 
+        group.by = "seurat_clusters",
+        stack = TRUE,
+        flip = TRUE)
+```
+
+
+## Differential Expression
+
+```{r}
+# Set identity to time window
+Idents(dat_comb) <- dat_comb$time
+
+# Identify DEGs
+degs <- FindMarkers(dat_comb, 
+                    ident.1 = "5", ident.2 = "10")
+```
+
+```{r}
+VlnPlot(dat_comb, 
+        rownames(degs)[1:3], 
+        split.by = "time", 
+        group.by = "seurat_clusters",
+        stack = TRUE,
+        flip = TRUE)
+```
+
+```{r}
+DotPlot(dat_comb, 
+        features = rownames(degs)[1:25], 
+        cols = c("blue", "red"), 
+        dot.scale = 8, 
+    split.by = "time",
+    group.by = "seurat_clusters") +
+  RotatedAxis()
+```
+
+```{r}
+FeaturePlot(dat_comb,
+            features = rownames(degs)[1:4],
+            split.by = "time", 
+            max.cutoff = 3)
+```
+
+### Subsampling for DEGs
+
+```{r, eval = FALSE}
+# Create a number of cells to randomly subset
+sub_n <- c(500, 1000, 2000, 4000, 8000, 12000, 15772)
+
+# Empty tibble to populate
+deg <- tibble()
+
+# Loop through subsamples
+for (n in 1:length(sub_n)) {
+  
+  # Print out at start of loop
+  print(paste("Begin", n))
+  
+  # Subset 
+  dat_comb_sub <- DietSeurat(subset(dat_comb, 
+                         cell %in% sample(dat_comb$cell, sub_n[n])))
+  
+  # Redo scaling and stuff before degs
+  dat_comb_sub <- ScaleData(dat_comb_sub, verbose = FALSE)
+  dat_comb_sub <- FindVariableFeatures(dat_comb_sub)
+  dat_comb_sub <- RunPCA(dat_comb_sub, npcs = 30, verbose = FALSE)
+  dat_comb_sub <- RunUMAP(dat_comb_sub, reduction = "pca", dims = 1:20)
+  dat_comb_sub <- FindNeighbors(dat_comb_sub, reduction = "pca", dims = 1:20)
+  dat_comb_sub <- FindClusters(dat_comb_sub, resolution = 0.5)
+  
+  # DEGs
+  Idents(dat_comb_sub) <- dat_comb_sub$time
+  degs <- FindMarkers(dat_comb_sub, ident.1 = "5", ident.2 = "10")
+  
+  # Add to DEG object
+  deg <- bind_rows(deg,  
+                   degs %>% 
+                     rownames_to_column("gene") %>% 
+                     mutate(sub_n = sub_n[n]))
+  
+  # Print out at end of loop
+  print(paste("End", n))
+}
+
+# Save deg
+saveRDS(deg, here::here("calderon/data/tso_sub_n_deg.rds"))
+
+```
+
+```{r, echo = FALSE}
+# Read in DEGs from sub samples 
+deg <- readRDS(here::here("calderon/data/tso_sub_n_deg.rds"))
+```
+
+```{r}
+# Count of total number of genes per subsample
+deg %>%
+  group_by(sub_n) %>%
+  tally()
+
+# Count number of significant DEGs
+deg %>%
+  group_by(sub_n) %>%
+  mutate(sig = p_val_adj < 0.05) %>%
+  group_by(sub_n, sig) %>%
+  tally()
+
+# Quickly plot number of DEGs per subsample
+deg %>%
+  group_by(sub_n) %>%
+  filter(p_val_adj < 0.05) %>%
+  tally() %>%
+  ggplot(aes(x = sub_n,
+                y = n)) +
+  geom_line(linetype = 2) +
+  geom_point(size = 2) +
+  labs(y = "Number of differentially expressed genes",
+       x = "Number of cells in subsample") +
+  theme_minimal()
+
+# Quickly plot number of genes per subsample
+deg %>%
+  group_by(sub_n) %>%
+  tally() %>%
+  ggplot(aes(x = sub_n,
+                y = n)) +
+  geom_line(linetype = 2) +
+  geom_point(size = 2) +
+  labs(y = "Number of genes",
+       x = "Number of cells in subsample") +
+  theme_minimal()
+```
+
 
 ## Annotation of cell types and tissues
 
@@ -335,7 +511,8 @@ unique(rna_meta$manual_annot)
 # Need to create a SummarizedExperiment object from dat object
 # Add the rna_meta annotations from the Calderon data
 dat@meta.data$manual_annot <- rna_meta$manual_annot
-dat@meta.data$germ_layer <- rna_meta$germ_layer
+dat@meta.data$germ_layer <- str_replace_all(rna_meta$germ_layer, 
+                                            "^$", "unknown") 
 ```
 
 ```{r, eval = FALSE}
@@ -373,16 +550,36 @@ annot <- SingleR(test = sce_comb,
 annot <- readRDS(here::here("calderon/data/tso_annot_sce_comb.rds"))
 ```
 
+### Germ layer annotation
+
+```{r, eval = FALSE}
+# Run SingleR to create annotation labels for each cell
+annot_germ <- SingleR(test = sce_comb,
+                      assay.type.test = 1,
+                      ref = ref_sce,
+                      labels = ref_sce$germ_layer)
+```
+
+```{r, echo = FALSE}
+# SingleR took ~ 1 hr to run so saved this as an annot file to load later
+saveRDS(annot_germ, here::here("calderon/data/tso_annot_germ_sce_comb.rds"))
+
+# Load annot data
+annot_germ <- readRDS(here::here("calderon/data/tso_annot_germ_sce_comb.rds"))
+```
+
 ### Check annotations
 
 ```{r}
 # Annotation diagnostics
 plotScoreHeatmap(annot)
+plotScoreHeatmap(annot_germ)
 ```
 
 ```{r, eval = FALSE}
 # Set the annotations back in the Seurat object for later
 dat_comb@meta.data$annot <- annot$pruned.labels
+dat_comb@meta.data$annot_germ <- annot_germ$pruned.labels
 ```
 
 ```{r}
@@ -395,52 +592,292 @@ dat_comb@meta.data %>%
   arrange(desc(`5`)) %>%
   select(annot, `5`, `10`) %>%
   print(n = 37)
+
+
+# Count the number of cells in each annotation
+dat_comb@meta.data %>%
+  group_by(time, annot_germ) %>%
+  tally() %>%
+  pivot_wider(values_from = n,
+              names_from = time) %>%
+  arrange(desc(`5`)) %>%
+  select(annot_germ, `5`, `10`)
 ```
+
+```{r}
+# Plot the number of cells in each annotation
+dat_comb@meta.data %>%
+  group_by(time, annot) %>%
+  tally() %>%
+  pivot_wider(values_from = n,
+              names_from = time) %>%
+  arrange(desc(`5`)) %>%
+  select(annot, `5`, `10`) %>%
+  head(20) %>%
+  pivot_longer(names_to = "time", 
+               cols = c(`5`, `10`)) %>%
+  #mutate(time = fct_relevel(time, c("5", "10"))) %>%
+  ggplot() +
+  geom_col(aes(x = annot,
+               y = value,
+               fill = time),
+           position = "dodge") +
+  scale_fill_manual(values = c("#444444", "#888888")) +
+  theme_minimal() +
+  coord_flip()
+```
+
 
 ```{r}
 # Plot all the annotations on a UMAP for 5 and 10 hour embryos
 DimPlot(dat_comb,
         group.by = "annot",
         split.by = "time")
+
+
+# Plot all the annotations on a UMAP for 5 and 10 hour embryos
+DimPlot(dat_comb,
+        group.by = "annot_germ",
+        split.by = "time")
+```
+
+#### Percent matching at 5 hrs
+
+```{r}
+# Check to make sure that the cells in the vector are aligned correctly
+sum(rownames(subset(dat, NNv1_age > 5.45 & NNv1_age < 5.55)@meta.data) != 
+      rownames(subset(dat_comb, time == "5")@meta.data))
+
+# Find the number of matches
+n_match <- sum(subset(dat, 
+                      NNv1_age > 5.45 & 
+                        NNv1_age < 5.55)@meta.data$manual_annot ==
+                 subset(dat_comb, time == "5")@meta.data$annot, na.rm = TRUE)
+
+# Number of total cells 
+n_cells <- ncol(subset(dat, NNv1_age > 5.45 & NNv1_age < 5.55))
+
+# Percent true match to manual annotation
+(n_match/n_cells)*100
+```
+
+```{r}
+# Check to make sure that the cells in the vector are aligned correctly
+sum(rownames(subset(dat, NNv1_age > 5.45 & NNv1_age < 5.55)@meta.data) != 
+      rownames(subset(dat_comb, time == "5")@meta.data))
+
+# Find the number of matches
+n_match <- sum(subset(dat, 
+                      NNv1_age > 5.45 & 
+                        NNv1_age < 5.55)@meta.data$germ_layer ==
+                 subset(dat_comb, time == "5")@meta.data$annot_germ, 
+               na.rm = TRUE)
+
+# Number of total cells 
+n_cells <- ncol(subset(dat, NNv1_age > 5.45 & NNv1_age < 5.55))
+
+# Percent true match to manual annotation
+(n_match/n_cells)*100
+```
+
+#### Percent matching at 10 hrs
+
+```{r}
+# Check to make sure that the cells in the vector are aligned correctly
+sum(rownames(subset(dat, NNv1_age > 10.1 & NNv1_age < 10.9)@meta.data) != 
+      rownames(subset(dat_comb, time == "10")@meta.data))
+
+# Find the number of matches
+n_match <- sum(subset(dat, 
+                      NNv1_age > 10.1 & 
+                        NNv1_age < 10.9)@meta.data$germ_layer ==
+                 subset(dat_comb, time == "10")@meta.data$annot_germ, 
+               na.rm = TRUE)
+
+# Number of total cells 
+n_cells <- ncol(subset(dat, NNv1_age > 10.1 & NNv1_age < 10.9))
+
+# Percent true match to manual annotation
+(n_match/n_cells)*100
+```
+
+Really low match rate. Need to figure out what is going on here. Might be that there are annotation categories that are present in some but not others. See below. But there must be something else going on too. This is annoying. It also splits up the clusters and doesn't annotate per cluster it only annotates per cell.
+
+
+
+Is there a way to annotate per specific cluster instead of a per cell annotation like here?
+
+
+```{r}
+# Labels present in manual annotation
+unique(subset(dat,NNv1_age > 10.1 & NNv1_age < 10.9)@meta.data$manual_annot)
+# Labels present in SingleR annotation
+unique(subset(dat_comb, time == "10")@meta.data$annot)
+
+# Labels that are only present in the manual annotation
+setdiff(unique(subset(dat,NNv1_age > 10.1 & 
+                        NNv1_age < 10.9)@meta.data$manual_annot),
+        unique(subset(dat_comb, time == "10")@meta.data$annot))
+
+# Labels that are only present in the SingleR annotation
+setdiff(unique(subset(dat_comb, time == "10")@meta.data$annot),
+        unique(subset(dat,NNv1_age > 10.1 & 
+                        NNv1_age < 10.9)@meta.data$manual_annot))
+```
+
+# SCENIC
+
+SCENIC (**S**ingle-**C**ell r**E**gulatory **N**etwork ***I**nference and **C**lustering)
+
+
+Downloaded the SCENIC database [`dm6-5kb-upstream-full-tx-11species.mc8nr.feather`](https://resources.aertslab.org/cistarget/databases/old/drosophila_melanogaster/dm6/flybase_r6.02/mc8nr/gene_based/dm6-5kb-upstream-full-tx-11species.mc8nr.feather), which is the old database. The new one wasn't working per this [GitHub issue](https://github.com/aertslab/SCENIC/issues/334).
+
+```{r, eval = FALSE}
+# Load library
+require(SCENIC)
+library(SCopeLoomR)
+
+# Load data
+dat_comb <- readRDS(here::here("calderon/data/dat_comb.rds"))
+Idents(dat_comb) <- "cluster"
+DefaultAssay(dat_comb) <- "RNA"
+dat_comb <- NormalizeData(dat_comb)
+
+# Filtering genes for calculating time
+exprMat <- as.matrix(dat_comb@assays$RNA@data)
+cellInfo <- dat_comb@meta.data
+
+# Set options
+scenicOptions <- initializeScenic(org = "dmel",
+                                  dbDir = here::here("calderon/dbDir"),
+                                  datasetTitle = "5 hr vs. 10 hr combined",
+                                  nCores = 10)
+
+# Save the scenicOptions being used for later reference --
+saveRDS(scenicOptions, 
+        file = here::here("calderon/scenic/int/scenicOptions.rds"))
+
+# This sorta already exists? Do I really need to redo it?
+cellInfo$nGene <- colSums(exprMat>0)
+cellInfo <- data.frame(cellInfo)
+cbind(table(cellInfo$annot))
+
+# Save the cellInfo being used for later reference --
+saveRDS(cellInfo, 
+        here::here("calderon/scenic/int/cellInfo.rds"))
+
+
+# Co-expression network -----
+
+# Filter out genes bases on min number of 
+genesKept <- geneFiltering(exprMat, scenicOptions)
+exprMat_filtered <- exprMat[genesKept, ]
+
+# Run the correlation -- stored in "int/1.2_corrMat.Rds"
+runCorrelation(exprMat_filtered, scenicOptions)
+
+# Log2 expression of the filtered expression matrix
+exprMat_filtered_log <- log2(exprMat_filtered + 1) 
+# Save exprMat_filtered_log for later
+saveRDS(exprMat_filtered_log, 
+        here::here("calderon/scenic/int/exprMat_filtered_log.rds"))
+
+# ------------------------------------------------------------------------------
+# GENIE3 -- recovers the gene regulatory network from the expression data ------
+# ------------------------------------------------------------------------------
+
+# Load data
+scenicOptions <- readRDS(here::here("calderon/scenic/int/scenicOptions.rds"))
+exprMat_filtered_log <- readRDS(here::here("calderon/scenic/int/exprMat_filtered_log.rds"))
+
+# Run GENIE3
+runGenie3(exprMat_filtered_log, scenicOptions)
+
+# After Genie3
+aucellApp <- plotTsne_AUCellApp(scenicOptions, exprMat_filtered_log)
+
+library(SCENIC)
+scenicOptions <- readRDS("calderon/scenic/int/scenicOptions.rds")
+scenicOptions@settings$verbose <- TRUE
+scenicOptions@settings$nCores <- 10
+scenicOptions@settings$seed <- 123
+
+# For a very quick run: 
+# coexMethod=c("top5perTarget")
+scenicOptions@settings$dbs <- scenicOptions@settings$dbs["10kb"] # For toy run
+# save...
+
+setwd(here::here("calderon/scenic"))
+scenicOptions <- runSCENIC_1_coexNetwork2modules(scenicOptions)
+
+scenicOptions <- runSCENIC_2_createRegulons(scenicOptions, coexMethod=c("top5perTarget")) #** Only for toy run!!
+scenicOptions <- runSCENIC_3_scoreCells(scenicOptions, exprMat_log)
+saveRDS(scenicOptions, file="int/scenicOptions.Rds") # To save status
+
 ```
 
 
-<!-- # **ATAC-Seq data** -->
-
-<!-- ```{r} -->
-<!-- atac <- readRDS(here::here("calderon/data/exp1_hrs03-07_b1_gene_activity_counts.rds")) -->
-<!-- ``` -->
-
-<!-- ## Data structure of Seurat object -->
-
-<!-- ```{r} -->
-<!-- # Class -->
-<!-- class(atac) -->
-
-<!-- # Structure of data -->
-<!-- str(atac) -->
-
-<!-- # Peak at the data -->
-<!-- head(atac) -->
-
-<!-- # Print dimensions -->
-<!-- # Rows = genes; columns = cells -->
-<!-- dim(atac) -->
-<!-- ``` -->
-
-<!-- ## Metadata per cell -->
-<!-- ```{r} -->
-<!-- # metadata -->
-<!-- ``` -->
 
 
 
-<!-- # Add more stuff -->
 
-<!-- Other things to try: -->
 
-<!-- - Try RNA-Seq quality control filtering etc. -->
-<!-- - See the number of genes that meet the 0.02 count per per cell for differential expression per Joe Boyd -->
-<!-- - ATAC-Seq data -->
+
+
+
+
+# ------------------------------------------------------------------------------
+
+
+
+
+# **ATAC-Seq data**
+
+```{r}
+atac <- readRDS(
+  here::here("calderon/data/exp1_hrs03-07_b1_gene_activity_counts.rds"))
+
+atac <- readRDS(
+  here::here("calderon/data/fly.new.04-06_seurat_filtered_processed.rds"))
+```
+
+## Data structure of Seurat object
+
+```{r}
+# Class
+class(atac)
+
+# Structure of data
+str(atac)
+
+# Peak at the data
+head(atac)
+
+# Print dimensions
+# Rows = genes; columns = cells
+dim(atac)
+```
+
+## Metadata per cell
+```{r}
+# Metadata
+atac@assays
+```
+
+```{r}
+# 
+
+# Extract gene annotations from EnsDb
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v75) 
+```
+
+
+
+
+
+Other things to try:
+
+- Try RNA-Seq quality control filtering etc.
+- See the number of genes that meet the 0.02 count per per cell for differential expression per Joe Boyd
 
 
