@@ -7,6 +7,8 @@ output:
     theme: sandstone
     toc: true
     toc_float: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -31,7 +33,7 @@ dat_ws <- read_csv(here::here("pheno/data/acclimation_walking_speed_new_geno_sum
 
 # Canton S survival
 
-```{r}
+```{r, height = 4, width = 6}
 # Plot Canton S survival data
 dat %>%
   filter(Genotype == "CantonS") %>%
@@ -61,17 +63,29 @@ dat %>%
         panel.grid.minor.y = element_line(color = "grey90", 
                                           size = 0.5))
 
+# Save two sizes
+ggsave("pheno/figures/cantonS_survival.tiff", height = 4, width = 6)
+ggsave("pheno/figures/cantonS_survival_small.tiff", height = 3.5, width = 5)
 ```
 
 ## All old genotypes
 
-```{r}
+```{r, height = 6, width = 10}
 # Plot data for individual genotypes
 dat %>% 
+  filter(Genotype != "CantonS") %>%
   mutate(Genotype = factor(Genotype, 
-                           levels = c("CantonS", "RFM 48", "RFM 6", 
+                           levels = c("RFM 48", "RFM 6", 
                                       "VT 8", "VT 10", "Chiapas", 
                                        "Ghana", "Guam", "St. Kitts"))) %>%
+  mutate(Genotype = recode(Genotype,
+         "RFM 48" = "Raleigh, NC, USA (48)",
+         "RFM 6" = "Raleigh, NC, USA (6)",
+         "VT 8" = "East Calais, VT, USA (8)",
+         "VT 10" = "East Calais, VT, USA (10)",
+         "Chiapas" = "Chiapas, Mexico",
+         "Ghana" = "Ghana, Africa",
+         "St. Kitts" = "Monkey Hill, St. Kitts")) %>%
   filter(Stage == "Early") %>%
   mutate(Acclimation = paste0(Acclimation, "°C")) %>%
   ggplot(aes(x = Acclimation,
@@ -99,7 +113,10 @@ dat %>%
         panel.grid.minor.y = element_line(color = "grey90", 
                                           size = 0.5)) +
   facet_wrap(~ Genotype,
-             nrow = 2) 
+             nrow = 2)
+
+# Save figure
+ggsave("pheno/figures/na_genotypes_survival.tiff", height = 6, width = 10)
 ```
 
 ```{r}
@@ -127,12 +144,19 @@ dat %>%
 
 Data that Emily collected in the summer of 2022.
 
-```{r}
+```{r, height = 6, width = 8}
 # New genotypes ----------------------------------------------------------------
 dat_new %>% 
   mutate(Genotype = factor(Genotype,
                            levels = c("FRMO01", "FRMO02", "JPOK",
                                       "JPSC", "GH169", "GH174"))) %>%
+  mutate(Genotype = recode(Genotype,
+                           "FRMO01" = "Montpellier, France (1)",
+                           "FRMO02" = "Montpellier, France (2)",
+                           "JPOK" = "Okinawa, Japan (26°N)",
+                           "JPSC" = "Shiojiri, Japan (36°N)",
+                           "GH169" = "Accra, Ghana (169)",
+                           "GH174" = "Accra, Ghana (174)")) %>%
   dplyr::filter(Stage == "Early") %>%
   mutate(Acclimation = paste0(Acclimation, "°C")) %>%
   ggplot(aes(x = Acclimation,
@@ -160,16 +184,26 @@ dat_new %>%
         panel.grid.minor.y = element_line(color = "grey90", 
                                           size = 0.5)) +
   facet_wrap(~ Genotype, nrow = 3) 
+
+# Save figure
+ggsave("pheno/figures/new_genotypes_survival.tiff", height = 6, width = 8)
 ```
 
 ## Egg-to-pupa survival
 
-```{r}
+```{r, height = 6, width = 8}
 # Egg-to-pupa survival
 dat_new %>%
   mutate(Genotype = factor(Genotype,
                            levels = c("FRMO01", "FRMO02", "JPOK",
                                       "JPSC", "GH169", "GH174"))) %>%
+  mutate(Genotype = recode(Genotype,
+                           "FRMO01" = "Montpellier, France (1)",
+                           "FRMO02" = "Montpellier, France (2)",
+                           "JPOK" = "Okinawa, Japan (26°N)",
+                           "JPSC" = "Shiojiri, Japan (36°N)",
+                           "GH169" = "Accra, Ghana (169)",
+                           "GH174" = "Accra, Ghana (174)")) %>%
   dplyr::filter(Stage == "Early") %>%
   mutate(Acclimation = paste0(Acclimation, "°C")) %>%
   ggplot(aes(x = Acclimation,
@@ -197,16 +231,26 @@ dat_new %>%
         panel.grid.minor.y = element_line(color = "grey90", 
                                           size = 0.5)) +
   facet_wrap(~ Genotype, nrow = 3) 
+
+# Save figure
+ggsave("pheno/figures/new_genotypes_egg_to_pupa.tiff", height = 6, width = 8)
 ```
 
 ## Egg-to-adult survival
 
-```{r}
+```{r, height = 6, width = 8}
 # Egg-to-adult survival
 dat_new %>% 
   mutate(Genotype = factor(Genotype,
                            levels = c("FRMO01", "FRMO02", "JPOK",
                                       "JPSC", "GH169", "GH174"))) %>%
+  mutate(Genotype = recode(Genotype,
+                           "FRMO01" = "Montpellier, France (1)",
+                           "FRMO02" = "Montpellier, France (2)",
+                           "JPOK" = "Okinawa, Japan (26°N)",
+                           "JPSC" = "Shiojiri, Japan (36°N)",
+                           "GH169" = "Accra, Ghana (169)",
+                           "GH174" = "Accra, Ghana (174)")) %>%
   dplyr::filter(Stage == "Early") %>%
   mutate(Acclimation = paste0(Acclimation, "°C")) %>%
   ggplot(aes(x = Acclimation,
@@ -234,16 +278,26 @@ dat_new %>%
         panel.grid.minor.y = element_line(color = "grey90", 
                                           size = 0.5)) +
   facet_wrap(~ Genotype, nrow = 3) 
+
+# Save figure
+ggsave("pheno/figures/new_genotypes_egg_to_adult.tiff", height = 6, width = 8)
 ```
 
 ## Pupation height
 
-```{r}
+```{r, height = 6, width = 8}
 # Pupation height
 dat_ph %>%
   mutate(Genotype = factor(Genotype,
                                 levels = c("FRMO01", "FRMO02", "JPOK",
                                            "JPSC", "GH169", "GH174"))) %>%
+  mutate(Genotype = recode(Genotype,
+                           "FRMO01" = "Montpellier, France (1)",
+                           "FRMO02" = "Montpellier, France (2)",
+                           "JPOK" = "Okinawa, Japan (26°N)",
+                           "JPSC" = "Shiojiri, Japan (36°N)",
+                           "GH169" = "Accra, Ghana (169)",
+                           "GH174" = "Accra, Ghana (174)")) %>%
   dplyr::filter(Stage == "Early") %>%
   mutate(Acclimation = paste0(Acclimation, "°C")) %>%
   ggplot(aes(x = Acclimation,
@@ -257,7 +311,7 @@ dat_ph %>%
                             shape = 21,
                             color = "grey20",
                             alpha = 0.9) +
-  scale_y_continuous(name = "Pupation height") +
+  scale_y_continuous(name = "Pupation height (cm)") +
   theme_classic(base_size = 14) +
   scale_fill_manual(values = c("skyblue", "pink")) +
   labs(x = "Acclimation temperature") +
@@ -269,16 +323,26 @@ dat_ph %>%
         panel.grid.minor.y = element_line(color = "grey90", 
                                           size = 0.5)) +
   facet_wrap(~ Genotype, nrow = 3) 
+
+# Save figure
+ggsave("pheno/figures/new_genotypes_pupation_height.tiff", height = 6, width = 8)
 ```
 
 ## Walking speed
 
-```{r}
+```{r, height = 6, width = 8}
 # Walking speed
 dat_ws %>%
   mutate(Genotype = factor(Genotype,
                                 levels = c("FRMO01", "FRMO02", "JPOK",
                                            "JPSC", "GH169", "GH174"))) %>%
+  mutate(Genotype = recode(Genotype,
+                           "FRMO01" = "Montpellier, France (1)",
+                           "FRMO02" = "Montpellier, France (2)",
+                           "JPOK" = "Okinawa, Japan (26°N)",
+                           "JPSC" = "Shiojiri, Japan (36°N)",
+                           "GH169" = "Accra, Ghana (169)",
+                           "GH174" = "Accra, Ghana (174)")) %>%
   dplyr::filter(Stage == "Early") %>%
   mutate(Acclimation = paste0(Acclimation, "°C")) %>%
   ggplot(aes(x = Acclimation,
@@ -292,7 +356,7 @@ dat_ws %>%
                             shape = 21,
                             color = "grey20",
                             alpha = 0.9) +
-  scale_y_continuous(name = "Pupation height") +
+  scale_y_continuous(name = "Walking Speed") +
   theme_classic(base_size = 14) +
   scale_fill_manual(values = c("skyblue", "pink")) +
   labs(x = "Acclimation temperature") +
@@ -304,4 +368,74 @@ dat_ws %>%
         panel.grid.minor.y = element_line(color = "grey90", 
                                           size = 0.5)) +
   facet_wrap(~ Genotype, nrow = 3) 
+
+# Save figure
+ggsave("pheno/figures/new_genotypes_walking_speed.tiff", height = 6, width = 8)
 ```
+
+# Analysis of acclimation slopes
+
+```{r}
+# Plot 
+dat %>%
+  filter(Genotype == "CantonS") %>%
+  filter(Stage == "Early") %>%
+  ggplot(aes(x = Acclimation,
+                 y = Survival)) +
+  geom_point() +
+  geom_smooth(method = "lm",
+              se = FALSE,
+              color = "black",
+              linetype = 1)
+```
+
+
+```{r}
+# Linear model
+dat %>%
+  filter(Genotype == "CantonS") %>%
+  filter(Stage == "Early") %>%
+  lm(formula = Survival ~ Acclimation,
+     weights = Number_Eggs,
+     data = .) %>%
+  broom::tidy()
+```
+
+
+
+```{r}
+# Plot for new genotypes
+dat_new %>% 
+  mutate(Genotype = factor(Genotype,
+                           levels = c("FRMO01", "FRMO02", "JPOK",
+                                      "JPSC", "GH169", "GH174"))) %>%
+  mutate(Genotype = recode(Genotype,
+                           "FRMO01" = "Montpellier, France (1)",
+                           "FRMO02" = "Montpellier, France (2)",
+                           "JPOK" = "Okinawa, Japan (26°N)",
+                           "JPSC" = "Shiojiri, Japan (36°N)",
+                           "GH169" = "Accra, Ghana (169)",
+                           "GH174" = "Accra, Ghana (174)")) %>%
+  dplyr::filter(Stage == "Early") %>%
+  ggplot(aes(x = Acclimation,
+                 y = N_Hatched/N_Eggs)) +
+  geom_point() +
+  geom_smooth(method = "lm",
+              se = FALSE,
+              color = "black",
+              linetype = 1) +
+  facet_wrap(~Genotype)
+```
+
+```{r}
+# Linear model for all genotypes
+dat_new %>%
+  group_by(Genotype) %>%
+  nest() %>%
+  mutate(fit = map(data, 
+                   ~lm(N_Hatched/N_Eggs ~ Acclimation, 
+                       weights = N_Eggs, 
+                       data = .))) %>%
+  mutate(tidy = broom::tidy(fit)) 
+```
+
