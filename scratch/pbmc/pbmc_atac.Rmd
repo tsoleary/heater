@@ -1,0 +1,305 @@
+---
+title: "PBMC sc-ATAC-Seq"
+author: "TS O'Leary"
+date: "October 27, 2022"
+output:
+  rmarkdown::html_document:
+    theme: sandstone
+    toc: true
+    toc_float: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+# don"t show echos, warnings, or messages
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE,
+                      comment = "")
+```
+
+From [Analyzing PBMC scATAC-seq](https://stuartlab.org/signac/articles/pbmc_vignette.html) vignette.
+
+# Setup
+
+```{r}
+# Load packages
+require(tidyverse)
+library(Signac)
+library(Seurat)
+library(GenomeInfoDb)
+library(EnsDb.Hsapiens.v75)
+library(patchwork)
+set.seed(1234)
+
+# Load counts
+counts <- Read10X_h5(filename = here::here("pbmc/data/atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5"))
+
+# Load metadata
+metadata <- read.csv(file = here::here("pbmc/data/atac_v1_pbmc_10k_singlecell.csv"),
+                     header = TRUE,
+                     row.names = 1)
+
+# Create Chromatin Assay
+chrom_assay <- CreateChromatinAssay(counts = counts,
+                                    sep = c(":", "-"),
+                                    genome = "hg19",
+                                    fragments = here::here("pbmc/data/atac_v1_pbmc_10k_fragments.tsv.gz"),
+                                    min.cells = 10,
+                                    min.features = 200)
+
+# Create Seurat Object
+pbmc <- CreateSeuratObject(counts = chrom_assay,
+                           assay = "peaks",
+                           meta.data = metadata)
+```
+
+```{r, eval = FALSE, }
+pbmc <- readRDS(here::here("pbmc/data/pbmc_final.rds"))
+```
+
+
+## Check objects
+
+```{r}
+# Print object
+pbmc
+
+# Structure of object
+str(pbmc)
+
+# Meta data 
+glimpse(pbmc@meta.data)
+
+# Peaks
+pbmc[["peaks"]]
+```
+
+```{r, eval = FALSE}
+# Genomic ranges
+granges(pbmc)
+
+# Extract gene annotations from EnsDb
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v75)
+
+# Change to UCSC style since the data was mapped to hg19
+seqlevelsStyle(annotations) <- "UCSC"
+
+# Add the gene information to the object
+Annotation(pbmc) <- annotations
+```
+
+
+# Quality Control
+
+```{r, eval = FALSE}
+# Compute nucleosome signal score per cell
+pbmc <- NucleosomeSignal(object = pbmc)
+
+# Compute TSS enrichment score per cell
+pbmc <- TSSEnrichment(object = pbmc, fast = FALSE)
+
+# Add blacklist ratio and fraction of reads in peaks
+pbmc$pct_reads_in_peaks <- pbmc$peak_region_fragments / 
+  pbmc$passed_filters * 100
+pbmc$blacklist_ratio <- pbmc$blacklist_region_fragments / 
+  pbmc$peak_region_fragments
+```
+
+
+```{r, eval = FALSE}
+# Create TSS threshold High and Low assignment
+pbmc$high.tss <- ifelse(pbmc$TSS.enrichment > 2, 
+                        "High", "Low")
+
+# Create TSS plot
+TSSPlot(pbmc, 
+        group.by = "high.tss") + 
+  NoLegend()
+```
+
+
+```{r, eval = FALSE}
+# Nucleosome group threshold assignment
+pbmc$nucleosome_group <- ifelse(pbmc$nucleosome_signal > 4, 
+                                "NS > 4", "NS < 4")
+
+# Histogram of Nucleosome groups
+FragmentHistogram(object = pbmc, 
+                  group.by = "nucleosome_group")
+```
+
+```{r}
+# Violin plot of QC metrics
+VlnPlot(object = pbmc,
+        features = c("pct_reads_in_peaks", "peak_region_fragments",
+                     "TSS.enrichment", "blacklist_ratio", "nucleosome_signal"),
+        pt.size = 0.1,
+        ncol = 5)
+```
+
+
+```{r, eval = FALSE}
+# Filter out cells that don't pass QC
+pbmc <- subset(x = pbmc,
+               subset = peak_region_fragments > 3000 &
+                 peak_region_fragments < 20000 &
+                 pct_reads_in_peaks > 15 &
+                 blacklist_ratio < 0.05 &
+                 nucleosome_signal < 4 &
+                 TSS.enrichment > 2)
+```
+
+# Normalization and linear dimensional reduction
+
+```{r, eval = FALSE}
+# Compute the term-frequency inverse-document-frequency
+pbmc <- RunTFIDF(pbmc)
+# Find the most frequently observed features -- q0 includes all peaks 
+# (q75 would include only top 25%)
+pbmc <- FindTopFeatures(pbmc, min.cutoff = "q0")
+# Run singular value decomposition
+pbmc <- RunSVD(pbmc)
+```
+
+
+```{r, eval = FALSE}
+# Plot correction between depth and components
+DepthCor(pbmc)
+# First component is removed from further analysis because of the high corr
+```
+
+```{r, eval = FALSE}
+# Dimension Reduction & clustering
+pbmc <- RunUMAP(object = pbmc, reduction = "lsi", dims = 2:30)
+pbmc <- FindNeighbors(object = pbmc, reduction = "lsi", dims = 2:30)
+pbmc <- FindClusters(object = pbmc, verbose = FALSE, algorithm = 3)
+```
+
+```{r}
+# Plot Clusters
+DimPlot(object = pbmc, label = TRUE) + NoLegend()
+```
+
+# Create gene activity matrix
+
+```{r, eval = FALSE}
+# Create gene activity matrix
+gene.activities <- GeneActivity(pbmc)
+
+# Add gene activity matrix to the Seurat object as a new assay and normalize it
+pbmc[["RNA"]] <- CreateAssayObject(counts = gene.activities)
+
+# Log-normalize the count data
+pbmc <- NormalizeData(object = pbmc,
+                      assay = "RNA",
+                      normalization.method = "LogNormalize",
+                      scale.factor = median(pbmc$nCount_RNA))
+```
+
+```{r}
+DefaultAssay(pbmc) <- "RNA"
+
+FeaturePlot(object = pbmc,
+            features = c("MS4A1", "CD3D", "LEF1", "NKG7", "TREM1", "LYZ"),
+            pt.size = 0.1,
+            max.cutoff = "q95",
+            ncol = 3)
+```
+
+```{r, eval = FALSE}
+pbmc <- subset(pbmc, idents = 14, invert = TRUE)
+pbmc <- RenameIdents(
+  object = pbmc,
+  '0' = 'CD14 Mono',
+  '1' = 'CD4 Memory',
+  '2' = 'CD8 Effector',
+  '3' = 'CD4 Naive',
+  '4' = 'CD14 Mono',
+  '5' = 'DN T',
+  '6' = 'CD8 Naive',
+  '7' = 'NK CD56Dim',
+  '8' = 'pre-B',
+  '9' = 'CD16 Mono',
+  '10' = 'pro-B',
+  '11' = 'DC',
+  '12' = 'NK CD56bright',
+  '13' = 'pDC')
+```
+
+# Differentially accessible peaks between clusters
+
+```{r, eval = FALSE}
+# Change back to working with peaks instead of gene activities
+DefaultAssay(pbmc) <- "peaks"
+
+# Find differentially accessible peaks between CD4 Naive & CD14 Mono cells
+da_peaks <- FindMarkers(object = pbmc,
+                        ident.1 = "CD4 Naive",
+                        ident.2 = "CD14 Mono",
+                        test.use = "LR",
+                        latent.vars = "peak_region_fragments")
+```
+
+
+
+```{r}
+plot1 <- VlnPlot(
+  object = pbmc,
+  features = rownames(da_peaks)[1],
+  pt.size = 0.1,
+  idents = c("CD4 Naive","CD14 Mono")
+)
+plot2 <- FeaturePlot(
+  object = pbmc,
+  features = rownames(da_peaks)[1],
+  pt.size = 0.1
+)
+
+plot1 | plot2
+```
+
+```{r}
+# Alternatively you can just look at the FoldChange differences
+fc <- FoldChange(pbmc, ident.1 = "CD4 Naive", ident.2 = "CD14 Mono")
+head(fc)
+```
+
+```{r}
+# DA peaks that are open in Naive or Mono groups
+open_cd4naive <- rownames(da_peaks[da_peaks$avg_log2FC > 3, ])
+open_cd14mono <- rownames(da_peaks[da_peaks$avg_log2FC < -3, ])
+
+# Fine the closest feature to the peak regions
+closest_genes_cd4naive <- ClosestFeature(pbmc, regions = open_cd4naive)
+closest_genes_cd14mono <- ClosestFeature(pbmc, regions = open_cd14mono)
+
+
+head(closest_genes_cd4naive)
+head(closest_genes_cd14mono)
+```
+
+## Ploting genomic regions
+
+```{r}
+# set plotting order
+levels(pbmc) <- c("CD4 Naive", "CD4 Memory", "CD8 Naive", "CD8 Effector", 
+                  "DN T", "NK CD56bright", "NK CD56Dim", "pre-B", "pro-B", 
+                  "pDC", "DC", "CD14 Mono", "CD16 Mono")
+
+# Plot the genomic region for the first peak and include extended regions
+CoveragePlot(
+  object = pbmc,
+  region = rownames(da_peaks)[1],
+  extend.upstream = 40000,
+  extend.downstream = 20000
+)
+```
+
+The function `CoverageBrowser()` can be used to create an interactive version of these plots.
+
+
+
+
+
