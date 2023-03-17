@@ -9,8 +9,8 @@ heater.Rproj
 # Directories with large data files
 scratch/calderon/data/*
 scratch/calderon/dbDir/*
-scratch/calderon/scenic/int/*
-scrath/pbmc/data/*
+scratch/calderon/scenic/*
+scratch/pbmc/data/*
 
 # Specific files extensions to ignore
 *.out
