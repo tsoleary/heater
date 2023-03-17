@@ -1,13 +1,17 @@
+# R specific files to ignore
 .Rproj.user
 heater.Rproj
 .Rhistory
 .RData
 .Ruserdata
-calderon/data/*
-calderon/dbDir/*
-calderon/scenic/int/*
-*.out
-output/*
-int/*
-pbmc/data/*
 .DS_store
+
+# Directories with large data files
+scratch/calderon/data/*
+scratch/calderon/dbDir/*
+scratch/calderon/scenic/int/*
+scrath/pbmc/data/*
+
+# Specific files extensions to ignore
+*.out
+
