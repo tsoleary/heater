@@ -1,0 +1,316 @@
+﻿Genotype,Region,Stage,Acclimation,Temp,Number_Eggs,Survival
+CantonS,Temperate,Early,18,38.75,100,0.12
+CantonS,Temperate,Early,18,38.75,100,0.19
+CantonS,Temperate,Early,18,38.75,100,0.24
+CantonS,Temperate,Early,18,38.75,50,0.3
+CantonS,Temperate,Early,18,38.75,60,0.25
+CantonS,Temperate,Early,18,38.75,50,0.28
+CantonS,Temperate,Early,18,38.75,60,0.17
+CantonS,Temperate,Late,18,39.75,60,0.07
+CantonS,Temperate,Late,18,39.75,60,0.13
+CantonS,Temperate,Late,18,39.75,100,0.04
+CantonS,Temperate,Late,18,39.75,25,0.24
+CantonS,Temperate,Late,18,39.75,50,0.26
+CantonS,Temperate,Late,18,39.75,100,0.22
+CantonS,Temperate,Late,18,39.75,40,0.18
+CantonS,Temperate,Late,18,39.75,100,0.34
+CantonS,Temperate,Late,18,39.75,50,0.04
+CantonS,Temperate,Early,25,38.75,100,0.47
+CantonS,Temperate,Early,25,38.75,100,0.31
+CantonS,Temperate,Early,25,38.75,100,0.49
+CantonS,Temperate,Early,25,38.75,100,0.39
+CantonS,Temperate,Early,25,38.75,100,0.47
+CantonS,Temperate,Early,25,38.75,100,0.25
+CantonS,Temperate,Early,25,38.75,100,0.44
+CantonS,Temperate,Early,25,38.75,100,0.33
+CantonS,Temperate,Early,25,38.75,16,0.44
+CantonS,Temperate,Early,25,38.75,56,0.55
+CantonS,Temperate,Early,25,38.75,100,0.52
+CantonS,Temperate,Early,25,38.75,100,0.55
+CantonS,Temperate,Early,25,38.75,100,0.41
+CantonS,Temperate,Early,25,38.75,100,0.41
+CantonS,Temperate,Late,25,39.75,80,0.26
+CantonS,Temperate,Late,25,39.75,60,0.37
+CantonS,Temperate,Late,25,39.75,100,0.48
+CantonS,Temperate,Late,25,39.75,100,0.42
+CantonS,Temperate,Early,30,38.75,100,0.54
+CantonS,Temperate,Early,30,38.75,100,0.45
+CantonS,Temperate,Early,30,38.75,80,0.1875
+CantonS,Temperate,Early,30,38.75,56,0.571428571
+CantonS,Temperate,Early,30,38.75,16,0.5
+CantonS,Temperate,Early,30,38.75,80,0.4625
+CantonS,Temperate,Early,30,38.75,100,0.61
+CantonS,Temperate,Early,30,38.75,100,0.66
+CantonS,Temperate,Early,30,38.75,100,0.59
+CantonS,Temperate,Early,30,38.75,58,0.58
+CantonS,Temperate,Early,30,38.75,75,0.346666667
+CantonS,Temperate,Early,30,38.75,100,0.54
+CantonS,Temperate,Early,30,38.75,80,0.4625
+CantonS,Temperate,Early,30,38.75,100,0.39
+CantonS,Temperate,Late,30,39.75,20,0.6
+CantonS,Temperate,Late,30,39.75,40,0.475
+CantonS,Temperate,Late,30,39.75,100,0.25
+CantonS,Temperate,Late,30,39.75,40,0.2
+CantonS,Temperate,Late,30,39.75,60,0.616666667
+CantonS,Temperate,Late,30,39.75,60,0.416666667
+CantonS,Temperate,Late,30,39.75,60,0.65
+CantonS,Temperate,Late,30,39.75,100,0.6
+CantonS,Temperate,Late,30,39.75,100,0.64
+CantonS,Temperate,Late,30,39.75,100,0.43
+CantonS,Temperate,Late,30,39.75,100,0.49
+CantonS,Temperate,Late,30,39.75,100,0.42
+Ghana,Tropical,Early,30,38.75,50,0.32954545
+VT 10,Temperate,Early,30,38.75,50,0.3
+Chiapas,Tropical,Early,30,38.75,50,0.35714286
+St. Kitts,Tropical,Early,30,38.75,50,0.43877551
+RFM 48,Temperate,Early,30,38.75,50,0.8
+Guam,Tropical,Early,30,38.75,50,0.76344086
+Ghana,Tropical,Early,30,38.75,50,0.392857143
+VT 8,Temperate,Early,30,38.75,50,0.696969697
+VT 10,Temperate,Early,30,38.75,50,0.108695652
+Chiapas,Tropical,Early,30,38.75,50,0.25
+RFM 6,Temperate,Early,30,38.75,50,0.605263158
+St. Kitts,Tropical,Early,30,38.75,50,0.3
+RFM 48,Temperate,Early,30,38.75,50,0.727272727
+Ghana,Tropical,Early,30,38.75,50,0.402061856
+VT 8,Temperate,Early,30,38.75,50,0.74
+VT 10,Temperate,Early,30,38.75,50,0.159574468
+Chiapas,Tropical,Early,30,38.75,50,0.268817204
+RFM 6,Temperate,Early,30,38.75,50,0.636363636
+St. Kitts,Tropical,Early,30,38.75,50,0.557894737
+RFM 48,Temperate,Early,30,38.75,50,0.479591837
+Guam,Tropical,Early,30,38.75,50,0.54
+Ghana,Tropical,Early,30,38.75,12,0.25
+VT 8,Temperate,Early,30,38.75,50,0.56756757
+VT 10,Temperate,Early,30,38.75,6,0.33333333
+RFM 6,Temperate,Early,30,38.75,7,0.42857143
+St. Kitts,Tropical,Early,30,38.75,5,0
+Guam,Tropical,Early,30,38.75,12,0.416666667
+Ghana,Tropical,Early,30,38.75,50,0.40740741
+VT 8,Temperate,Early,30,38.75,50,0.79591837
+VT 10,Temperate,Early,30,38.75,10,0.2
+Chiapas,Tropical,Early,30,38.75,50,0.53571429
+RFM 6,Temperate,Early,30,38.75,50,0.39655172
+St. Kitts,Tropical,Early,30,38.75,50,0.3
+RFM 48,Temperate,Early,30,38.75,50,0.33333333
+Ghana,Tropical,Early,30,38.75,50,0.4
+VT 8,Temperate,Early,30,38.75,50,0.69
+VT 10,Temperate,Early,30,38.75,50,0.07
+Chiapas,Tropical,Early,30,38.75,50,0.59
+RFM 6,Temperate,Early,30,38.75,50,0.552238806
+St. Kitts,Tropical,Early,30,38.75,50,0.26
+RFM 48,Temperate,Early,30,38.75,50,0.68
+Guam,Tropical,Early,30,38.75,50,0.46
+Ghana,Tropical,Early,30,38.75,50,0.35
+VT 8,Temperate,Early,30,38.75,50,0.725
+VT 10,Temperate,Early,30,38.75,50,0.24
+Chiapas,Tropical,Early,30,38.75,50,0.52
+RFM 6,Temperate,Early,30,38.75,50,0.556962025
+St. Kitts,Tropical,Early,30,38.75,50,0.19
+RFM 48,Temperate,Early,30,38.75,50,0.6
+Guam,Tropical,Early,30,38.75,50,0.57
+Ghana,Tropical,Early,30,38.75,50,0.637681159
+VT 8,Temperate,Early,30,38.75,50,0.74
+VT 10,Temperate,Early,30,38.75,50,0.7
+Chiapas,Tropical,Early,30,38.75,50,0.62222222
+RFM 6,Temperate,Early,30,38.75,50,0.64
+St. Kitts,Tropical,Early,30,38.75,50,0.68
+RFM 48,Temperate,Early,30,38.75,50,0.69
+Guam,Tropical,Early,30,38.75,50,0.8
+Ghana,Tropical,Early,30,38.75,50,0.541666667
+VT 8,Temperate,Early,30,38.75,50,0.59
+VT 10,Temperate,Early,30,38.75,50,0.467532468
+Chiapas,Tropical,Early,30,38.75,50,0.6
+RFM 6,Temperate,Early,30,38.75,50,0.49
+St. Kitts,Tropical,Early,30,38.75,50,0.739726027
+RFM 48,Temperate,Early,30,38.75,50,0.820512821
+Guam,Tropical,Early,30,38.75,50,0.709677419
+Ghana,Tropical,Early,30,38.75,50,0.58
+VT 8,Temperate,Early,30,38.75,50,0.74
+VT 10,Temperate,Early,30,38.75,50,0.2
+Chiapas,Tropical,Early,30,38.75,50,0.377777778
+RFM 6,Temperate,Early,30,38.75,50,0.710526316
+St. Kitts,Tropical,Early,30,38.75,50,0.79
+RFM 48,Temperate,Early,30,38.75,50,0.673684211
+Guam,Tropical,Early,30,38.75,50,0.87
+Ghana,Tropical,Early,30,38.75,50,0.69
+VT 8,Temperate,Early,30,38.75,50,0.85
+VT 10,Temperate,Early,30,38.75,50,0.41
+Chiapas,Tropical,Early,30,38.75,50,0.82
+RFM 6,Temperate,Early,30,38.75,50,0.91
+St. Kitts,Tropical,Early,30,38.75,50,0.56
+RFM 48,Temperate,Early,30,38.75,50,0.75
+Guam,Tropical,Early,30,38.75,50,0.72
+Ghana,Tropical,Early,30,38.75,50,0.63
+VT 8,Temperate,Early,30,38.75,50,0.9
+VT 10,Temperate,Early,30,38.75,50,0.44
+Chiapas,Tropical,Early,30,38.75,50,0.88
+RFM 6,Temperate,Early,30,38.75,50,0.913793103
+St. Kitts,Tropical,Early,30,38.75,50,0.640449438
+RFM 48,Temperate,Early,30,38.75,50,0.727272727
+Guam,Tropical,Early,30,38.75,50,0.8
+Ghana,Tropical,Early,25,38.75,50,0.29
+VT 8,Temperate,Early,25,38.75,50,0.747474748
+VT 10,Temperate,Early,25,38.75,50,0.353535354
+Chiapas,Tropical,Early,25,38.75,50,0.6
+RFM 6,Temperate,Early,25,38.75,50,0.6875
+St. Kitts,Tropical,Early,25,38.75,50,0.44
+RFM 48,Temperate,Early,25,38.75,50,0.666666667
+Guam,Tropical,Early,25,38.75,50,0.333333333
+Ghana,Tropical,Early,25,38.75,50,0.321428
+VT 8,Temperate,Early,25,38.75,50,0.77
+VT 10,Temperate,Early,25,38.75,50,0.3
+Chiapas,Tropical,Early,25,38.75,50,0.565
+RFM 6,Temperate,Early,25,38.75,50,0.5
+St. Kitts,Tropical,Early,25,38.75,50,0.225
+RFM 48,Temperate,Early,25,38.75,50,0.3913
+Guam,Tropical,Early,25,38.75,50,0.68
+Ghana,Tropical,Early,25,38.75,50,0.321428
+VT 8,Temperate,Early,25,38.75,50,0.321428
+VT 10,Temperate,Early,25,38.75,50,0.3367
+Chiapas,Tropical,Early,25,38.75,50,0.29
+RFM 6,Temperate,Early,25,38.75,50,0.675
+St. Kitts,Tropical,Early,25,38.75,50,0.4324
+RFM 48,Temperate,Early,25,38.75,50,0.34
+Guam,Tropical,Early,25,38.75,50,0.69
+Ghana,Tropical,Early,25,38.75,50,0.1733
+VT 8,Temperate,Early,25,38.75,50,0.52
+Chiapas,Tropical,Early,25,38.75,50,0.44
+St. Kitts,Tropical,Early,25,38.75,50,0.32
+RFM 48,Temperate,Early,25,38.75,50,0.4878
+Guam,Tropical,Early,25,38.75,50,0.79
+Ghana,Tropical,Early,25,38.75,50,0.1176
+VT 8,Temperate,Early,25,38.75,50,0.55
+VT 10,Temperate,Early,25,38.75,50,0.0909
+Chiapas,Tropical,Early,25,38.75,50,0.5
+St. Kitts,Tropical,Early,25,38.75,50,0.2
+RFM 48,Temperate,Early,25,38.75,50,0.44
+Guam,Tropical,Early,25,38.75,50,0.61
+Ghana,Tropical,Early,25,38.75,50,0.17
+VT 8,Temperate,Early,25,38.75,50,0.88
+VT 10,Temperate,Early,25,38.75,50,0.2111
+Chiapas,Tropical,Early,25,38.75,50,0.2
+RFM 6,Temperate,Early,25,38.75,50,0.65
+St. Kitts,Tropical,Early,25,38.75,50,0.42
+RFM 48,Temperate,Early,25,38.75,50,0.71
+Guam,Tropical,Early,25,38.75,50,0.68367
+Ghana,Tropical,Early,25,38.75,50,0.19
+VT 8,Temperate,Early,25,38.75,50,0.69
+VT 10,Temperate,Early,25,38.75,50,0.4
+Chiapas,Tropical,Early,25,38.75,50,0.510638298
+RFM 6,Temperate,Early,25,38.75,50,0.352941177
+St. Kitts,Tropical,Early,25,38.75,50,0.525773196
+RFM 48,Temperate,Early,25,38.75,50,0.533333333
+Guam,Tropical,Early,25,38.75,50,0.616666667
+Ghana,Tropical,Early,25,38.75,50,0.36363636
+VT 8,Temperate,Early,25,38.75,50,0.86
+VT 10,Temperate,Early,25,38.75,50,0.716981132
+Chiapas,Tropical,Early,25,38.75,50,0.83333333
+RFM 6,Temperate,Early,25,38.75,50,0.643678161
+St. Kitts,Tropical,Early,25,38.75,50,0.947368421
+RFM 48,Temperate,Early,25,38.75,50,0.757281553
+Guam,Tropical,Early,25,38.75,50,0.79
+Ghana,Tropical,Early,25,38.75,50,0.525423729
+VT 8,Temperate,Early,25,38.75,50,0.85
+VT 10,Temperate,Early,25,38.75,50,0.810126582
+Chiapas,Tropical,Early,25,38.75,50,0.776470588
+RFM 6,Temperate,Early,25,38.75,50,0.88
+St. Kitts,Tropical,Early,25,38.75,50,0.95
+RFM 48,Temperate,Early,25,38.75,50,0.89
+Guam,Tropical,Early,25,38.75,50,0.88
+Ghana,Tropical,Early,25,38.75,50,0.5125
+VT 8,Temperate,Early,25,38.75,50,0.68
+VT 10,Temperate,Early,25,38.75,50,0.820512821
+Chiapas,Tropical,Early,25,38.75,50,0.527272727
+RFM 6,Temperate,Early,25,38.75,50,0.78
+St. Kitts,Tropical,Early,25,38.75,50,0.89
+RFM 48,Temperate,Early,25,38.75,50,0.84
+Guam,Tropical,Early,25,38.75,50,0.825
+Ghana,Tropical,Early,18,38.75,50,0.04
+VT 8,Temperate,Early,18,38.75,50,0.37755102
+VT 10,Temperate,Early,18,38.75,50,0.06
+Chiapas,Tropical,Early,18,38.75,50,0.16
+RFM 6,Temperate,Early,18,38.75,50,0.246753247
+St. Kitts,Tropical,Early,18,38.75,50,0.1
+RFM 48,Temperate,Early,18,38.75,50,0.3125
+Guam,Tropical,Early,18,38.75,50,0.57
+Ghana,Tropical,Early,18,38.75,50,0.212121212
+VT 8,Temperate,Early,18,38.75,50,0.363636364
+Chiapas,Tropical,Early,18,38.75,50,0.224489796
+RFM 6,Temperate,Early,18,38.75,50,0.348314607
+St. Kitts,Tropical,Early,18,38.75,50,0.15
+RFM 48,Temperate,Early,18,38.75,50,0.511627907
+Guam,Tropical,Early,18,38.75,50,0.489795918
+Ghana,Tropical,Early,18,38.75,50,0.15
+VT 8,Temperate,Early,18,38.75,50,0.52941176
+RFM 6,Temperate,Early,18,38.75,50,0.33333333
+St. Kitts,Tropical,Early,18,38.75,50,0.2
+RFM 48,Temperate,Early,18,38.75,50,0.33333
+Guam,Tropical,Early,18,38.75,50,0.55
+Ghana,Tropical,Early,18,38.75,11,0.36363636
+VT 8,Temperate,Early,18,38.75,50,0.37142857
+VT 10,Temperate,Early,18,38.75,10,0.2
+RFM 6,Temperate,Early,18,38.75,50,0.20930233
+Ghana,Tropical,Early,18,38.75,50,0.02857143
+VT 8,Temperate,Early,18,38.75,50,0.07
+VT 10,Temperate,Early,18,38.75,50,0.05263158
+Chiapas,Tropical,Early,18,38.75,50,0.2
+RFM 6,Temperate,Early,18,38.75,50,0.2
+St. Kitts,Tropical,Early,18,38.75,50,0.08695652
+RFM 48,Temperate,Early,18,38.75,50,0.066666667
+Guam,Tropical,Early,18,38.75,50,0.18
+VT 8,Temperate,Early,18,38.75,50,0.34
+VT 10,Temperate,Early,18,38.75,50,0.1875
+Chiapas,Tropical,Early,18,38.75,50,0.1369863
+RFM 6,Temperate,Early,18,38.75,50,0.63636364
+St. Kitts,Tropical,Early,18,38.75,50,0.12
+RFM 48,Temperate,Early,18,38.75,50,0.26470588
+Guam,Tropical,Early,18,38.75,50,0.23
+Ghana,Tropical,Early,18,38.75,50,0.217821782
+VT 8,Temperate,Early,18,38.75,50,0.861386139
+VT 10,Temperate,Early,18,38.75,50,0.626865672
+Chiapas,Tropical,Early,18,38.75,50,0.871794872
+RFM 6,Temperate,Early,18,38.75,50,0.647887324
+St. Kitts,Tropical,Early,18,38.75,50,0.06666667
+RFM 48,Temperate,Early,18,38.75,50,0.563829787
+Guam,Tropical,Early,18,38.75,50,0.8
+Ghana,Tropical,Early,18,38.75,50,0.491525424
+VT 8,Temperate,Early,18,38.75,50,0.868686869
+VT 10,Temperate,Early,18,38.75,50,0.714285714
+Chiapas,Tropical,Early,18,38.75,50,0.780487805
+RFM 6,Temperate,Early,18,38.75,50,0.765306122
+St. Kitts,Tropical,Early,18,38.75,50,0.65625
+RFM 48,Temperate,Early,18,38.75,50,0.615384615
+Guam,Tropical,Early,18,38.75,50,0.653061225
+Ghana,Tropical,Early,18,38.75,50,0.75
+VT 8,Temperate,Early,18,38.75,50,0.77
+VT 10,Temperate,Early,18,38.75,50,0.588235284
+Chiapas,Tropical,Early,18,38.75,50,0.76
+RFM 6,Temperate,Early,18,38.75,50,0.77631579
+St. Kitts,Tropical,Early,18,38.75,50,0.19
+RFM 48,Temperate,Early,18,38.75,50,0.43
+Guam,Tropical,Early,18,38.75,50,0.88
+Ghana,Tropical,Early,18,38.75,50,0.272727273
+VT 8,Temperate,Early,18,38.75,50,0.79
+VT 10,Temperate,Early,18,38.75,50,0.61
+Chiapas,Tropical,Early,18,38.75,50,0.79
+RFM 6,Temperate,Early,18,38.75,50,0.826666667
+St. Kitts,Tropical,Early,18,38.75,50,0.47
+RFM 48,Temperate,Early,18,38.75,50,0.71
+Guam,Tropical,Early,18,38.75,50,0.794871795
+Ghana,Tropical,Early,18,38.75,50,0.52
+VT 8,Temperate,Early,18,38.75,50,0.873684211
+VT 10,Temperate,Early,18,38.75,50,0.458823529
+Chiapas,Tropical,Early,18,38.75,50,0.7
+RFM 6,Temperate,Early,18,38.75,50,0.858695652
+St. Kitts,Tropical,Early,18,38.75,50,0.19
+RFM 48,Temperate,Early,18,38.75,50,0.66
+Guam,Tropical,Early,18,38.75,50,0.794871795
+Ghana,Tropical,Early,18,38.75,50,0.323529412
+VT 8,Temperate,Early,18,38.75,50,0.71
+VT 10,Temperate,Early,18,38.75,50,0.75
+Chiapas,Tropical,Early,18,38.75,50,0.84
+RFM 6,Temperate,Early,18,38.75,50,0.788888889
+St. Kitts,Tropical,Early,18,38.75,50,0.4
+RFM 48,Temperate,Early,18,38.75,50,0.522222222
+Guam,Tropical,Early,18,38.75,50,0.8

@@ -1,0 +1,88 @@
+---
+title: "Final Sample Nuceli Concentration"
+subtitle: "HEATER Project"
+author: "TS O'Leary"
+output:
+  rmarkdown::html_document:
+    theme: sandstone
+    toc: true
+    toc_float: true
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+```{r setup, include = FALSE}
+# don't show echos, warnings, or messages
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE, 
+                      message = FALSE,
+                      comment = "")
+```
+
+```{r}
+# Load packages
+require(tidyverse)
+require(kableExtra)
+
+# Load data
+dat <- read_csv(here::here("data/raw/nuclei_counts_2023-03-09.csv")) %>%
+  mutate(Slice = str_remove_all(Slice, ".tif")) %>%
+  separate(Slice, into = c("sample", "rep"), sep = "_")
+
+# Set variables ----
+
+# Dilution factor of samples loaded onto hemocytometer
+dil_factor <- 10
+# Final nuclei stock concentration and volume to hand to core
+
+nuc_std <- 2000
+tol_vol <- 20
+```
+
+# Data & Calculations
+
+## Raw data
+```{r}
+# Print raw data
+dat %>%
+  mutate(nuc_conc = (Count/0.1)*dil_factor) %>%
+  select(sample, rep, Count, nuc_conc) %>%
+  kable() %>%
+  kable_styling("striped") %>%
+  scroll_box(width = "100%", height = "100%")
+```
+
+## Average and SD
+
+```{r}
+# Calculate average and sd between samples
+dat %>%
+  mutate(nuc_conc = (Count/0.1)*dil_factor) %>%
+  group_by(sample) %>%
+  summarise(nuc_conc_avg = mean(nuc_conc),
+            nuc_conc_sd = sd(nuc_conc)) %>%
+  kable() %>%
+  kable_styling("striped") %>%
+  scroll_box(width = "100%", height = "100%")
+```
+
+## Create standard dilution
+
+```{r}
+# Calculate average concentration and necessary dilutions
+dat_dil <- dat %>%
+  mutate(nuc_conc = (Count/0.1)*dil_factor) %>%
+  group_by(sample) %>%
+  summarise(nuc_conc_avg = mean(nuc_conc)) %>%
+  mutate(nuc_uL = round((2000/nuc_conc_avg)*tol_vol, 2),
+         dil_buffer_uL = round(tol_vol - nuc_uL, 2))
+
+# Print out table
+dat_dil %>%
+  kable() %>%
+  kable_styling("striped") %>%
+  scroll_box(width = "100%", height = "100%")
+```
+
