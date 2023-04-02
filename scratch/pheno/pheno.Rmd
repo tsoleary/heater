@@ -64,8 +64,10 @@ dat %>%
                                           size = 0.5))
 
 # Save two sizes
-ggsave("output/figs/cantonS_survival.tiff", height = 4, width = 6)
-ggsave("output/figs/cantonS_survival_small.tiff", height = 3.5, width = 5)
+ggsave(here::here("output/figs/cantonS_survival.tiff"), 
+       height = 4, width = 6)
+ggsave(here::here("output/figs/cantonS_survival_small.tiff"), 
+       height = 3.5, width = 5)
 ```
 
 ## All old genotypes
@@ -116,7 +118,8 @@ dat %>%
              nrow = 2)
 
 # Save figure
-ggsave("output/figs/na_genotypes_survival.tiff", height = 6, width = 10)
+ggsave(here::here("output/figs/na_genotypes_survival.tiff"), 
+       height = 6, width = 10)
 ```
 
 ```{r}
@@ -186,7 +189,8 @@ dat_new %>%
   facet_wrap(~ Genotype, nrow = 3) 
 
 # Save figure
-ggsave("output/figs/new_genotypes_survival.tiff", height = 6, width = 8)
+ggsave(here::here("output/figs/new_genotypes_survival.tiff"), 
+       height = 6, width = 8)
 ```
 
 ## Egg-to-pupa survival
@@ -233,7 +237,8 @@ dat_new %>%
   facet_wrap(~ Genotype, nrow = 3) 
 
 # Save figure
-ggsave("output/figs/new_genotypes_egg_to_pupa.tiff", height = 6, width = 8)
+ggsave(here::here("output/figs/new_genotypes_egg_to_pupa.tiff"), 
+       height = 6, width = 8)
 ```
 
 ## Egg-to-adult survival
@@ -280,7 +285,8 @@ dat_new %>%
   facet_wrap(~ Genotype, nrow = 3) 
 
 # Save figure
-ggsave("output/figs/new_genotypes_egg_to_adult.tiff", height = 6, width = 8)
+ggsave(here::here("output/figs/new_genotypes_egg_to_adult.tiff"), 
+       height = 6, width = 8)
 ```
 
 ## Pupation height
@@ -325,7 +331,8 @@ dat_ph %>%
   facet_wrap(~ Genotype, nrow = 3) 
 
 # Save figure
-ggsave("output/figs/new_genotypes_pupation_height.tiff", height = 6, width = 8)
+ggsave(here::here("output/figs/new_genotypes_pupation_height.tiff"), 
+       height = 6, width = 8)
 ```
 
 ## Walking speed
@@ -370,7 +377,8 @@ dat_ws %>%
   facet_wrap(~ Genotype, nrow = 3) 
 
 # Save figure
-ggsave("output/figs/new_genotypes_walking_speed.tiff", height = 6, width = 8)
+ggsave(here::here("output/figs/new_genotypes_walking_speed.tiff", 
+                  height = 6, width = 8))
 ```
 
 # Analysis of acclimation slopes
