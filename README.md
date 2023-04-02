@@ -19,6 +19,7 @@ The files in this project are organized into the following directory structure:
     - `nuclei/` info and analysis related to nuclei troubleshooting
         - `flow/` flow cytometry data and analysis
     - `pbmc/` practice pbmc data set
+    - `writing` scraps methods sections scratch writing 
     
 - `output/` - all output
     - `figs/` - figures
