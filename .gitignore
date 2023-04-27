@@ -12,6 +12,7 @@ scratch/calderon/dbDir/*
 scratch/calderon/scenic/*
 scratch/pbmc/data/*
 data/raw/seq/*
+data/processed/seq/*
 
 # Specific files extensions to ignore
 *.out
