@@ -7,12 +7,10 @@ heater.Rproj
 .DS_store
 
 # Directories with large data files
-scratch/calderon/data/*
-scratch/calderon/dbDir/*
-scratch/calderon/scenic/*
-scratch/pbmc/data/*
+scratch/*
 data/raw/seq/*
 data/processed/seq/*
+
 
 # Specific files extensions to ignore
 *.out
