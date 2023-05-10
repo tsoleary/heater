@@ -1,16 +1,32 @@
 # Methods
 
-# Fly care
+## Fly care
 
-# Condos
+Canton-S flies (Canton, OH, USA) were raised on standard yeast, cornmeal, and molasses food. Stocks were kept at a standard density of approximately 50 to 100 flies per vial (95mm x 25mm, Genessee Scientific) in an incubator (DR -36VL, Percival Scientific Inc.) at 25°C at 55% relative humidity on a 12hr:12hr light:dark cycle for more than 2 generations prior to starting the experiment. 
 
-# Acute heat shocks and hatching success
+## Acclimation and accessing heat tolerance
 
-# 
+Approximately 100 mating pairs of Canton-S flies were transferred into small fly cages (Genesee Scientific) with grape juice agar plates (60 x 15 mm) with yeast paste and kept in the 25°C incubator. Two successive one hour pre-lays were preformed prior to each experimental collection. Embryos were collected for one hour and then allowed to acclimate for a certain amount of time based on the expected development rate of their acclimation temperature. Development times were estimated based on a Q~10~ of 2.2 (@Kuntz and Eisen 2014), and subsequently validated by visualizing Browne's stage 11 embryos in each acclimation condition under a light microscope (M80, Leica). Stage 11 embryos were defined as embryos displaying full germ band extension towards the anterior.  
 
-# Nuclei extraction
+Control embryos were kept at 25°C for 5 hours, cool acclimated embryos were transferred to 18°C for 9 hours, and warm acclimated embryos were transferred to 30°C for 3 hours. To access acute heat tolerance following acclimation, egg plates were wrapped in Parafilm, submerged in a water bath (A24B, Thermo Scientific), and heat shocked at 38.75°C for 45 minutes. Embryos were then moved into four-by-five grids of twenty total eggs (Number of total eggs per acclimation temperature: 520, 1272, 1145 for 18°C, 25°C, and 30°C respectively) with a paintbrush. All embryos recovered from heat shock at 25°C and hatching success was scored approximately 48 hours after initial eggs laying by visualizing hatching under a dissecting microscope.  
 
-# Sequencing workflow
+## Embryo acclimation and nuclei extraction for sequencing
 
-# Sequencing analysis
+Follwing the heat tolerance results, ee chose to move forward with the control (25°C) and cool acclimated (18°C) embryos for Chromium Single Cell Multiome ATAC + Gene Expression (10X Genomics). Here, embryos were collected and acclimated as before but following acclimation, embryos were washed and dechrionated. Approximately 50 stage 11 embryos were hand-selected and collected with a paintbrush into a 1.5 mL DNA LoBind tube (Eppendorf), then 100 µL of cryobuffer (90% FBS and 10% DMSO) was added and samples were placed in a isopropanol cryochamber (Cryo-Safe™ Cooler-1°C Freeze Control, Bel-Art Products) and frozen at -80°C until nuclei extraction.
+
+Nuclei extraction was completed and described in @Albright_2022. In detail, cryofrozen embryo samples were thawed on ice and subsequently washed with 250 µL 1x PBS, centrifuged (Sorvall ST89, Thermo Scientific) at 500 RCF for three minutes at 4°C. Then 600 µL of lysis buffer (10 mM Tris-HCl, pH 7.5, 10 mM NaCl, 3 mM MgCl~2~, 0.1% IGEPAL, 1% BSA, 1 mM DTT and 1 U/µL RNase Inhibitor (RNaseOUT™ Recombinant Ribonuclease Inhibitor, Thermo Fisher) prepared with nuclease free H~2~O) was added to the embryo pellet and the sample was transfered to a 1 mL Dounce homogenizer (KIMBLE® KONTES®, Sigma). Embryos were homogenized on ice with the loose pestle for ten passes and then further homogenized with the tight pestle for an additional ten passes. To decrease loss of sample, pestles were rinsed with 100 µL of lysis buffer following removal from the sample. The 800 µL of homogenate was filtered with a 40 µm Mini-Strainer (pluriSelect) into a fresh 1.5 mL LoBind tube. The sample was then centrifuged at 900 RCF for five minutes at 4°C. After discarding the supernatant, the resulting nuclei pellet was washed with 500 µL wash buffer (identical to the Lysis buffer but missing IGEPAL) and centrifuged again at 900 RCF for five minutes at 4°C. The pellet was resuspended in 20 µL 1X nuclei buffer (10X Genomics) with 1 mM DTT and 1 U/µL RNase Inhibitor.
+
+To access the quality and concentration of each sample, an aliquot of isolated nuclei was used to create a one-tenth dilution in 1X PBS and 0.1 mg/mL DAPI. Samples were visualized on a confocal microscope (Nikon ECLIPSE Ti2). We confirmed nuclei quality by looking for the absence of nuclear blebing at 600X magnification – all visualized nuclei were high-quality or mostly intact with minor evidence of blebbing as defined by 10X Genomics. Nuclei concentration was assessed by loading 10 µL of one-tenth diluted nuclei sample onto a hemacytometer (Bright-Line™, American Optical) and visualizing DAPI fluorsence on the confocal microscope at 100X magnification. 
+
+Original undiluted samples were brought down an estimated concentration of 2,000 nuclei per µL with 1X nuclei buffer before proceeding directly to the 10X Genomics Chromium Single Cell Multiome ATAC + Gene Expression sequencing library preparation.
+
+## Library preparation and sequencing
+
+Nuclei samples then immediately began the ATAC and GEX library preparation following the 10X Genomics protocol (*Chromium Next GEM Multiome ATAC + Gene Expression User Guide*, Document Number CG000338, Rev F, August 2022) for a final target of 4,000 total nuclei per sample. Briefly, each sample of nuclei was transposed and then loaded onto a Chromium Next GEM Chip J to generate GEMs and barcode individual nuclei. After the GEMs are broken down, barcoded transposed DNA and cDNA are amplified with PCR. And finally, the individual ATAC and Gene Expression libraries was constructed and then sequenced on rapid-run flow cell on a Ilumina Hi-Seq 2500™. 
+
+## Sequencing analysis
+
+Sequencing reads were demultiplexed and analyzed with the Cell Ranger ARC (version 2.0.2, 10X Genomics) pipeline was as recommended. In more detail, a _Drosophila melanogaster_ reference package was created following 10X Genomics recommendations. The FASTA ([Drosophila_melanogaster.BDGP6.32.dna.toplevel.fa.gz](https://ftp.ensembl.org/pub/release-109/fasta/drosophila_melanogaster/dna/Drosophila_melanogaster.BDGP6.32.dna.toplevel.fa.gz)) and GTF ([Drosophila_melanogaster.BDGP6.32.109.gtf.gz](https://ftp.ensembl.org/pub/release-109/gtf/drosophila_melanogaster/Drosophila_melanogaster.BDGP6.32.109.gtf.gz)) files were downloaded from Ensembl database. Prior creating the reference package, the GTF file was filtered so that the reference was restricted to protein coding, long non-coding RNA, antisense, and immune-related genes, so we would be using the same filter criteria used by 10X Genomics to create the human and mouse references. 
+
+Then the Cell Ranger ARC pipeline was run on all samples to trim, align, and map reads, and then create count matrices for gene expression and chromatin accessibility peaks. Samples were then aggregated together into a single file for each data type and then the files were imported into R (version 4.2.2) and analyzed using Seurat (@Satija et al 2015, version 4.3.0).  All code used for the analysis is available on GitHub at https://github.com/tsoleary/heater. 
 
