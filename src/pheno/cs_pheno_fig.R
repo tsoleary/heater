@@ -11,16 +11,20 @@
 library(tidyverse)
 
 # Load data
-dat <- read_csv(here::here("data/raw/embryo_acc_pheno.csv"))
+dat <- read_csv(here::here("data/raw/pheno/embryo_acc_pheno.csv"))
 
 # Filter only Canton S data
 dat <- dat %>%
-  filter(Genotype == "CantonS")
+  filter(Genotype == "CantonS") %>%
+  filter(Stage == "Early")
+
+# Count the number of eggs per acclimation treatment
+dat %>%
+  group_by(Acclimation) %>%
+  summarise(total_eggs = sum(Number_Eggs))
 
 # Plot Canton S Survival
 dat %>%
-  filter(Genotype == "CantonS") %>%
-  filter(Stage == "Early") %>%
   mutate(Acclimation = paste0(Acclimation, "°C")) %>%
   ggplot(aes(x = Acclimation,
              y = Survival*100)) +
