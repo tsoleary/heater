@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4 Seurat | How Embryos Acclimate to Temperature through Epigenetic Regulation</title>
+  <meta name="description" content="Record of analysis for HEATER project." />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4 Seurat | How Embryos Acclimate to Temperature through Epigenetic Regulation" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Record of analysis for HEATER project." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4 Seurat | How Embryos Acclimate to Temperature through Epigenetic Regulation" />
+  
+  <meta name="twitter:description" content="Record of analysis for HEATER project." />
+  
+
+<meta name="author" content="TS O’Leary" />
+
+
+<meta name="date" content="2023-05-15" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="cell-ranger-arc.html"/>
+<link rel="next" href="session-info.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="heater.html"><a href="heater.html"><i class="fa fa-check"></i><strong>HEATER</strong></a></li>
+<li class="chapter" data-level="1" data-path="embryonic-thermal-acclimation.html"><a href="embryonic-thermal-acclimation.html"><i class="fa fa-check"></i><b>1</b> <strong>Embryonic thermal acclimation</strong></a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="embryonic-thermal-acclimation.html"><a href="embryonic-thermal-acclimation.html#egg-hatching-success"><i class="fa fa-check"></i><b>1.1</b> Egg hatching success</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="nuclei-isolation.html"><a href="nuclei-isolation.html"><i class="fa fa-check"></i><b>2</b> <strong>Nuclei isolation</strong></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="nuclei-isolation.html"><a href="nuclei-isolation.html#nuclei-quality"><i class="fa fa-check"></i><b>2.1</b> Nuclei quality</a></li>
+<li class="chapter" data-level="2.2" data-path="nuclei-isolation.html"><a href="nuclei-isolation.html#nuclei-counts"><i class="fa fa-check"></i><b>2.2</b> Nuclei counts</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="cell-ranger-arc.html"><a href="cell-ranger-arc.html"><i class="fa fa-check"></i><b>3</b> <strong>Cell Ranger ARC</strong></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="cell-ranger-arc.html"><a href="cell-ranger-arc.html#mkref"><i class="fa fa-check"></i><b>3.1</b> <code>mkref</code></a></li>
+<li class="chapter" data-level="3.2" data-path="cell-ranger-arc.html"><a href="cell-ranger-arc.html#count"><i class="fa fa-check"></i><b>3.2</b> <code>count</code></a></li>
+<li class="chapter" data-level="3.3" data-path="cell-ranger-arc.html"><a href="cell-ranger-arc.html#aggr"><i class="fa fa-check"></i><b>3.3</b> <code>aggr</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="seurat.html"><a href="seurat.html"><i class="fa fa-check"></i><b>4</b> <strong>Seurat</strong></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="seurat.html"><a href="seurat.html#create-seurat-object"><i class="fa fa-check"></i><b>4.1</b> Create seurat object</a></li>
+<li class="chapter" data-level="4.2" data-path="seurat.html"><a href="seurat.html#quality-control-and-filtering"><i class="fa fa-check"></i><b>4.2</b> Quality control and filtering</a></li>
+<li class="chapter" data-level="4.3" data-path="seurat.html"><a href="seurat.html#clustering"><i class="fa fa-check"></i><b>4.3</b> Clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="session-info.html"><a href="session-info.html"><i class="fa fa-check"></i>Session Info</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">How Embryos Acclimate to Temperature through Epigenetic Regulation</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="seurat" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">4</span> <strong>Seurat</strong><a href="seurat.html#seurat" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="create-seurat-object" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Create seurat object<a href="seurat.html#create-seurat-object" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="seurat.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------------------------</span></span>
+<span id="cb6-2"><a href="seurat.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data and set up Seurat object</span></span>
+<span id="cb6-3"><a href="seurat.html#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># May 11, 2023</span></span>
+<span id="cb6-4"><a href="seurat.html#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># TS O&#39;Leary</span></span>
+<span id="cb6-5"><a href="seurat.html#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------------------------</span></span>
+<span id="cb6-6"><a href="seurat.html#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="seurat.html#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Description </span></span>
+<span id="cb6-8"><a href="seurat.html#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Load in the RNA-Seq count data and the ATAC-Seq peak fragment data and save as</span></span>
+<span id="cb6-9"><a href="seurat.html#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># an rds file to be used for quality control and filtering.</span></span>
+<span id="cb6-10"><a href="seurat.html#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="seurat.html#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries</span></span>
+<span id="cb6-12"><a href="seurat.html#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb6-13"><a href="seurat.html#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
+<span id="cb6-14"><a href="seurat.html#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Signac)</span>
+<span id="cb6-15"><a href="seurat.html#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AnnotationHub)</span>
+<span id="cb6-16"><a href="seurat.html#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="seurat.html#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the RNA-Seq and ATAC-Seq data -------------------------------------------</span></span>
+<span id="cb6-18"><a href="seurat.html#cb6-18" aria-hidden="true" tabindex="-1"></a>data_dir <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;data/processed/seq/all/outs/&quot;</span>)</span>
+<span id="cb6-19"><a href="seurat.html#cb6-19" aria-hidden="true" tabindex="-1"></a>raw_feature_dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(data_dir, <span class="st">&quot;raw_feature_bc_matrix&quot;</span>)</span>
+<span id="cb6-20"><a href="seurat.html#cb6-20" aria-hidden="true" tabindex="-1"></a>frag_path <span class="ot">&lt;-</span> <span class="fu">paste0</span>(data_dir, <span class="st">&quot;atac_fragments.tsv.gz&quot;</span>)</span>
+<span id="cb6-21"><a href="seurat.html#cb6-21" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">Read10X</span>(raw_feature_dir)</span>
+<span id="cb6-22"><a href="seurat.html#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="seurat.html#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Get gene annotations for dm6 -------------------------------------------------</span></span>
+<span id="cb6-24"><a href="seurat.html#cb6-24" aria-hidden="true" tabindex="-1"></a>BDGP6<span class="fl">.32</span> <span class="ot">&lt;-</span> <span class="fu">query</span>(</span>
+<span id="cb6-25"><a href="seurat.html#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">AnnotationHub</span>(), </span>
+<span id="cb6-26"><a href="seurat.html#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;EnsDb&quot;</span>, <span class="st">&quot;Drosophila melanogaster&quot;</span>, <span class="st">&quot;109&quot;</span>)</span>
+<span id="cb6-27"><a href="seurat.html#cb6-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-28"><a href="seurat.html#cb6-28" aria-hidden="true" tabindex="-1"></a>annotation <span class="ot">&lt;-</span> <span class="fu">GetGRangesFromEnsDb</span>(BDGP6<span class="fl">.32</span>[[<span class="dv">1</span>]])</span>
+<span id="cb6-29"><a href="seurat.html#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="fu">seqlevelsStyle</span>(annotation) <span class="ot">&lt;-</span> <span class="st">&quot;UCSC&quot;</span></span>
+<span id="cb6-30"><a href="seurat.html#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="seurat.html#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Meta data --------------------------------------------------------------------</span></span>
+<span id="cb6-32"><a href="seurat.html#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Create meta data for all cells based on the GEM well suffix. From 10X Genomics</span></span>
+<span id="cb6-33"><a href="seurat.html#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co"># &quot;This number, which indicates which GEM well the barcode sequence came from, </span></span>
+<span id="cb6-34"><a href="seurat.html#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="co"># is called the GEM well suffix. The numbering of the GEM wells will reflect the </span></span>
+<span id="cb6-35"><a href="seurat.html#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="co"># order that the GEM wells were provided in the Aggregation CSV.&quot;</span></span>
+<span id="cb6-36"><a href="seurat.html#cb6-36" aria-hidden="true" tabindex="-1"></a>meta_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">cellnames =</span> <span class="fu">colnames</span>(counts[[<span class="dv">1</span>]])) <span class="sc">%&gt;%</span></span>
+<span id="cb6-37"><a href="seurat.html#cb6-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">orig.ident =</span> <span class="fu">str_extract</span>(cellnames, <span class="st">&quot;[1-4]&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-38"><a href="seurat.html#cb6-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb6-39"><a href="seurat.html#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>orig.ident, <span class="sc">~</span>sample_name, <span class="sc">~</span>acc_temp,</span>
+<span id="cb6-40"><a href="seurat.html#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;1&quot;</span>, <span class="st">&quot;18C_Rep1&quot;</span>, <span class="st">&quot;18C&quot;</span>,</span>
+<span id="cb6-41"><a href="seurat.html#cb6-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;2&quot;</span>, <span class="st">&quot;18C_Rep2&quot;</span>, <span class="st">&quot;18C&quot;</span>,</span>
+<span id="cb6-42"><a href="seurat.html#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;3&quot;</span>, <span class="st">&quot;25C_Rep1&quot;</span>, <span class="st">&quot;25C&quot;</span>,</span>
+<span id="cb6-43"><a href="seurat.html#cb6-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;4&quot;</span>, <span class="st">&quot;25C_Rep2&quot;</span>, <span class="st">&quot;25C&quot;</span></span>
+<span id="cb6-44"><a href="seurat.html#cb6-44" aria-hidden="true" tabindex="-1"></a>  ), </span>
+<span id="cb6-45"><a href="seurat.html#cb6-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&quot;orig.ident&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-46"><a href="seurat.html#cb6-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&quot;cellnames&quot;</span>)</span>
+<span id="cb6-47"><a href="seurat.html#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-48"><a href="seurat.html#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Seurat object containing the RNA data</span></span>
+<span id="cb6-49"><a href="seurat.html#cb6-49" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">CreateSeuratObject</span>(</span>
+<span id="cb6-50"><a href="seurat.html#cb6-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">project =</span> <span class="st">&quot;heater&quot;</span>,</span>
+<span id="cb6-51"><a href="seurat.html#cb6-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">counts =</span> counts<span class="sc">$</span><span class="st">`</span><span class="at">Gene Expression</span><span class="st">`</span>,</span>
+<span id="cb6-52"><a href="seurat.html#cb6-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay =</span> <span class="st">&quot;RNA&quot;</span>,</span>
+<span id="cb6-53"><a href="seurat.html#cb6-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">names.delim =</span> <span class="st">&quot;-&quot;</span>,</span>
+<span id="cb6-54"><a href="seurat.html#cb6-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">meta.data =</span> meta_data</span>
+<span id="cb6-55"><a href="seurat.html#cb6-55" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-56"><a href="seurat.html#cb6-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-57"><a href="seurat.html#cb6-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Create ATAC assay and add it to the object</span></span>
+<span id="cb6-58"><a href="seurat.html#cb6-58" aria-hidden="true" tabindex="-1"></a>dat[[<span class="st">&quot;ATAC&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">CreateChromatinAssay</span>(</span>
+<span id="cb6-59"><a href="seurat.html#cb6-59" aria-hidden="true" tabindex="-1"></a>  <span class="at">counts =</span> counts<span class="sc">$</span>Peaks,</span>
+<span id="cb6-60"><a href="seurat.html#cb6-60" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep =</span> <span class="fu">c</span>(<span class="st">&quot;:&quot;</span>, <span class="st">&quot;-&quot;</span>),</span>
+<span id="cb6-61"><a href="seurat.html#cb6-61" aria-hidden="true" tabindex="-1"></a>  <span class="at">fragments =</span> frag_path,</span>
+<span id="cb6-62"><a href="seurat.html#cb6-62" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation =</span> annotation,</span>
+<span id="cb6-63"><a href="seurat.html#cb6-63" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Validate fragments arg makes sure all cells can be found in the frags file</span></span>
+<span id="cb6-64"><a href="seurat.html#cb6-64" aria-hidden="true" tabindex="-1"></a>  <span class="co"># However, there may be cells/barcodes that are present in the assay, but are </span></span>
+<span id="cb6-65"><a href="seurat.html#cb6-65" aria-hidden="true" tabindex="-1"></a>  <span class="co"># not represented in the fragment file. For example, RNA-seq reads that are</span></span>
+<span id="cb6-66"><a href="seurat.html#cb6-66" aria-hidden="true" tabindex="-1"></a>  <span class="co"># from GEM barcodes that have no fragments associated with them. Check with </span></span>
+<span id="cb6-67"><a href="seurat.html#cb6-67" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Seth about this.</span></span>
+<span id="cb6-68"><a href="seurat.html#cb6-68" aria-hidden="true" tabindex="-1"></a>  <span class="at">validate.fragments =</span> <span class="cn">FALSE</span></span>
+<span id="cb6-69"><a href="seurat.html#cb6-69" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-70"><a href="seurat.html#cb6-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-71"><a href="seurat.html#cb6-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Save raw Seurat object</span></span>
+<span id="cb6-72"><a href="seurat.html#cb6-72" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(dat, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;data/processed/seurat_object/01_dat_raw.rds&quot;</span>))</span></code></pre></div>
+</div>
+<div id="quality-control-and-filtering" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Quality control and filtering<a href="seurat.html#quality-control-and-filtering" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="seurat.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------------------------</span></span>
+<span id="cb7-2"><a href="seurat.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Quality control and filtering of low-quality cells</span></span>
+<span id="cb7-3"><a href="seurat.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># March 27, 2023</span></span>
+<span id="cb7-4"><a href="seurat.html#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># TS O&#39;Leary</span></span>
+<span id="cb7-5"><a href="seurat.html#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------------------------</span></span>
+<span id="cb7-6"><a href="seurat.html#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="seurat.html#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Description -----</span></span>
+<span id="cb7-8"><a href="seurat.html#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic quality control metrics and filtering out non-cell barcodes.</span></span>
+<span id="cb7-9"><a href="seurat.html#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="seurat.html#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries</span></span>
+<span id="cb7-11"><a href="seurat.html#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
+<span id="cb7-12"><a href="seurat.html#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Signac)</span>
+<span id="cb7-13"><a href="seurat.html#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb7-14"><a href="seurat.html#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="seurat.html#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Load  data</span></span>
+<span id="cb7-16"><a href="seurat.html#cb7-16" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;data/processed/seurat_object/01_dat_raw.rds&quot;</span>))</span>
+<span id="cb7-17"><a href="seurat.html#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="seurat.html#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="seurat.html#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Per sample raw sequencing read data information</span></span>
+<span id="cb7-20"><a href="seurat.html#cb7-20" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span></span>
+<span id="cb7-21"><a href="seurat.html#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sample_name) <span class="sc">%&gt;%</span></span>
+<span id="cb7-22"><a href="seurat.html#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_RNA_Reads =</span> <span class="fu">sum</span>(nCount_RNA),</span>
+<span id="cb7-23"><a href="seurat.html#cb7-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">total_ATAC_Reads =</span> <span class="fu">sum</span>(nCount_ATAC))</span>
+<span id="cb7-24"><a href="seurat.html#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="seurat.html#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Knee-plot for ATAC -----------------------------------------------------------</span></span>
+<span id="cb7-26"><a href="seurat.html#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Create ranked data.frame</span></span>
+<span id="cb7-27"><a href="seurat.html#cb7-27" aria-hidden="true" tabindex="-1"></a>knee_atac_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb7-28"><a href="seurat.html#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">nCount_ATAC =</span> <span class="fu">sort</span>(dat<span class="sc">$</span>nCount_ATAC, </span>
+<span id="cb7-29"><a href="seurat.html#cb7-29" aria-hidden="true" tabindex="-1"></a>                     <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-30"><a href="seurat.html#cb7-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-31"><a href="seurat.html#cb7-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&quot;rank&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-32"><a href="seurat.html#cb7-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rank =</span> <span class="fu">as.numeric</span>(rank)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-33"><a href="seurat.html#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">40000</span>)</span>
+<span id="cb7-34"><a href="seurat.html#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="seurat.html#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the knee_plot</span></span>
+<span id="cb7-36"><a href="seurat.html#cb7-36" aria-hidden="true" tabindex="-1"></a>knee_atac_df <span class="sc">%&gt;%</span></span>
+<span id="cb7-37"><a href="seurat.html#cb7-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb7-38"><a href="seurat.html#cb7-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> rank,</span>
+<span id="cb7-39"><a href="seurat.html#cb7-39" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> nCount_ATAC),</span>
+<span id="cb7-40"><a href="seurat.html#cb7-40" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>,</span>
+<span id="cb7-41"><a href="seurat.html#cb7-41" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape =</span> <span class="dv">21</span>) <span class="sc">+</span></span>
+<span id="cb7-42"><a href="seurat.html#cb7-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">10000</span>),</span>
+<span id="cb7-43"><a href="seurat.html#cb7-43" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="dv">2</span>,</span>
+<span id="cb7-44"><a href="seurat.html#cb7-44" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;orange&quot;</span>,</span>
+<span id="cb7-45"><a href="seurat.html#cb7-45" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.8</span>,</span>
+<span id="cb7-46"><a href="seurat.html#cb7-46" aria-hidden="true" tabindex="-1"></a>             <span class="at">linewidth =</span> <span class="fl">1.1</span>) <span class="sc">+</span></span>
+<span id="cb7-47"><a href="seurat.html#cb7-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">500</span>),</span>
+<span id="cb7-48"><a href="seurat.html#cb7-48" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="dv">2</span>,</span>
+<span id="cb7-49"><a href="seurat.html#cb7-49" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;orange&quot;</span>,</span>
+<span id="cb7-50"><a href="seurat.html#cb7-50" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.8</span>,</span>
+<span id="cb7-51"><a href="seurat.html#cb7-51" aria-hidden="true" tabindex="-1"></a>             <span class="at">linewidth =</span> <span class="fl">1.1</span>) <span class="sc">+</span></span>
+<span id="cb7-52"><a href="seurat.html#cb7-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">trans =</span> <span class="st">&quot;log10&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-53"><a href="seurat.html#cb7-53" aria-hidden="true" tabindex="-1"></a>  cowplot<span class="sc">::</span><span class="fu">theme_minimal_grid</span>()</span>
+<span id="cb7-54"><a href="seurat.html#cb7-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-55"><a href="seurat.html#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Knee-plot for RNA ------------------------------------------------------------</span></span>
+<span id="cb7-56"><a href="seurat.html#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Create ranked data.frame</span></span>
+<span id="cb7-57"><a href="seurat.html#cb7-57" aria-hidden="true" tabindex="-1"></a>knee_rna_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb7-58"><a href="seurat.html#cb7-58" aria-hidden="true" tabindex="-1"></a>  <span class="at">nCount_RNA =</span> <span class="fu">sort</span>(dat<span class="sc">$</span>nCount_RNA, </span>
+<span id="cb7-59"><a href="seurat.html#cb7-59" aria-hidden="true" tabindex="-1"></a>                    <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-60"><a href="seurat.html#cb7-60" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-61"><a href="seurat.html#cb7-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&quot;rank&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-62"><a href="seurat.html#cb7-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rank =</span> <span class="fu">as.numeric</span>(rank)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-63"><a href="seurat.html#cb7-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">40000</span>)</span>
+<span id="cb7-64"><a href="seurat.html#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-65"><a href="seurat.html#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the knee_plot</span></span>
+<span id="cb7-66"><a href="seurat.html#cb7-66" aria-hidden="true" tabindex="-1"></a>knee_rna_df <span class="sc">%&gt;%</span></span>
+<span id="cb7-67"><a href="seurat.html#cb7-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb7-68"><a href="seurat.html#cb7-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> rank,</span>
+<span id="cb7-69"><a href="seurat.html#cb7-69" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> nCount_RNA),</span>
+<span id="cb7-70"><a href="seurat.html#cb7-70" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>,</span>
+<span id="cb7-71"><a href="seurat.html#cb7-71" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape =</span> <span class="dv">21</span>) <span class="sc">+</span></span>
+<span id="cb7-72"><a href="seurat.html#cb7-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">10000</span>),</span>
+<span id="cb7-73"><a href="seurat.html#cb7-73" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="dv">2</span>,</span>
+<span id="cb7-74"><a href="seurat.html#cb7-74" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;orange&quot;</span>,</span>
+<span id="cb7-75"><a href="seurat.html#cb7-75" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.8</span>,</span>
+<span id="cb7-76"><a href="seurat.html#cb7-76" aria-hidden="true" tabindex="-1"></a>             <span class="at">linewidth =</span> <span class="fl">1.1</span>) <span class="sc">+</span></span>
+<span id="cb7-77"><a href="seurat.html#cb7-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">500</span>),</span>
+<span id="cb7-78"><a href="seurat.html#cb7-78" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="dv">2</span>,</span>
+<span id="cb7-79"><a href="seurat.html#cb7-79" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;orange&quot;</span>,</span>
+<span id="cb7-80"><a href="seurat.html#cb7-80" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.8</span>,</span>
+<span id="cb7-81"><a href="seurat.html#cb7-81" aria-hidden="true" tabindex="-1"></a>             <span class="at">linewidth =</span> <span class="fl">1.1</span>) <span class="sc">+</span></span>
+<span id="cb7-82"><a href="seurat.html#cb7-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">trans =</span> <span class="st">&quot;log10&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-83"><a href="seurat.html#cb7-83" aria-hidden="true" tabindex="-1"></a>  cowplot<span class="sc">::</span><span class="fu">theme_minimal_grid</span>()</span>
+<span id="cb7-84"><a href="seurat.html#cb7-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-85"><a href="seurat.html#cb7-85" aria-hidden="true" tabindex="-1"></a><span class="co"># Save knee plot for the </span></span>
+<span id="cb7-86"><a href="seurat.html#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;output/figs/rna_knee_plot.pdf&quot;</span>))</span>
+<span id="cb7-87"><a href="seurat.html#cb7-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-88"><a href="seurat.html#cb7-88" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter out low quality cells and non-cell barcodes ---------------------------</span></span>
+<span id="cb7-89"><a href="seurat.html#cb7-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-90"><a href="seurat.html#cb7-90" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter criteria just based on ATAC?</span></span>
+<span id="cb7-91"><a href="seurat.html#cb7-91" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">subset</span>(</span>
+<span id="cb7-92"><a href="seurat.html#cb7-92" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> dat,</span>
+<span id="cb7-93"><a href="seurat.html#cb7-93" aria-hidden="true" tabindex="-1"></a>  <span class="at">subset =</span> nCount_ATAC <span class="sc">&lt;</span> <span class="dv">10000</span> <span class="sc">&amp;</span></span>
+<span id="cb7-94"><a href="seurat.html#cb7-94" aria-hidden="true" tabindex="-1"></a>    nCount_ATAC <span class="sc">&gt;</span> <span class="dv">500</span> <span class="sc">&amp;</span></span>
+<span id="cb7-95"><a href="seurat.html#cb7-95" aria-hidden="true" tabindex="-1"></a>    nCount_RNA <span class="sc">&gt;</span> <span class="dv">100</span> <span class="sc">&amp;</span></span>
+<span id="cb7-96"><a href="seurat.html#cb7-96" aria-hidden="true" tabindex="-1"></a>    nCount_RNA <span class="sc">&lt;</span> <span class="dv">5000</span></span>
+<span id="cb7-97"><a href="seurat.html#cb7-97" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-98"><a href="seurat.html#cb7-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-99"><a href="seurat.html#cb7-99" aria-hidden="true" tabindex="-1"></a><span class="co"># Total number of nuclei</span></span>
+<span id="cb7-100"><a href="seurat.html#cb7-100" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span></span>
+<span id="cb7-101"><a href="seurat.html#cb7-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span>
+<span id="cb7-102"><a href="seurat.html#cb7-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-103"><a href="seurat.html#cb7-103" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of nuclei at each acclimation temperature</span></span>
+<span id="cb7-104"><a href="seurat.html#cb7-104" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span></span>
+<span id="cb7-105"><a href="seurat.html#cb7-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(acc_temp) <span class="sc">%&gt;%</span></span>
+<span id="cb7-106"><a href="seurat.html#cb7-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span>
+<span id="cb7-107"><a href="seurat.html#cb7-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-108"><a href="seurat.html#cb7-108" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of nuclei in each sample</span></span>
+<span id="cb7-109"><a href="seurat.html#cb7-109" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span></span>
+<span id="cb7-110"><a href="seurat.html#cb7-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sample_name) <span class="sc">%&gt;%</span></span>
+<span id="cb7-111"><a href="seurat.html#cb7-111" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span>
+<span id="cb7-112"><a href="seurat.html#cb7-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-113"><a href="seurat.html#cb7-113" aria-hidden="true" tabindex="-1"></a><span class="co"># Does calderon have these knee plots -- if not I should just make them if it is possible</span></span>
+<span id="cb7-114"><a href="seurat.html#cb7-114" aria-hidden="true" tabindex="-1"></a><span class="co"># Albright has good knee plots but that is pre cellularization so it is possible </span></span>
+<span id="cb7-115"><a href="seurat.html#cb7-115" aria-hidden="true" tabindex="-1"></a><span class="co"># is why they were able to reduce ambient RNA in their sample that </span></span>
+<span id="cb7-116"><a href="seurat.html#cb7-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-117"><a href="seurat.html#cb7-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-118"><a href="seurat.html#cb7-118" aria-hidden="true" tabindex="-1"></a><span class="co"># DecontX to account for ambient RNAs ------------------------------------------ </span></span>
+<span id="cb7-119"><a href="seurat.html#cb7-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-120"><a href="seurat.html#cb7-120" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert RNA counts to a single cell experiment object </span></span>
+<span id="cb7-121"><a href="seurat.html#cb7-121" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">GetAssayData</span>(<span class="at">object =</span> dat, <span class="at">slot =</span> <span class="st">&quot;counts&quot;</span>)</span>
+<span id="cb7-122"><a href="seurat.html#cb7-122" aria-hidden="true" tabindex="-1"></a>sce <span class="ot">&lt;-</span> SingleCellExperiment<span class="sc">::</span><span class="fu">SingleCellExperiment</span>(<span class="fu">list</span>(<span class="at">counts =</span> counts))</span>
+<span id="cb7-123"><a href="seurat.html#cb7-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-124"><a href="seurat.html#cb7-124" aria-hidden="true" tabindex="-1"></a><span class="co"># Run decontX on the RNA counts</span></span>
+<span id="cb7-125"><a href="seurat.html#cb7-125" aria-hidden="true" tabindex="-1"></a>sce <span class="ot">&lt;-</span> celda<span class="sc">::</span><span class="fu">decontX</span>(sce)</span>
+<span id="cb7-126"><a href="seurat.html#cb7-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-127"><a href="seurat.html#cb7-127" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new assay object with dexcontX fixed counts</span></span>
+<span id="cb7-128"><a href="seurat.html#cb7-128" aria-hidden="true" tabindex="-1"></a><span class="co"># Optionally write over the old counts ---??</span></span>
+<span id="cb7-129"><a href="seurat.html#cb7-129" aria-hidden="true" tabindex="-1"></a>dat[[<span class="st">&quot;decontX_counts&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">CreateAssayObject</span>(</span>
+<span id="cb7-130"><a href="seurat.html#cb7-130" aria-hidden="true" tabindex="-1"></a>  <span class="at">counts =</span> celda<span class="sc">::</span><span class="fu">decontXcounts</span>(sce)</span>
+<span id="cb7-131"><a href="seurat.html#cb7-131" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-132"><a href="seurat.html#cb7-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-133"><a href="seurat.html#cb7-133" aria-hidden="true" tabindex="-1"></a><span class="co"># Save data</span></span>
+<span id="cb7-134"><a href="seurat.html#cb7-134" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(dat, <span class="st">&quot;data/processed/seurat_object/02_dat_cells.rds&quot;</span>)</span>
+<span id="cb7-135"><a href="seurat.html#cb7-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-136"><a href="seurat.html#cb7-136" aria-hidden="true" tabindex="-1"></a><span class="do">### SCRATCH</span></span>
+<span id="cb7-137"><a href="seurat.html#cb7-137" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Nucleosome Signal and TSS Enrichment for ATAC QC metrics</span></span>
+<span id="cb7-138"><a href="seurat.html#cb7-138" aria-hidden="true" tabindex="-1"></a><span class="co"># DefaultAssay(dat) &lt;- &quot;ATAC&quot;</span></span>
+<span id="cb7-139"><a href="seurat.html#cb7-139" aria-hidden="true" tabindex="-1"></a><span class="co"># dat &lt;- NucleosomeSignal(dat)</span></span>
+<span id="cb7-140"><a href="seurat.html#cb7-140" aria-hidden="true" tabindex="-1"></a><span class="co"># dat &lt;- TSSEnrichment(dat) # Doesn&#39;t work?</span></span>
+<span id="cb7-141"><a href="seurat.html#cb7-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-142"><a href="seurat.html#cb7-142" aria-hidden="true" tabindex="-1"></a><span class="co"># Create simple Violin Plot with cell meta.data information before filtering</span></span>
+<span id="cb7-143"><a href="seurat.html#cb7-143" aria-hidden="true" tabindex="-1"></a><span class="co"># VlnPlot(</span></span>
+<span id="cb7-144"><a href="seurat.html#cb7-144" aria-hidden="true" tabindex="-1"></a><span class="co">#   object = dat,</span></span>
+<span id="cb7-145"><a href="seurat.html#cb7-145" aria-hidden="true" tabindex="-1"></a><span class="co">#   features = c(&quot;nCount_RNA&quot;, </span></span>
+<span id="cb7-146"><a href="seurat.html#cb7-146" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;nCount_ATAC&quot;, </span></span>
+<span id="cb7-147"><a href="seurat.html#cb7-147" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;TSS.enrichment&quot;, </span></span>
+<span id="cb7-148"><a href="seurat.html#cb7-148" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;nucleosome_signal&quot;),</span></span>
+<span id="cb7-149"><a href="seurat.html#cb7-149" aria-hidden="true" tabindex="-1"></a><span class="co">#   ncol = 4,</span></span>
+<span id="cb7-150"><a href="seurat.html#cb7-150" aria-hidden="true" tabindex="-1"></a><span class="co">#   pt.size = 0</span></span>
+<span id="cb7-151"><a href="seurat.html#cb7-151" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb7-152"><a href="seurat.html#cb7-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-153"><a href="seurat.html#cb7-153" aria-hidden="true" tabindex="-1"></a><span class="co"># VlnPlot(</span></span>
+<span id="cb7-154"><a href="seurat.html#cb7-154" aria-hidden="true" tabindex="-1"></a><span class="co">#   object = dat,</span></span>
+<span id="cb7-155"><a href="seurat.html#cb7-155" aria-hidden="true" tabindex="-1"></a><span class="co">#   features = c(&quot;nCount_RNA&quot;,</span></span>
+<span id="cb7-156"><a href="seurat.html#cb7-156" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;nCount_ATAC&quot;),</span></span>
+<span id="cb7-157"><a href="seurat.html#cb7-157" aria-hidden="true" tabindex="-1"></a><span class="co">#   ncol = 4,</span></span>
+<span id="cb7-158"><a href="seurat.html#cb7-158" aria-hidden="true" tabindex="-1"></a><span class="co">#   pt.size = 0</span></span>
+<span id="cb7-159"><a href="seurat.html#cb7-159" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span></code></pre></div>
+</div>
+<div id="clustering" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Clustering<a href="seurat.html#clustering" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="seurat.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------------------------</span></span>
+<span id="cb8-2"><a href="seurat.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Dimension reduction and clustering</span></span>
+<span id="cb8-3"><a href="seurat.html#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># May 11, 2023</span></span>
+<span id="cb8-4"><a href="seurat.html#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># TS O&#39;Leary</span></span>
+<span id="cb8-5"><a href="seurat.html#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------------------------</span></span>
+<span id="cb8-6"><a href="seurat.html#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="seurat.html#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries</span></span>
+<span id="cb8-8"><a href="seurat.html#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb8-9"><a href="seurat.html#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="seurat.html#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb8-11"><a href="seurat.html#cb8-11" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;data/processed/seurat_object/02_dat_cells.rds&quot;</span>))</span>
+<span id="cb8-12"><a href="seurat.html#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="seurat.html#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyze data ----</span></span>
+<span id="cb8-14"><a href="seurat.html#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="seurat.html#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the standard workflow for visualization and clustering</span></span>
+<span id="cb8-16"><a href="seurat.html#cb8-16" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">ScaleData</span>(dat, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-17"><a href="seurat.html#cb8-17" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">RunPCA</span>(dat, <span class="at">npcs =</span> <span class="dv">30</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-18"><a href="seurat.html#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="seurat.html#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># t-SNE and Clustering</span></span>
+<span id="cb8-20"><a href="seurat.html#cb8-20" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">RunUMAP</span>(dat, <span class="at">reduction =</span> <span class="st">&quot;pca&quot;</span>, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>)</span>
+<span id="cb8-21"><a href="seurat.html#cb8-21" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">FindNeighbors</span>(dat, <span class="at">reduction =</span> <span class="st">&quot;pca&quot;</span>, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>)</span>
+<span id="cb8-22"><a href="seurat.html#cb8-22" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">FindClusters</span>(dat, <span class="at">resolution =</span> <span class="fl">0.5</span>)</span>
+<span id="cb8-23"><a href="seurat.html#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="seurat.html#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot </span></span>
+<span id="cb8-25"><a href="seurat.html#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="fu">DimPlot</span>(dat,</span>
+<span id="cb8-26"><a href="seurat.html#cb8-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">group.by =</span> <span class="st">&quot;acc_temp&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="cell-ranger-arc.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="session-info.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": false,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
