@@ -1,8 +1,11 @@
 ---
 title: "How Embryos Acclimate to Temperature through Epigenetic Regulation"
-author: "TS O'Leary"
+author: 
+  - "Thomas O’Leary, Emily Mikucki, Sumaetee Tangwancharoen"
+  - "Sara Helms Cahan, Seth Frietze, and Brent L. Lockwood"
 date: "2023-05-15"
 description: "Record of analysis for HEATER project."
+include: ["output/"]
 output:
   bookdown::gitbook:
     number_sections: true
@@ -59,22 +62,36 @@ The data is loaded and then the species are grouped.
 ```{r, file = "src/02_cellranger-arc/02_aggr.sh", eval = FALSE}
 ```
 
+## Summary of output
+
+```{r}
+# Summary stats from Cell Ranger ARC
+readr::read_csv(here::here("data/processed/seq/all/outs/summary.csv")) |>
+  t() |>
+  kableExtra::kable() |>
+  kableExtra::kable_styling("striped")
+```
+
 # **Seurat**
 
 ## Create seurat object
 
 ```{r, file = "src/03_seurat/01_create_seurat_object.R", eval = FALSE}
 ```
+Creating a Seurat object directly from the Cell Ranger ARC filtered output.
+
+```{r, file = "src/03_seurat/01_create_seurat_object_filtered.R", eval = FALSE}
+```
 
 ## Quality control and filtering
 
-```{r, file = "src/03_seurat/02_quality_control_filtering.R", eval = FALSE}
+```{r, file = "src/03_seurat/02_quality_control_filtering.R", eval = TRUE}
 ```
 
-## Clustering
+<!-- ## Clustering -->
 
-```{r, file = "src/03_seurat/03_cluster.R", eval = FALSE}
-```
+<!-- ```{r, file = "src/03_seurat/03_cluster.R", eval = FALSE} -->
+<!-- ``` -->
 
 # Session Info {-}
 

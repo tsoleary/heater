@@ -20,7 +20,8 @@
   <meta name="twitter:description" content="Record of analysis for HEATER project." />
   
 
-<meta name="author" content="TS O’Leary" />
+<meta name="author" content="Thomas O’Leary, Emily Mikucki, Sumaetee Tangwancharoen" />
+<meta name="author" content="Sara Helms Cahan, Seth Frietze, and Brent L. Lockwood" />
 
 
 <meta name="date" content="2023-05-15" />
@@ -52,6 +53,8 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -92,7 +95,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -105,7 +108,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -147,12 +150,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1" data-path="cell-ranger-arc.html"><a href="cell-ranger-arc.html#mkref"><i class="fa fa-check"></i><b>3.1</b> <code>mkref</code></a></li>
 <li class="chapter" data-level="3.2" data-path="cell-ranger-arc.html"><a href="cell-ranger-arc.html#count"><i class="fa fa-check"></i><b>3.2</b> <code>count</code></a></li>
 <li class="chapter" data-level="3.3" data-path="cell-ranger-arc.html"><a href="cell-ranger-arc.html#aggr"><i class="fa fa-check"></i><b>3.3</b> <code>aggr</code></a></li>
+<li class="chapter" data-level="3.4" data-path="cell-ranger-arc.html"><a href="cell-ranger-arc.html#summary-of-output"><i class="fa fa-check"></i><b>3.4</b> Summary of output</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="seurat.html"><a href="seurat.html"><i class="fa fa-check"></i><b>4</b> <strong>Seurat</strong></a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="seurat.html"><a href="seurat.html#create-seurat-object"><i class="fa fa-check"></i><b>4.1</b> Create seurat object</a></li>
 <li class="chapter" data-level="4.2" data-path="seurat.html"><a href="seurat.html#quality-control-and-filtering"><i class="fa fa-check"></i><b>4.2</b> Quality control and filtering</a></li>
-<li class="chapter" data-level="4.3" data-path="seurat.html"><a href="seurat.html#clustering"><i class="fa fa-check"></i><b>4.3</b> Clustering</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="session-info.html"><a href="session-info.html"><i class="fa fa-check"></i>Session Info</a></li>
 </ul>
@@ -345,6 +348,386 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-54"><a href="cell-ranger-arc.html#cb5-54" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>csv<span class="ot">=</span><span class="er">$</span>{libraries_path} \</span>
 <span id="cb5-55"><a href="cell-ranger-arc.html#cb5-55" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>reference<span class="ot">=</span><span class="er">$</span>{ref_path} \</span>
 <span id="cb5-56"><a href="cell-ranger-arc.html#cb5-56" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>normalize<span class="ot">=</span>depth</span></code></pre></div>
+</div>
+<div id="summary-of-output" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Summary of output<a href="cell-ranger-arc.html#summary-of-output" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="cell-ranger-arc.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary stats from Cell Ranger ARC</span></span>
+<span id="cb6-2"><a href="cell-ranger-arc.html#cb6-2" aria-hidden="true" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;data/processed/seq/all/outs/summary.csv&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="cell-ranger-arc.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>() <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="cell-ranger-arc.html#cb6-4" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable</span>() <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="cell-ranger-arc.html#cb6-5" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="st">&quot;striped&quot;</span>)</span></code></pre></div>
+<pre><code>## Rows: 1 Columns: 45
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (3): Sample ID, Genome, Pipeline version
+## dbl (42): Number of cells, Number of cells (18C_Rep1), Number of cells (18C_...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<tbody>
+<tr>
+<td style="text-align:left;">
+Sample ID
+</td>
+<td style="text-align:left;">
+all
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Genome
+</td>
+<td style="text-align:left;">
+BDGP6_32_filtered
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pipeline version
+</td>
+<td style="text-align:left;">
+cellranger-arc-2.0.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of cells
+</td>
+<td style="text-align:left;">
+14301
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of cells (18C_Rep1)
+</td>
+<td style="text-align:left;">
+2024
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of cells (18C_Rep2)
+</td>
+<td style="text-align:left;">
+5188
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of cells (25C_Rep1)
+</td>
+<td style="text-align:left;">
+3312
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of cells (25C_Rep2)
+</td>
+<td style="text-align:left;">
+3777
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Fraction of genome in peaks
+</td>
+<td style="text-align:left;">
+0.0854
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Fraction of high-quality fragments overlapping peaks
+</td>
+<td style="text-align:left;">
+0.5032
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Fraction of reads kept (18C_Rep1)
+</td>
+<td style="text-align:left;">
+0.6236
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Fraction of reads kept (18C_Rep2)
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Fraction of reads kept (25C_Rep1)
+</td>
+<td style="text-align:left;">
+0.7992
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Fraction of reads kept (25C_Rep2)
+</td>
+<td style="text-align:left;">
+0.8177
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Fraction of transposition events in peaks in cells
+</td>
+<td style="text-align:left;">
+0.4692
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Median high-quality fragments per cell
+</td>
+<td style="text-align:left;">
+6002
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Number of peaks
+</td>
+<td style="text-align:left;">
+13927
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Post-normalization high-quality read pairs
+</td>
+<td style="text-align:left;">
+213569184
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Post-normalization high-quality reads pairs per cell
+</td>
+<td style="text-align:left;">
+14933.86
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Pre-normalization high-quality read pairs
+</td>
+<td style="text-align:left;">
+262483329
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Pre-normalization high-quality read pairs (18C_Rep1)
+</td>
+<td style="text-align:left;">
+61554884
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Pre-normalization high-quality read pairs (18C_Rep2)
+</td>
+<td style="text-align:left;">
+66444472
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Pre-normalization high-quality read pairs (25C_Rep1)
+</td>
+<td style="text-align:left;">
+66581198
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Pre-normalization high-quality read pairs (25C_Rep2)
+</td>
+<td style="text-align:left;">
+67902775
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Pre-normalization high-quality read pairs per cell (18C_Rep1)
+</td>
+<td style="text-align:left;">
+30412.49
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Pre-normalization high-quality read pairs per cell (18C_Rep2)
+</td>
+<td style="text-align:left;">
+12807.34
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Pre-normalization high-quality read pairs per cell (25C_Rep1)
+</td>
+<td style="text-align:left;">
+20103.02
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ATAC Pre-normalization high-quality read pairs per cell (25C_Rep2)
+</td>
+<td style="text-align:left;">
+17977.97
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Fraction of reads kept (18C_Rep1)
+</td>
+<td style="text-align:left;">
+0.4455
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Fraction of reads kept (18C_Rep2)
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Fraction of reads kept (25C_Rep1)
+</td>
+<td style="text-align:left;">
+0.6894
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Fraction of reads kept (25C_Rep2)
+</td>
+<td style="text-align:left;">
+0.782
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Median UMI counts per cell
+</td>
+<td style="text-align:left;">
+1035
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Median genes per cell
+</td>
+<td style="text-align:left;">
+606
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Post-normalization high-quality reads
+</td>
+<td style="text-align:left;">
+154789965
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Post-normalization high-quality reads per cell
+</td>
+<td style="text-align:left;">
+10823.72
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Pre-normalization high-quality reads
+</td>
+<td style="text-align:left;">
+214036138
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Pre-normalization high-quality reads (18C_Rep1)
+</td>
+<td style="text-align:left;">
+56426086
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Pre-normalization high-quality reads (18C_Rep2)
+</td>
+<td style="text-align:left;">
+51237055
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Pre-normalization high-quality reads (25C_Rep1)
+</td>
+<td style="text-align:left;">
+51522744
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Pre-normalization high-quality reads (25C_Rep2)
+</td>
+<td style="text-align:left;">
+54850253
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Pre-normalization high-quality reads per cell (18C_Rep1)
+</td>
+<td style="text-align:left;">
+27878.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Pre-normalization high-quality reads per cell (18C_Rep2)
+</td>
+<td style="text-align:left;">
+9876.071
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Pre-normalization high-quality reads per cell (25C_Rep1)
+</td>
+<td style="text-align:left;">
+15556.38
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GEX Pre-normalization high-quality reads per cell (25C_Rep2)
+</td>
+<td style="text-align:left;">
+14522.17
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
             </section>
