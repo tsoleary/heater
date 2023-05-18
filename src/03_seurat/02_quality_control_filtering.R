@@ -17,7 +17,7 @@ dat <- readRDS(here::here("data/processed/seurat_object/01_dat_raw.rds"))
 
 # Load 10X filtered data
 dat_10x <- readRDS(
-  here::here("data/processed/seurat_object/01_dat_filtered.rds")
+  here::here("data/processed/seurat_object/01_dat_10x_cells.rds")
 )
 
 # Total number of barcodes in the data set
@@ -227,45 +227,32 @@ dat@meta.data %>%
   group_by(sample_name) %>%
   tally()
 
-# DecontX to account for ambient RNAs ------------------------------------------ 
+# Save data
+saveRDS(dat, "data/processed/seurat_object/02_dat_cells_cutoff.rds")
 
-# # Convert RNA counts to a single cell experiment object 
-# counts <- GetAssayData(object = dat, slot = "counts")
-# sce <- SingleCellExperiment::SingleCellExperiment(list(counts = counts))
-# 
-# # Run decontX on the RNA counts
-# sce <- celda::decontX(sce)
-# 
-# # Create a new assay object with dexcontX fixed counts
-# # Optionally write over the old counts ---??
-# dat[["decontX_counts"]] <- CreateAssayObject(
-#   counts = celda::decontXcounts(sce)
-# )
-# 
-# # Save data
-# saveRDS(dat, "data/processed/seurat_object/02_dat_cells.rds")
-# 
-# ### SCRATCH
-# # Calculate Nucleosome Signal and TSS Enrichment for ATAC QC metrics
-# # DefaultAssay(dat) <- "ATAC"
-# # dat <- NucleosomeSignal(dat)
-# # dat <- TSSEnrichment(dat) # Doesn't work?
-# 
-# # Create simple Violin Plot with cell meta.data information before filtering
-# # VlnPlot(
-# #   object = dat,
-# #   features = c("nCount_RNA", 
-# #                "nCount_ATAC", 
-# #                "TSS.enrichment", 
-# #                "nucleosome_signal"),
-# #   ncol = 4,
-# #   pt.size = 0
-# # )
-# 
-# # VlnPlot(
-# #   object = dat,
-# #   features = c("nCount_RNA",
-# #                "nCount_ATAC"),
-# #   ncol = 4,
-# #   pt.size = 0
-# # )
+# Plots of quality control metrics ---------------------------------------------
+
+dat <- readRDS(here::here("data/processed/seurat_object/01_dat_10x_cells.rds"))
+
+# Plot
+dat@meta.data %>%
+  ggplot(aes(y = nCount_ATAC)) +
+  geom_boxplot()
+
+ # Calculate Nucleosome Signal and TSS Enrichment for ATAC QC metrics
+DefaultAssay(dat) <- "ATAC"
+dat <- NucleosomeSignal(dat)
+dat <- TSSEnrichment(dat) # Doesn't work?
+
+
+# Simple violin plot
+VlnPlot(
+  object = dat,
+  features = c("nCount_RNA",
+               "nCount_ATAC",
+               #"TSS.enrichment",
+               "nucleosome_signal"
+               ),
+  ncol = 4,
+  pt.size = 0
+)
