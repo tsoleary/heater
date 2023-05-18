@@ -37,10 +37,10 @@ meta_data <- tibble(cellnames = colnames(counts[[1]])) %>%
   mutate(orig.ident = str_extract(cellnames, "[1-4]")) %>%
   full_join(tibble::tribble(
     ~orig.ident, ~sample_name, ~acc_temp,
-    "1", "18C_Rep1", "18C",
-    "2", "18C_Rep2", "18C",
-    "3", "25C_Rep1", "25C",
-    "4", "25C_Rep2", "25C"
+    "1", "18C_Rep1", "18°C",
+    "2", "18C_Rep2", "18°C",
+    "3", "25C_Rep1", "25°C",
+    "4", "25C_Rep2", "25°C"
   ), 
   by = "orig.ident") %>%
   column_to_rownames("cellnames")
@@ -60,13 +60,47 @@ dat[["ATAC"]] <- CreateChromatinAssay(
   sep = c(":", "-"),
   fragments = frag_path,
   annotation = annotation,
-  # Validate fragments arg makes sure all cells can be found in the frags file
-  # However, there may be cells/barcodes that are present in the assay, but are 
-  # not represented in the fragment file. For example, RNA-seq reads that are
-  # from GEM barcodes that have no fragments associated with them. Check with 
-  # Seth about this.
   validate.fragments = FALSE
 )
 
 # Save raw Seurat object
 saveRDS(dat, here::here("data/processed/seurat_object/01_dat_raw.rds"))
+
+# Create Seurat object from the filtered matrix from 10X Cell Ranger ARC -------
+
+# Load filtered data
+filtered_feature_dir <- paste0(data_dir, "filtered_feature_bc_matrix")
+counts <- Read10X(filtered_feature_dir)
+
+# Meta data for counts from filtered counts
+meta_data <- tibble(cellnames = colnames(counts[[1]])) %>%
+  mutate(orig.ident = str_extract(cellnames, "[1-4]")) %>%
+  full_join(tibble::tribble(
+    ~orig.ident, ~sample_name, ~acc_temp,
+    "1", "18C_Rep1", "18°C",
+    "2", "18C_Rep2", "18°C",
+    "3", "25C_Rep1", "25°C",
+    "4", "25C_Rep2", "25°C"
+  ), 
+  by = "orig.ident") %>%
+  column_to_rownames("cellnames")
+
+# Create a Seurat object containing the RNA data
+dat <- CreateSeuratObject(
+  project = "heater",
+  counts = counts$`Gene Expression`,
+  assay = "RNA",
+  names.delim = "-",
+  meta.data = meta_data
+)
+
+# Create ATAC assay and add it to the object
+dat[["ATAC"]] <- CreateChromatinAssay(
+  counts = counts$Peaks,
+  sep = c(":", "-"),
+  fragments = frag_path,
+  annotation = annotation
+)
+
+# Save 10X Cell Ranger ARC filtered Seurat object
+saveRDS(dat, here::here("data/processed/seurat_object/01_dat_10x_cells.rds"))

@@ -5,22 +5,74 @@
 # ------------------------------------------------------------------------------
 
 # Load libraries
-require(tidyverse)
+library(tidyverse)
+library(Seurat)
+library(Signac)
+library(clustree)
 
 # Load data
-dat <- readRDS(here::here("data/processed/seurat_object/02_dat_cells.rds"))
+dat <- readRDS(here::here("data/processed/seurat_object/01_dat_10x_cells.rds"))
 
-# Analyze data ----
+# Run the standard workflow for visualization and clustering -------------------
 
-# Run the standard workflow for visualization and clustering
-dat <- ScaleData(dat, verbose = FALSE)
-dat <- RunPCA(dat, npcs = 30, verbose = FALSE)
+# Set RNA to the default assay set for the following set of operations 
+DefaultAssay(dat) <- "RNA"
 
-# t-SNE and Clustering
-dat <- RunUMAP(dat, reduction = "pca", dims = 1:20)
-dat <- FindNeighbors(dat, reduction = "pca", dims = 1:20)
-dat <- FindClusters(dat, resolution = 0.5)
+# Log-Normalize data
+dat <- NormalizeData(dat)
 
-# Plot 
+# Find variable features
+dat <- FindVariableFeatures(dat)
+
+# Scale and center data
+dat <- ScaleData(dat)
+
+# Run principle component analysis 
+dat <- RunPCA(dat)
+
+# Run UMAP
+dat <- RunUMAP(dat, dims = 1:30)
+
+# Construct nearest-neighbor graph
+dat <- FindNeighbors(dat, dims = 1:30)
+
+# Finding the correct resolution of clusters
+clustree::clustree(dat)
+
+# Determine the clusters within the data
+dat <- FindClusters(dat, resolution = 0.1)
+
+# Plot UMAP
 DimPlot(dat,
-        group.by = "acc_temp")
+        split.by = "acc_temp")
+
+# Count per cluster
+dat@meta.data %>%
+  group_by(seurat_clusters) %>%
+  tally()
+
+# Count per cluster per acclimation state
+dat@meta.data %>%
+  group_by(seurat_clusters, acc_temp) %>%
+  tally() %>%
+  pivot_wider(values_from = n, names_from = acc_temp)
+
+# Quick bar plot counting the number of cells for each cluster
+dat@meta.data %>%
+  ggplot(aes(x = seurat_clusters,
+             fill = acc_temp)) +
+  geom_bar(position = "dodge",
+           color = "grey50") +
+  labs(y = "Number of cells",
+       x = "Cluster") +
+  scale_fill_manual(name = element_blank(),
+                     values = c("#43aa8b", "#f3722c")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  cowplot::theme_minimal_hgrid()
+
+# Log-Normalize ATAC Reads ------
+dat <- NormalizeData(dat, assay = "ATAC")
+
+# Save data
+saveRDS(dat, here::here("data/processed/seurat_object/03_dat_clustered.rds"))
+
