@@ -1,0 +1,66 @@
+---
+title: "How Embryos Acclimate to Temperature through Epigenetic Regulation"
+subtitle: "Figures"
+author: 
+  - "Thomas O’Leary, Emily Mikucki, Sumaetee Tangwancharoen, Sara Helms Cahan, Seth Frietze, and Brent L. Lockwood"
+output:
+  rmarkdown::html_document:
+    theme: lumen
+    number_sections: true
+    toc: true
+    toc_float: true
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+# **Quality control**
+
+## Knee plot
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/knee_plots.png"))
+```
+
+## Scatter plot of counts
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/scatter_rna_atac_10x_cells.png"))
+```
+
+## Violin QC plots
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/violin_qc_metrics.png"))
+```
+
+# **Seurat**
+
+## Clusters
+
+### Cells per cluster
+
+```{r}
+knitr::include_graphics(here::here("output/figs/cluster/cells_per_cluster.png"))
+```
+
+### Acclimation clusters
+
+#### Together
+
+```{r}
+knitr::include_graphics(here::here("output/figs/cluster/umap_18_25_overlay.png"))
+```
+
+#### Split
+
+```{r}
+knitr::include_graphics(here::here("output/figs/cluster/umap_18_25_split.png"))
+```
+
+## Features
+
+### Gene expression
+
+
