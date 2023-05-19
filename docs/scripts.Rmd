@@ -1,0 +1,100 @@
+---
+title: "How Embryos Acclimate to Temperature through Epigenetic Regulation"
+subtitle: "Scripts"
+author: 
+  - "Thomas O’Leary, Emily Mikucki, Sumaetee Tangwancharoen, Sara Helms Cahan, Seth Frietze, and Brent L. Lockwood"
+output:
+  rmarkdown::html_document:
+    theme: lumen
+    number_sections: true
+    toc: true
+    toc_float: true
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# HEATER {-}
+
+## Goals {-}
+
+HEATER Project:
+
+# **Embryonic thermal acclimation**
+
+## Egg hatching success
+
+```{r, file = "src/00_pheno/cs_pheno.R"}
+```
+
+# **Nuclei isolation**
+
+## Nuclei quality
+
+## Nuclei counts
+
+The data is loaded and then the species are grouped.
+
+```{r, file = "src/00_pheno/cs_pheno_fig.R"}
+```
+
+# **Cell Ranger ARC**
+
+## `mkref`
+
+```{r, file = "src/02_cellranger-arc/00_mkref.sh"}
+```
+
+## `count`
+
+```{r, file = "src/02_cellranger-arc/01_count.sh"}
+```
+
+## `aggr`
+
+```{r, file = "src/02_cellranger-arc/02_aggr.sh"}
+```
+
+# **Seurat**
+
+## Create seurat object
+
+```{r, file = "src/03_seurat/01_create_seurat_object.R"}
+```
+
+## Quality control and filtering
+
+```{r, file = "src/03_seurat/02_quality_control_filtering.R"}
+```
+
+## Clustering
+
+```{r, file = "src/03_seurat/03_cluster.R"}
+```
+
+## Cluster Plots
+
+```{r, file = "src/03_seurat/04_cluster_plots.R"}
+```
+
+## Cluster Markers
+
+```{r, file = "src/03_seurat/05_cluster_markers.R"}
+```
+
+## Differentially expressed genes
+
+```{r, file = "src/03_seurat/06_degs.R"}
+```
+
+## Feature plots
+
+```{r, file = "src/03_seurat/08_feature_plots.R"}
+```
+
+# Session Info {-}
+
+```{r}
+sessionInfo()
+```

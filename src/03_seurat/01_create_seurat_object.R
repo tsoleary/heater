@@ -21,12 +21,9 @@ frag_path <- paste0(data_dir, "atac_fragments.tsv.gz")
 counts <- Read10X(raw_feature_dir)
 
 # Get gene annotations for dm6 -------------------------------------------------
-BDGP6.32 <- query(
-  AnnotationHub(), 
-  c("EnsDb", "Drosophila melanogaster", "109")
-)
-annotation <- GetGRangesFromEnsDb(BDGP6.32[[1]])
-seqlevelsStyle(annotation) <- "UCSC"
+BDGP6.32 <- query(AnnotationHub(), 
+                  c("EnsDb", "Drosophila melanogaster", "109"))[[1]]
+annotation <- GetGRangesFromEnsDb(BDGP6.32)
 
 # Meta data --------------------------------------------------------------------
 # Create meta data for all cells based on the GEM well suffix. From 10X Genomics
