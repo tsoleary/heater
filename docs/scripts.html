@@ -1531,7 +1531,6 @@ thermal acclimation</strong></h1>
 <div id="egg-hatching-success" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Egg hatching
 success</h2>
-<!-- If you want to include code but don't want to run it. You may use eval = FALSE in the chunk option. This will print, but not execute the code. -->
 <pre class="r"><code># ------------------------------------------------------------------------------
 # Canton S acclimation phenotype figure
 # March 31, 2023
@@ -1557,103 +1556,25 @@ dat %&gt;%
   group_by(Acclimation) %&gt;%
   summarise(total_eggs = sum(Number_Eggs))
 
-# Plot Canton S Survival
+# Acclimation effect
 dat %&gt;%
-  mutate(Acclimation = paste0(Acclimation, &quot;°C&quot;)) %&gt;%
-  ggplot(aes(x = Acclimation,
-             y = Survival*100)) +
-  geom_boxplot(width = 0.3,
-               color = &quot;grey20&quot;,
-               outlier.shape = NA) +
-  ggbeeswarm::geom_beeswarm(size = 3,
-                            cex = 2,
-                            shape = 21,
-                            fill = &quot;grey50&quot;,
-                            color = &quot;grey20&quot;,
-                            alpha = 0.9) +
-  xlab(&quot;Acclimation temperature&quot;) +
-  scale_y_continuous(name = &quot;Survival after acute heat shock&quot;,
-                     limits = c(0, 100),
-                     expand = expansion(mult = c(0, 0.05)),
-                     labels = function(x) paste0(x, &quot;%&quot;)) + 
-  cowplot::theme_minimal_hgrid(font_family = &quot;Myriad Pro&quot;)
-  
-
-# Save two sizes
-ggsave(here::here(&quot;output/figs/cantonS_survival.tiff&quot;), 
-       height = 4, width = 6)
-ggsave(here::here(&quot;output/figs/cantonS_survival_small.tiff&quot;), 
-       height = 3.5, width = 5)</code></pre>
+  glm(Survival ~ Acclimation, 
+      data = .,
+      weights = Number_Eggs,
+      family = binomial(link = &quot;logit&quot;))</code></pre>
+<!-- # **Nuclei isolation** -->
+<!-- ## Nuclei quality -->
+<!-- ## Nuclei counts -->
+<!-- The data is loaded and then the species are grouped. -->
+<!-- ```{r, file = "src/00_pheno/cs_pheno.R"} -->
+<!-- ``` -->
 </div>
 </div>
-<div id="nuclei-isolation" class="section level1" number="2">
-<h1><span class="header-section-number">2</span> <strong>Nuclei
-isolation</strong></h1>
-<div id="nuclei-quality" class="section level2" number="2.1">
-<h2><span class="header-section-number">2.1</span> Nuclei quality</h2>
-</div>
-<div id="nuclei-counts" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> Nuclei counts</h2>
-<p>The data is loaded and then the species are grouped.</p>
-<pre class="r"><code># ------------------------------------------------------------------------------
-# Canton S acclimation phenotype figure
-# March 31, 2023
-# TS O&#39;Leary
-# ------------------------------------------------------------------------------
-
-# Description -----
-# Canton S phenotype figure
-
-# Load libraries
-library(tidyverse)
-
-# Load data
-dat &lt;- read_csv(here::here(&quot;data/raw/pheno/embryo_acc_pheno.csv&quot;))
-
-# Filter only Canton S data
-dat &lt;- dat %&gt;%
-  filter(Genotype == &quot;CantonS&quot;) %&gt;%
-  filter(Stage == &quot;Early&quot;)
-
-# Count the number of eggs per acclimation treatment
-dat %&gt;%
-  group_by(Acclimation) %&gt;%
-  summarise(total_eggs = sum(Number_Eggs))
-
-# Plot Canton S Survival
-dat %&gt;%
-  mutate(Acclimation = paste0(Acclimation, &quot;°C&quot;)) %&gt;%
-  ggplot(aes(x = Acclimation,
-             y = Survival*100)) +
-  geom_boxplot(width = 0.3,
-               color = &quot;grey20&quot;,
-               outlier.shape = NA) +
-  ggbeeswarm::geom_beeswarm(size = 3,
-                            cex = 2,
-                            shape = 21,
-                            fill = &quot;grey50&quot;,
-                            color = &quot;grey20&quot;,
-                            alpha = 0.9) +
-  xlab(&quot;Acclimation temperature&quot;) +
-  scale_y_continuous(name = &quot;Survival after acute heat shock&quot;,
-                     limits = c(0, 100),
-                     expand = expansion(mult = c(0, 0.05)),
-                     labels = function(x) paste0(x, &quot;%&quot;)) + 
-  cowplot::theme_minimal_hgrid(font_family = &quot;Myriad Pro&quot;)
-  
-
-# Save two sizes
-ggsave(here::here(&quot;output/figs/cantonS_survival.tiff&quot;), 
-       height = 4, width = 6)
-ggsave(here::here(&quot;output/figs/cantonS_survival_small.tiff&quot;), 
-       height = 3.5, width = 5)</code></pre>
-</div>
-</div>
-<div id="cell-ranger-arc" class="section level1" number="3">
-<h1><span class="header-section-number">3</span> <strong>Cell Ranger
+<div id="cell-ranger-arc" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> <strong>Cell Ranger
 ARC</strong></h1>
-<div id="mkref" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span>
+<div id="mkref" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span>
 <code>mkref</code></h2>
 <pre class="r"><code>#!/bin/bash
 
@@ -1705,8 +1626,8 @@ cellranger-arc mkgtf Drosophila_melanogaster.BDGP6.32.109.gtf \
 # Create a filtered reference package ------------------------------------------
 cellranger-arc mkref --config=BDGP6.32.filtered.config </code></pre>
 </div>
-<div id="count" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span>
+<div id="count" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span>
 <code>count</code></h2>
 <pre class="r"><code>#!/bin/bash
 
@@ -1767,8 +1688,8 @@ cellranger-arc count --id=25C_Rep2 \
   --localmem=${mem} \
   --jobmode=slurm</code></pre>
 </div>
-<div id="aggr" class="section level2" number="3.3">
-<h2><span class="header-section-number">3.3</span>
+<div id="aggr" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span>
 <code>aggr</code></h2>
 <pre class="r"><code>#!/bin/bash
 
@@ -1828,11 +1749,11 @@ cellranger-arc aggr --id=all \
   --normalize=depth</code></pre>
 </div>
 </div>
-<div id="seurat" class="section level1" number="4">
-<h1><span class="header-section-number">4</span>
+<div id="seurat" class="section level1" number="3">
+<h1><span class="header-section-number">3</span>
 <strong>Seurat</strong></h1>
-<div id="create-seurat-object" class="section level2" number="4.1">
-<h2><span class="header-section-number">4.1</span> Create seurat
+<div id="create-seurat-object" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Create seurat
 object</h2>
 <pre class="r"><code># ------------------------------------------------------------------------------
 # Load data and set up Seurat object
@@ -1897,7 +1818,7 @@ dat[[&quot;ATAC&quot;]] &lt;- CreateChromatinAssay(
 )
 
 # Save raw Seurat object
-saveRDS(dat, here::here(&quot;data/processed/seurat_object/01_dat_raw.rds&quot;))
+saveRDS(dat, here::here(&quot;data/processed/seurat_object/00_dat_raw.rds&quot;))
 
 # Create Seurat object from the filtered matrix from 10X Cell Ranger ARC -------
 
@@ -1936,10 +1857,10 @@ dat[[&quot;ATAC&quot;]] &lt;- CreateChromatinAssay(
 )
 
 # Save 10X Cell Ranger ARC filtered Seurat object
-saveRDS(dat, here::here(&quot;data/processed/seurat_object/01_dat_10x_cells.rds&quot;))</code></pre>
+saveRDS(dat, here::here(&quot;data/processed/seurat_object/00_dat_10x_cells.rds&quot;))</code></pre>
 </div>
-<div id="quality-control-and-filtering" class="section level2" number="4.2">
-<h2><span class="header-section-number">4.2</span> Quality control and
+<div id="quality-control-and-filtering" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Quality control and
 filtering</h2>
 <pre class="r"><code># ------------------------------------------------------------------------------
 # Quality control and filtering of low-quality cells
@@ -1948,328 +1869,61 @@ filtering</h2>
 # ------------------------------------------------------------------------------
 
 # Description -----
-# Basic quality control metrics and filtering out non-cell barcodes.
+# Basic quality control metrics and filtering out non-cell barcodes from the 10X 
+# Cell Ranger ARC called cells.
 
 # Load libraries
 library(tidyverse)
 library(Seurat)
 library(Signac)
 
-# Load  data
-dat &lt;- readRDS(here::here(&quot;data/processed/seurat_object/01_dat_raw.rds&quot;))
-
 # Load 10X filtered data
-dat_10x &lt;- readRDS(
-  here::here(&quot;data/processed/seurat_object/01_dat_10x_cells.rds&quot;)
+dat &lt;- readRDS(
+  here::here(&quot;data/processed/seurat_object/00_dat_10x_cells.rds&quot;)
 )
 
-# Total number of barcodes in the data set
-length(Cells(dat))
-
-# Define count cutoffs
-low_ATAC &lt;- 800
-low_RNA &lt;- 350
-
-# Visualize count cutoffs ----
-
-# Density distribution of ATAC Reads
-dat@meta.data %&gt;%
-  filter(nCount_ATAC &gt; 100) %&gt;%
-  ggplot() +
-  geom_density(aes(x = nCount_ATAC)) +
-  geom_vline(aes(xintercept = low_ATAC),
-             color = &quot;red&quot;,
-             linetype = 2) +
-  scale_x_continuous(trans = &quot;log10&quot;,
-                     breaks = c(1, 10, 100, 1000, 10000),
-                     labels = c(&quot;1&quot;, &quot;10&quot;, &quot;100&quot;, &quot;1k&quot;, &quot;10k&quot;)) +
-  cowplot::theme_minimal_grid()
-
-# Density distribution of RNA Reads
-dat@meta.data %&gt;%
-  filter(nCount_RNA &gt; 100) %&gt;%
-  ggplot() +
-  geom_density(aes(x = nCount_RNA)) +
-  geom_vline(aes(xintercept = low_RNA),
-             color = &quot;red&quot;,
-             linetype = 2) +
-  scale_x_continuous(trans = &quot;log10&quot;,
-                     breaks = c(1, 10, 100, 1000, 10000),
-                     labels = c(&quot;1&quot;, &quot;10&quot;, &quot;100&quot;, &quot;1k&quot;, &quot;10k&quot;)) +
-  cowplot::theme_minimal_grid()
-  
-# Knee-plot for ATAC -----------------------------------------------------------
-# Create ranked data.frame
-knee_atac_df &lt;- tibble(
-  nCount_ATAC = sort(dat$nCount_ATAC, 
-                     decreasing = TRUE)
-  ) %&gt;%
-  rownames_to_column(&quot;rank&quot;) %&gt;%
-  mutate(rank = as.numeric(rank)) %&gt;%
-  head(100000)
-
-# Plot the knee_plot
-p1 &lt;- knee_atac_df %&gt;%
-  ggplot() +
-  geom_point(aes(x = rank,
-                 y = nCount_ATAC),
-             color = &quot;grey50&quot;,
-             shape = 21) +
-  geom_vline(aes(xintercept = 16000),
-             linetype = 2,
-             color = &quot;orange&quot;,
-             alpha = 0.8,
-             linewidth = 1.1) +
-  geom_hline(aes(yintercept = low_ATAC),
-             linetype = 2,
-             color = &quot;red&quot;,
-             alpha = 0.8,
-             linewidth = 1.1) +
-  scale_y_continuous(trans = &quot;log10&quot;, 
-                     breaks = c(100, 1000, 10000, 100000),
-                     labels = c(&quot;100&quot;, &quot;1k&quot;, &quot;10k&quot;, &quot;100k&quot;),
-                     name = &quot;ATAC counts&quot;) +
-  scale_x_continuous(trans = &quot;log10&quot;,
-                     breaks = c(1, 10, 100, 1000, 10000, 100000),
-                     labels = c(&quot;1&quot;, &quot;10&quot;, &quot;100&quot;, &quot;1k&quot;, &quot;10k&quot;, &quot;100k&quot;),
-                     name = &quot;Barcodes rank ordered by total number of ATAC fragments&quot;) +
-  cowplot::theme_minimal_grid()
-
-# Knee-plot for RNA ------------------------------------------------------------
-# Create ranked data.frame
-knee_rna_df &lt;- tibble(
-  nCount_RNA = sort(dat$nCount_RNA, 
-                    decreasing = TRUE)
-  ) %&gt;%
-  rownames_to_column(&quot;rank&quot;) %&gt;%
-  mutate(rank = as.numeric(rank)) %&gt;%
-  head(100000)
-
-# Plot the knee_plot
-p2 &lt;- knee_rna_df %&gt;%
-  ggplot() +
-  geom_point(aes(x = rank,
-                 y = nCount_RNA),
-             color = &quot;grey50&quot;,
-             shape = 21) +
-  geom_vline(aes(xintercept = 16000),
-             linetype = 2,
-             color = &quot;orange&quot;,
-             alpha = 0.8,
-             linewidth = 1.1) +
-  geom_hline(aes(yintercept = low_RNA),
-             linetype = 2,
-             color = &quot;red&quot;,
-             alpha = 0.8,
-             linewidth = 1.1) +
-  scale_y_continuous(trans = &quot;log10&quot;, 
-                     breaks = c(100, 1000, 10000, 100000),
-                     labels = c(&quot;100&quot;, &quot;1k&quot;, &quot;10k&quot;, &quot;100k&quot;),
-                     name = &quot;RNA counts&quot;) +
-  scale_x_continuous(trans = &quot;log10&quot;,
-                     breaks = c(1, 10, 100, 1000, 10000, 100000),
-                     labels = c(&quot;1&quot;, &quot;10&quot;, &quot;100&quot;, &quot;1k&quot;, &quot;10k&quot;, &quot;100k&quot;),
-                     name = &quot;Barcodes rank ordered by total number of RNA reads&quot;) +
-  cowplot::theme_minimal_grid()
-
-# Knee plots together
-cowplot::plot_grid(p1, p2,
-                   nrow = 2)
-
-# Save knee plot
-ggsave(here::here(&quot;output/figs/qc/knee_plots.pdf&quot;),
-       height = 6,
-       width = 6)
-
-# Scatter plot of ATAC &amp; RNA counts --------------------------------------------
-
-# Cells called by Cell Ranger ARC
-dat@meta.data %&gt;%
-  filter(nCount_RNA &gt;= 1 &amp;
-           nCount_ATAC &gt;= 1) %&gt;%
-  rownames_to_column(&quot;cells&quot;) %&gt;%
-  mutate(cells_10x = ifelse(cells %in% Cells(dat_10x), 
-                            &quot;Cell Ranger ARC cells&quot;, 
-                            &quot;Non-cell barcodes&quot;)) %&gt;%
-  mutate(cells_10x = factor(cells_10x,
-                            levels = c(&quot;Non-cell barcodes&quot;,
-                                       &quot;Cell Ranger ARC cells&quot;))) %&gt;%
-  ggplot(aes(x = nCount_RNA,
-             y = nCount_ATAC)) +
-  geom_point(aes(color = cells_10x),
-             shape = 21) +
-  scale_x_continuous(trans = &quot;log10&quot;, 
-                     breaks = c(1, 10, 100, 1000, 10000, 100000),
-                     labels = c(&quot;1&quot;, &quot;10&quot;, &quot;100&quot;, &quot;1k&quot;, &quot;10k&quot;, &quot;100k&quot;),
-                     name = &quot;RNA counts&quot;) +
-  scale_y_continuous(trans = &quot;log10&quot;, 
-                     breaks = c(1, 10, 100, 1000, 10000, 100000),
-                     labels = c(&quot;1&quot;, &quot;10&quot;, &quot;100&quot;, &quot;1k&quot;, &quot;10k&quot;, &quot;100k&quot;),
-                     name = &quot;ATAC counts&quot;) +
-  scale_color_manual(values = c(&quot;grey90&quot;, &quot;#91AB73&quot;),
-                     name = element_blank()) +
-  cowplot::theme_minimal_grid() +
-  theme(legend.position = &quot;bottom&quot;)
-
-# Save scatter plot
-ggsave(here::here(&quot;output/figs/qc/scatter_rna_atac_10x_cells.pdf&quot;),
-       height = 6,
-       width = 6)
-
-# Cells called based on count cutoffs only
-dat@meta.data %&gt;%
-  filter(nCount_RNA &gt;= 1 &amp;
-           nCount_ATAC &gt;= 1) %&gt;%
-  mutate(cells = ifelse(nCount_RNA &gt; low_RNA &amp; 
-                          nCount_ATAC &gt; low_ATAC,
-                        &quot;Cells&quot;,
-                        &quot;Non-cell barcodes&quot;)) %&gt;%
-  mutate(cells = factor(cells,
-                        levels = c(&quot;Non-cell barcodes&quot;,
-                                   &quot;Cells&quot;))) %&gt;%
-  ggplot(aes(x = nCount_RNA,
-             y = nCount_ATAC)) +
-  geom_point(aes(color = cells),
-             shape = 21) +
-  scale_x_continuous(trans = &quot;log10&quot;, 
-                     breaks = c(1, 10, 100, 1000, 10000, 100000),
-                     labels = c(&quot;1&quot;, &quot;10&quot;, &quot;100&quot;, &quot;1k&quot;, &quot;10k&quot;, &quot;100k&quot;),
-                     name = &quot;RNA counts&quot;) +
-  scale_y_continuous(trans = &quot;log10&quot;, 
-                     breaks = c(1, 10, 100, 1000, 10000, 100000),
-                     labels = c(&quot;1&quot;, &quot;10&quot;, &quot;100&quot;, &quot;1k&quot;, &quot;10k&quot;, &quot;100k&quot;),
-                     name = &quot;ATAC counts&quot;) +
-  scale_color_manual(values = c(&quot;grey90&quot;, &quot;#91AB73&quot;),
-                     name = element_blank()) +
-  cowplot::theme_minimal_grid() +
-  theme(legend.position = &quot;bottom&quot;)
-
-# Save scatter plot 
-ggsave(here::here(&quot;output/figs/qc/scatter_rna_atac_low_density_cutoff.pdf&quot;),
-       height = 6,
-       width = 6)
-
-# Filter out low quality cells and non-cell barcodes ---------------------------
-
-# Filter criteria just based on low count threshold
-dat &lt;- dat %&gt;%
-  subset(nCount_ATAC &gt; low_ATAC &amp;
-           nCount_ATAC &gt; low_RNA)
-
-# Total number of nuclei
-dat@meta.data %&gt;%
-  tally()
-
-# Number of nuclei at each acclimation temperature
-dat@meta.data %&gt;%
-  group_by(acc_temp) %&gt;%
-  tally()
-
-# Number of nuclei in each sample
-dat@meta.data %&gt;%
-  group_by(sample_name) %&gt;%
-  tally()
-
-# Save data
-saveRDS(dat, &quot;data/processed/seurat_object/02_dat_cells_cutoff.rds&quot;)
-
-# Plots of quality control metrics of 10x Cell Ranger ARC cells  ---------------
-
 # Calculate Nucleosome Signal and TSS Enrichment for ATAC QC metrics
-DefaultAssay(dat_10x) &lt;- &quot;ATAC&quot;
-dat_10x &lt;- NucleosomeSignal(dat_10x)
-dat_10x &lt;- TSSEnrichment(dat_10x)
+DefaultAssay(dat) &lt;- &quot;ATAC&quot;
+dat &lt;- NucleosomeSignal(dat)
+dat &lt;- TSSEnrichment(dat)
 
 # Calculate the percentage of RNA reads that map to mitochondrial genes 
-DefaultAssay(dat_10x) &lt;- &quot;RNA&quot;
-dat_10x[[&quot;percent.mt&quot;]] &lt;- PercentageFeatureSet(dat_10x, 
+DefaultAssay(dat) &lt;- &quot;RNA&quot;
+dat[[&quot;percent.mt&quot;]] &lt;- PercentageFeatureSet(dat, 
                                                 pattern = &quot;^mt:&quot;)
 
-# Save object with Nucleosome TSS, and mito metadata added 
-saveRDS(dat_10x, &quot;data/processed/seurat_object/02_dat_10x_cells.rds&quot;)
+# Save object with Nucleosome, TSS, and mitochondria meta.data added 
+saveRDS(dat, &quot;data/processed/seurat_object/01_dat_10x_cells.rds&quot;)
 
-# Violin plot of QC metrics ----------------------------------------------------
-p1 &lt;- dat_10x@meta.data %&gt;%
-  mutate(project = &quot;heater&quot;) %&gt;%
-  ggplot() +
-  geom_violin(aes(y = nCount_RNA, 
-                  x = project),
-              fill = &quot;grey80&quot;,
-              color = &quot;grey20&quot;) +
-  scale_x_discrete(label = &quot;RNA Counts&quot;,
-                   name = element_blank()) +
-  scale_y_continuous(labels = scales::label_number(suffix = &quot;k&quot;, scale = 1e-3),
-                     name = element_blank()) +
-  theme_classic()
+# Filter out barcodes with low counts or high mitochondrial content ------------
 
-p2 &lt;- dat_10x@meta.data %&gt;%
-  mutate(project = &quot;heater&quot;) %&gt;%
-  ggplot() +
-  geom_violin(aes(y = nCount_ATAC, 
-                  x = project),
-              fill = &quot;grey80&quot;,
-              color = &quot;grey20&quot;) +
-  scale_x_discrete(label = &quot;ATAC Counts&quot;,
-                   name = element_blank()) +
-  scale_y_continuous(labels = scales::label_number(suffix = &quot;k&quot;, scale = 1e-3),
-                     name = element_blank()) +
-  theme_classic()
+# Define filtering thresholds
+low_ATAC &lt;- 800
+low_RNA &lt;- 200
+max_mt &lt;- 5
 
-p3 &lt;- dat_10x@meta.data %&gt;%
-  mutate(project = &quot;heater&quot;) %&gt;%
-  ggplot() +
-  geom_violin(aes(y = TSS.enrichment, 
-                  x = project),
-              fill = &quot;grey80&quot;,
-              color = &quot;grey20&quot;) +
-  scale_x_discrete(label = &quot;TSS Enrichment&quot;,
-                   name = element_blank()) +
-  ylab(element_blank()) +
-  theme_classic()
+# Subset 10x data based on thresholds
+dat &lt;- dat %&gt;%
+  subset(nCount_RNA &gt;= low_RNA &amp;
+           nCount_ATAC &gt;= low_ATAC &amp; 
+           percent.mt &lt; max_mt)
+# Save object
+saveRDS(dat, &quot;data/processed/seurat_object/01_dat_10x_filtered.rds&quot;)
 
-p4 &lt;- dat_10x@meta.data %&gt;%
-  mutate(project = &quot;heater&quot;) %&gt;%
-  ggplot() +
-  geom_violin(aes(y = nucleosome_signal, 
-                  x = project),
-              fill = &quot;grey80&quot;,
-              color = &quot;grey20&quot;) +
-  scale_x_discrete(label = &quot;Nucleosome signal&quot;,
-                   name = element_blank()) +
-  ylab(element_blank()) +
-  theme_classic()
+# Create a filtered fragment file to be used in the amulet doublet finder ------
 
-p5 &lt;- dat_10x@meta.data %&gt;%
-  mutate(project = &quot;heater&quot;) %&gt;%
-  ggplot() +
-  geom_violin(aes(y = percent.mt/100, 
-                  x = project),
-              fill = &quot;grey80&quot;,
-              color = &quot;grey20&quot;) +
-  scale_x_discrete(label = &quot;Percent mitochondrial reads&quot;,
-                   name = element_blank()) +
-  scale_y_continuous(name = element_blank(),
-                     labels = scales::percent_format(accuracy = 1)) +
-  theme_classic()
+# Path to fragment file with all barcodes included
+data_dir &lt;- here::here(&quot;data/processed/seq/all/outs/&quot;)
+frag_path &lt;- paste0(data_dir, &quot;atac_fragments.tsv.gz&quot;)
 
-# Combine all plots together
-cowplot::plot_grid(p2, p3, p4, p1, p5,
-                   nrow = 2)
-
-# Save plot
-ggsave(here::here(&quot;output/figs/cluster/violin_qc_metrics.pdf&quot;),
-       height = 4,
-       width = 6)
-
-
-# FILTER OUT DOUBLETS ----------------------------------------------------------
-# # Filter out 
-# sce &lt;- scds::cxds_bcds_hybrid(as.SingleCellExperiment(dat_10x))
-# 
-# singleCellTK::runScrublet(sce)</code></pre>
+# Write the file with fragments from only the filtered barcodes
+FilterCells(frag_path,
+            Cells(dat),
+            outfile = paste0(data_dir, &quot;atac_fragments_cells.tsv.gz&quot;))</code></pre>
 </div>
-<div id="clustering" class="section level2" number="4.3">
-<h2><span class="header-section-number">4.3</span> Clustering</h2>
+<div id="initial-clustering" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Initial
+clustering</h2>
 <pre class="r"><code># ------------------------------------------------------------------------------
 # Dimension reduction and clustering
 # May 11, 2023
@@ -2283,9 +1937,12 @@ library(Signac)
 library(clustree)
 
 # Load data
-dat &lt;- readRDS(here::here(&quot;data/processed/seurat_object/02_dat_10x_cells.rds&quot;))
+dat &lt;- readRDS(
+  here::here(&quot;data/processed/seurat_object/01_dat_10x_filtered.rds&quot;)
+)
 
 # Run the standard workflow for visualization and clustering -------------------
+# This initial clustering is just for the multiplets plots
 
 # Set RNA to the default assay set for the following set of operations 
 DefaultAssay(dat) &lt;- &quot;RNA&quot;
@@ -2308,284 +1965,307 @@ dat &lt;- RunUMAP(dat, dims = 1:30)
 # Construct nearest-neighbor graph
 dat &lt;- FindNeighbors(dat, dims = 1:30)
 
-# Finding the correct resolution of clusters
+# Finding the correct resolution of cluster -----
+# Run on a bunch of different resolutions
+dat &lt;- FindClusters(dat, resolution = seq(0.01, 0.1, 0.01))
+# Look at the cluster tree
 clustree::clustree(dat)
 
-# Determine the clusters within the data
-dat &lt;- FindClusters(dat, resolution = 0.1)
+# Remove the RNA_snn columns added
+dat@meta.data &lt;- dat@meta.data %&gt;%
+  select(!contains(&quot;RNA_snn&quot;))
 
-# Count per cluster
-dat@meta.data %&gt;%
-  group_by(seurat_clusters) %&gt;%
-  tally()
-
-# Count per cluster per acclimation state
-dat@meta.data %&gt;%
-  group_by(seurat_clusters, acc_temp) %&gt;%
-  tally() %&gt;%
-  pivot_wider(values_from = n, names_from = acc_temp)
-
-# Log-Normalize ATAC Reads -----------------------------------------------------
-dat &lt;- NormalizeData(dat, assay = &quot;ATAC&quot;)
+# Set the final clusters
+dat &lt;- FindClusters(dat, resolution = 0.03)
 
 # Save data
-saveRDS(dat, here::here(&quot;data/processed/seurat_object/03_dat_clustered.rds&quot;))</code></pre>
+saveRDS(
+  dat, 
+  here::here(&quot;data/processed/seurat_object/02_dat_initial_cluster.rds&quot;)
+)</code></pre>
 </div>
-<div id="cluster-plots" class="section level2" number="4.4">
-<h2><span class="header-section-number">4.4</span> Cluster Plots</h2>
+<div id="amulet-for-atac-doublet-id" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> <code>AMULET</code>
+for ATAC doublet id</h2>
 <pre class="r"><code># ------------------------------------------------------------------------------
-# Cluster and expression plots
-# May 16, 2023
+# AMULET to detect doublets in scATAC-Seq &gt; 2 overlapping reads
+# May 22, 2023
 # TS O&#39;Leary
 # ------------------------------------------------------------------------------
 
 # Load libraries
 library(tidyverse)
 library(Seurat)
-library(Signac)
+library(scDblFinder)
 
-# Load data
-dat &lt;- readRDS(here::here(&quot;data/processed/seurat_object/03_dat_clustered.rds&quot;))
+# needs higher read depth maybe?? (10-15K) max performance at 25k/cell
+# median(dat@meta.data$nCount_ATAC) is ~6,032
 
-# Acclimation temperature conditions plotted on top of each other --------------
-DimPlot(dat, 
-        group.by = &quot;acc_temp&quot;) +
-  labs(title = element_blank()) +
-  scale_color_manual(name = element_blank(),
-                     values = c(&quot;#43aa8b&quot;, &quot;#f3722c&quot;)) +
-  theme_void() +
-  theme(legend.position = &quot;bottom&quot;)
+# Path to filtered fragment file
+data_dir &lt;- here::here(&quot;data/processed/seq/all/outs/&quot;)
+frag_path &lt;- paste0(data_dir, &quot;atac_fragments_cells.tsv.gz&quot;)
 
-# Save plot
-ggsave(here::here(&quot;output/figs/cluster/umap_18_25_overlay.pdf&quot;),
-       height = 6,
-       width = 6)
+# Regions to exclude -- sex chromosomes, mito genome, non chr fragments
+# Add highly repetitive regions?
+exclude_regions &lt;- GenomicRanges::GRanges(c(&quot;X&quot;, &quot;Y&quot;, &quot;mitochondrion_genome&quot;,
+                                            &quot;Unmapped_Scaffold_8_D1580_D1567&quot;,
+                                            &quot;211000022280328&quot;,
+                                            &quot;211000022278760&quot;),
+                                          IRanges(1L, width = 10^9))
 
-# Acclimation temperature split apart ------------------------------------------
-DimPlot(dat, 
-        split.by = &quot;acc_temp&quot;,
-        label = TRUE,
-        label.color = &quot;grey20&quot;) +
-  theme_void() +
-  theme(legend.position = &quot;bottom&quot;) +
-  guides(color = guide_legend(byrow = TRUE,
-                              nrow = 1,
-                              override.aes = list(size = 2)))
+# Run amulet on fragments excluding regions
+doublet_amulet &lt;- amulet(frag_path, regionsToExclude = exclude_regions)
 
-# Save plot
-ggsave(here::here(&quot;output/figs/cluster/umap_18_25_split_labeled.pdf&quot;),
-       height = 6,
-       width = 10)
-
-# Without labels on the plot
-DimPlot(dat, 
-        split.by = &quot;acc_temp&quot;) +
-  theme_void() +
-  theme(legend.position = &quot;bottom&quot;) +
-  guides(color = guide_legend(byrow = TRUE,
-                              nrow = 1,
-                              override.aes = list(size = 2)))
-
-# Save plot
-ggsave(here::here(&quot;output/figs/cluster/umap_18_25_split.pdf&quot;),
-       height = 6,
-       width = 10)</code></pre>
+# Save the list of doublets from amulet
+saveRDS(doublet_amulet, here::here(&quot;data/processed/qc/doublet_amulet.rds&quot;))</code></pre>
 </div>
-<div id="cluster-markers" class="section level2" number="4.5">
-<h2><span class="header-section-number">4.5</span> Cluster Markers</h2>
+<div id="doubletfinder-for-rna-doublet-id" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span>
+<code>DoubletFinder</code> for RNA doublet id</h2>
 <pre class="r"><code># ------------------------------------------------------------------------------
-# Differential expression and accessibility
-# May 16, 2023
+# Detecting multiplets in the multiome data sets
+# DoubleFinder and amulet
+# May 22, 2023
 # TS O&#39;Leary
 # ------------------------------------------------------------------------------
 
 # Load libraries
 library(tidyverse)
 library(Seurat)
-library(Signac)
+library(DoubletFinder)
+
+# DoubletFinder for RNA doublets -----------------------------------------------
+
+# Define expected doublet rate from 10X estimates
+doublet_rate &lt;- 0.008/1000
+exp_double_rate &lt;- doublet_rate*4000
+
+# Each sample must be done separately per the instructions of DoubletFinder
+
+# 18C_Rep1 ---------------------------------------------------------------------
 
 # Load data
-dat &lt;- readRDS(here::here(&quot;data/processed/seurat_object/03_dat_clustered.rds&quot;))
+dat &lt;- readRDS(
+  here::here(&quot;data/processed/seurat_object/02_dat_10x_filtered.rds&quot;)) %&gt;%
+  subset(sample_name == &quot;18C_Rep1&quot;)
 
-# Find markers of each cluster that are conserved between the two conditions ---
+# Pre-process Seurat object ----------------------------------------------------
+DefaultAssay(dat) &lt;- &quot;RNA&quot;
+dat &lt;- NormalizeData(dat)
+dat &lt;- FindVariableFeatures(dat, selection.method = &quot;vst&quot;, nfeatures = 2000)
+dat &lt;- ScaleData(dat)
+dat &lt;- RunPCA(dat)
+dat &lt;- RunUMAP(dat, dims = 1:10)
+dat &lt;- FindNeighbors(dat, dims = 1:10)
+dat &lt;- FindClusters(dat, resolution = 0.1)
 
-# Create empty list to populate in the for loop
-markers &lt;- list()
+# pK Identification ------------------------------------------------------------
+sweep.res.list_dat &lt;- paramSweep_v3(dat, PCs = 1:10, sct = FALSE)
+sweep.stats_dat &lt;- summarizeSweep(sweep.res.list_dat, GT = FALSE)
+bcmvn_dat &lt;- find.pK(sweep.stats_dat)
 
-# Loop through each cluster individually
-for (i in levels(dat)) {
-  markers[[i]] &lt;- FindConservedMarkers(dat, 
-                                       ident.1 = i,
-                                       grouping.var = &quot;acc_temp&quot;,
-                                       only.pos = TRUE) %&gt;%
-    rownames_to_column(&quot;gene&quot;)
-}
+# Homotypic Doublet Proportion Estimate ----------------------------------------
+homotypic.prop &lt;- modelHomotypic(dat@meta.data$seurat_clusters)
+nExp_poi &lt;- round(exp_double_rate * nrow(dat@meta.data))
+nExp_poi.adj &lt;- round(nExp_poi*(1 - homotypic.prop))
 
-# Combine markers for all clusters
-markers &lt;- bind_rows(markers, 
-                     .id = &quot;cluster&quot;)
+# Run DoubletFinder with varying classification stringencies -------------------
+dat &lt;- doubletFinder_v3(dat, 
+                        PCs = 1:10,
+                        pK = 0.23,
+                        nExp = nExp_poi.adj,
+                        reuse.pANN = FALSE, 
+                        sct = FALSE)
 
-# Number of markers per cluster
-markers %&gt;%
-  filter(max_pval &lt; 0.05) %&gt;%
-  group_by(cluster) %&gt;%
-  tally()
+# Save the classified doublets
+doublets_18C_Rep1 &lt;- dat@meta.data %&gt;%
+  subset(DF.classifications_0.25_0.23_61 == &quot;Doublet&quot;) %&gt;%
+  rownames()
+
+# 18C_Rep2 ---------------------------------------------------------------------
+
+# Load data
+dat &lt;- readRDS(
+  here::here(&quot;data/processed/seurat_object/02_dat_10x_filtered.rds&quot;)) %&gt;%
+  subset(sample_name == &quot;18C_Rep2&quot;)
+
+# Pre-process Seurat object ----------------------------------------------------
+DefaultAssay(dat) &lt;- &quot;RNA&quot;
+dat &lt;- NormalizeData(dat)
+dat &lt;- FindVariableFeatures(dat, selection.method = &quot;vst&quot;, nfeatures = 2000)
+dat &lt;- ScaleData(dat)
+dat &lt;- RunPCA(dat)
+dat &lt;- RunUMAP(dat, dims = 1:10)
+dat &lt;- FindNeighbors(dat, dims = 1:10)
+dat &lt;- FindClusters(dat, resolution = 0.1)
+
+# pK Identification ------------------------------------------------------------
+sweep.res.list_dat &lt;- paramSweep_v3(dat, PCs = 1:10, sct = FALSE)
+sweep.stats_dat &lt;- summarizeSweep(sweep.res.list_dat, GT = FALSE)
+bcmvn_dat &lt;- find.pK(sweep.stats_dat)
+
+# Homotypic Doublet Proportion Estimate ----------------------------------------
+homotypic.prop &lt;- modelHomotypic(dat@meta.data$seurat_clusters)
+nExp_poi &lt;- round(exp_double_rate * nrow(dat@meta.data))
+nExp_poi.adj &lt;- round(nExp_poi*(1 - homotypic.prop))
+
+# Run DoubletFinder with varying classification stringencies -------------------
+dat &lt;- doubletFinder_v3(dat, 
+                        PCs = 1:10,
+                        pK = 0.005,
+                        nExp = nExp_poi.adj,
+                        reuse.pANN = FALSE, 
+                        sct = FALSE)
+
+# Save the classified doublets
+doublets_18C_Rep2 &lt;- dat@meta.data %&gt;%
+  subset(DF.classifications_0.25_0.005_103 == &quot;Doublet&quot;) %&gt;%
+  rownames()
 
 
+# 25C_Rep1 ---------------------------------------------------------------------
 
-# Save markers object
-saveRDS(markers, here::here(&quot;data/processed/genes/markers.rds&quot;))
+# Load data
+dat &lt;- readRDS(
+  here::here(&quot;data/processed/seurat_object/02_dat_10x_filtered.rds&quot;)) %&gt;%
+  subset(sample_name == &quot;25C_Rep1&quot;)
 
-# # Trying to annotate the clusters based on their cell type ---------------------
-# 
-# # Load annotations from BDGP
-# annot &lt;- read_csv(here::here(&quot;data/raw/annot/insitu_annot.csv&quot;))
-# 
-# # Top 10 markers per cluster
-# top_markers &lt;- markers %&gt;%
-#   filter(max_pval &lt; 10^-4) %&gt;%
-#   group_by(cluster) %&gt;%
-#   slice_min(max_pval, n = 10, with_ties = FALSE)
-# 
-# # This doesn&#39;t work -- lol
-# x &lt;- top_markers %&gt;%
-#   left_join(annot) %&gt;%
-#   filter(!is.na(annot)) %&gt;%
-#   select(cluster, gene, annot) %&gt;%
-#   group_by(cluster) %&gt;%
-#   distinct() %&gt;%
-#   reframe(annots = paste(annot, sep = &quot;_&quot;))</code></pre>
+# Pre-process Seurat object ----------------------------------------------------
+DefaultAssay(dat) &lt;- &quot;RNA&quot;
+dat &lt;- NormalizeData(dat)
+dat &lt;- FindVariableFeatures(dat, selection.method = &quot;vst&quot;, nfeatures = 2000)
+dat &lt;- ScaleData(dat)
+dat &lt;- RunPCA(dat)
+dat &lt;- RunUMAP(dat, dims = 1:10)
+dat &lt;- FindNeighbors(dat, dims = 1:10)
+dat &lt;- FindClusters(dat, resolution = 0.1)
+
+# pK Identification ------------------------------------------------------------
+sweep.res.list_dat &lt;- paramSweep_v3(dat, PCs = 1:10, sct = FALSE)
+sweep.stats_dat &lt;- summarizeSweep(sweep.res.list_dat, GT = FALSE)
+bcmvn_dat &lt;- find.pK(sweep.stats_dat)
+
+# Homotypic Doublet Proportion Estimate ----------------------------------------
+homotypic.prop &lt;- modelHomotypic(dat@meta.data$seurat_clusters)
+nExp_poi &lt;- round(exp_double_rate * nrow(dat@meta.data))
+nExp_poi.adj &lt;- round(nExp_poi*(1 - homotypic.prop))
+
+# Run DoubletFinder with varying classification stringencies -------------------
+dat &lt;- doubletFinder_v3(dat, 
+                        PCs = 1:10,
+                        pK = 0.3,
+                        nExp = nExp_poi.adj,
+                        reuse.pANN = FALSE, 
+                        sct = FALSE)
+
+# Save the classified doublets
+doublets_25C_Rep1 &lt;- dat@meta.data %&gt;%
+  subset(DF.classifications_0.25_0.3_63 == &quot;Doublet&quot;) %&gt;%
+  rownames()
+
+# 25C_Rep2 ---------------------------------------------------------------------
+
+# Load data
+dat &lt;- readRDS(
+  here::here(&quot;data/processed/seurat_object/02_dat_10x_filtered.rds&quot;)) %&gt;%
+  subset(sample_name == &quot;25C_Rep2&quot;)
+
+# Pre-process Seurat object ----------------------------------------------------
+DefaultAssay(dat) &lt;- &quot;RNA&quot;
+dat &lt;- NormalizeData(dat)
+dat &lt;- FindVariableFeatures(dat, selection.method = &quot;vst&quot;, nfeatures = 2000)
+dat &lt;- ScaleData(dat)
+dat &lt;- RunPCA(dat)
+dat &lt;- RunUMAP(dat, dims = 1:10)
+dat &lt;- FindNeighbors(dat, dims = 1:10)
+dat &lt;- FindClusters(dat, resolution = 0.1)
+
+# pK Identification ------------------------------------------------------------
+sweep.res.list_dat &lt;- paramSweep_v3(dat, PCs = 1:10, sct = FALSE)
+sweep.stats_dat &lt;- summarizeSweep(sweep.res.list_dat, GT = FALSE)
+bcmvn_dat &lt;- find.pK(sweep.stats_dat)
+
+# Homotypic Doublet Proportion Estimate ----------------------------------------
+homotypic.prop &lt;- modelHomotypic(dat@meta.data$seurat_clusters)
+nExp_poi &lt;- round(exp_double_rate * nrow(dat@meta.data))
+nExp_poi.adj &lt;- round(nExp_poi*(1 - homotypic.prop))
+
+# Run DoubletFinder with varying classification stringencies -------------------
+dat &lt;- doubletFinder_v3(dat, 
+                        PCs = 1:10,
+                        pK = 0.01,
+                        nExp = nExp_poi.adj,
+                        reuse.pANN = FALSE, 
+                        sct = FALSE)
+
+# Save the classified doublets
+doublets_25C_Rep2 &lt;- dat@meta.data %&gt;%
+  subset(DF.classifications_0.25_0.01_72 == &quot;Doublet&quot;) %&gt;%
+  rownames()
+
+doublets &lt;- c(doublets_18C_Rep1,
+              doublets_18C_Rep2,
+              doublets_25C_Rep1,
+              doublets_25C_Rep2)
+
+# Save doublets
+saveRDS(doublets, here::here(&quot;data/processed/qc/doublet_finder.rds&quot;))</code></pre>
 </div>
-<div id="differentially-expressed-genes" class="section level2" number="4.6">
-<h2><span class="header-section-number">4.6</span> Differentially
-expressed genes</h2>
+<div id="remove-identified-multiplets" class="section level2" number="3.6">
+<h2><span class="header-section-number">3.6</span> Remove identified
+multiplets</h2>
 <pre class="r"><code># ------------------------------------------------------------------------------
-# Find differentially expressed genes between conditions
-# May 17, 2023
+# Remove multiplets
+# May 23, 2023
 # TS O&#39;Leary
 # ------------------------------------------------------------------------------
 
 # Load libraries
 require(tidyverse)
+require(Seurat)
 
-# Load data
-dat &lt;- readRDS(here::here(&quot;data/processed/seurat_object/03_dat_clustered.rds&quot;))
+# Load multiplet barcodes
+doublet_amulet &lt;- readRDS(
+  here::here(&quot;data/processed/qc/doublet_amulet.rds&quot;)
+  ) %&gt;%
+  filter(q.value &lt; 0.05) %&gt;%
+  rownames()
+doublet_finder &lt;- readRDS(here::here(&quot;data/processed/qc/doublet_finder.rds&quot;))
 
-# Set default assay
-DefaultAssay(dat) &lt;- &quot;RNA&quot;
+# Load seurat object
+dat &lt;- readRDS(
+  here::here(&quot;data/processed/seurat_object/02_dat_initial_cluster.rds&quot;)
+  ) %&gt;%
+  DietSeurat()
 
-# Reset primary idents to the acclimation temperatures
-Idents(dat) &lt;- &quot;acc_temp&quot;
+# Mark amulet described multiplet barcodes
+dat$doublet_amulet &lt;- ifelse(colnames(dat) %in% doublet_amulet, 
+                             &quot;Multiplet&quot;,
+                             &quot;Singlet&quot;)
 
-# Average expression of RNA across all cells
-avg_exp &lt;- log10(AverageExpression(dat, verbose = FALSE)$RNA)
-avg_exp &lt;- avg_exp %&gt;%
-  as_tibble(rownames = &quot;gene&quot;)
+# Mark amulet described multiplet barcodes
+dat$doublet_finder &lt;- ifelse(colnames(dat) %in% doublet_finder,
+                             &quot;Multiplet&quot;,
+                             &quot;Singlet&quot;)
 
-# Scatter plot of the average expression for all cells -------------------------
-p &lt;- avg_exp %&gt;%
-  ggplot() +
-  geom_point(aes(x = `25C`,
-                 y = `18C`,
-                 label = gene)) +
-  labs(x = &quot;18°C&quot;,
-       y = &quot;25°C&quot;) +
-  theme_minimal()
+# Save dat with multiplets marked
+saveRDS(dat, here::here(&quot;data/processed/seurat_object/05_dat_multiplets.rds&quot;))
 
-# Quick plotly with gene labels
-plotly::ggplotly(p)
+# Remove all multiplets from the data set
+dat &lt;- dat %&gt;%
+  subset(doublet_amulet == &quot;Singlet&quot; &amp; doublet_finder == &quot;Singlet&quot;)
 
-# Differential expression bulk between two conditions regardless of cluster ----
-degs &lt;- FindMarkers(dat, 
-                    ident.1 = &quot;18C&quot;,
-                    ident.2 = &quot;25C&quot;)
+# Remove cluster info
+dat@meta.data &lt;- dat@meta.data %&gt;%
+  select(-seurat_clusters) %&gt;%
+  select(!contains(&quot;snn&quot;))
 
-degs %&gt;%
-  filter(p_val_adj &lt; 0.05)
-
-# I---
-# AggregateExpression(dat, assay = &quot;RNA&quot;)
-
-# Differential expression between conditions within clusters -------------------
-
-# Create combined groups of clusters and acclimation temperatures
-dat$clust_acc &lt;- paste(dat$seurat_clusters, dat$acc_temp, sep = &quot;_&quot;)
-
-# Set that new variable as the ident
-Idents(dat) &lt;- &quot;clust_acc&quot;
-
-# Find markers genes between different clusters 
-degs &lt;- list()
-
-# Loop through each cluster
-for (i in levels(dat$seurat_clusters)) {
-  degs[[i]] &lt;- FindMarkers(dat, 
-                      ident.1 = paste0(i, &quot;_18C&quot;),
-                      ident.2 = paste0(i, &quot;_25C&quot;)) %&gt;%
-    rownames_to_column(&quot;gene&quot;)
-}
-
-# Combine all clusters together
-degs &lt;- bind_rows(degs, .id = &quot;cluster&quot;)
-
-# Total number of DEGs
-degs %&gt;%
-  filter(p_val_adj &lt; 0.05) %&gt;%
-  tally()
-
-# Number of DEGs per cluster -----
-degs %&gt;%
-  filter(p_val_adj &lt; 0.05) %&gt;%
-  group_by(cluster) %&gt;%
-  tally()
-
-# Filter to just the genes with an adjusted p-value less than 0.05 -------------
-degs &lt;- degs %&gt;%
-  filter(p_val_adj &lt; 0.05)</code></pre>
-</div>
-<div id="feature-plots" class="section level2" number="4.7">
-<h2><span class="header-section-number">4.7</span> Feature plots</h2>
-<pre class="r"><code># ------------------------------------------------------------------------------
-# Create feature plots
-# May 16, 2023
-# TS O&#39;Leary
-# ------------------------------------------------------------------------------
-
-# Load libraries
-library(tidyverse)
-library(Seurat)
-library(Signac)
-
-# Load data
-dat &lt;- readRDS(here::here(&quot;data/processed/seurat_object/03_dat_clustered.rds&quot;))
-
-# Gene
-gene &lt;- &quot;sesB&quot;
-
-# Plot expression level on top of the UMAP projection
-FeaturePlot(dat, 
-            gene, 
-            cols = c(&quot;grey95&quot;, &quot;darkgreen&quot;),
-            keep.scale = &quot;all&quot;,
-            split.by = &quot;acc_temp&quot;)
-
-# Violin Plot
-Idents(dat) &lt;- &quot;seurat_clusters&quot;
-VlnPlot(dat,
-        gene,
-        cols = c(&quot;#43aa8b&quot;, &quot;#f3722c&quot;),
-        split.by = &quot;acc_temp&quot;, 
-        pt.size = 0)
-
-
-Idents(dat) &lt;- &quot;clust_acc&quot;
-RidgePlot(dat, 
-          gene)</code></pre>
+# Save dat with multiplets removed
+saveRDS(dat, here::here(&quot;data/processed/seurat_object/05_dat_filtered.rds&quot;))</code></pre>
 </div>
 </div>
 <div id="session-info" class="section level1 unnumbered">
 <h1 class="unnumbered">Session Info</h1>
-<pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 4.2.3 (2023-03-15)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 20.04.6 LTS
@@ -2605,12 +2285,57 @@ RidgePlot(dat,
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
+## other attached packages:
+##  [1] clustree_0.5.0     ggraph_2.1.0       Signac_1.9.0       SeuratObject_4.1.3
+##  [5] Seurat_4.3.0       lubridate_1.9.2    forcats_1.0.0      stringr_1.5.0     
+##  [9] dplyr_1.1.1        purrr_1.0.1        readr_2.1.4        tidyr_1.3.0       
+## [13] tibble_3.2.1       ggplot2_3.4.2      tidyverse_2.0.0   
+## 
 ## loaded via a namespace (and not attached):
-##  [1] digest_0.6.31   R6_2.5.1        jsonlite_1.8.4  evaluate_0.20  
-##  [5] cachem_1.0.7    rlang_1.1.0     cli_3.6.1       rstudioapi_0.14
-##  [9] jquerylib_0.1.4 bslib_0.4.2     rmarkdown_2.21  tools_4.2.3    
-## [13] xfun_0.38       yaml_2.3.7      fastmap_1.1.1   compiler_4.2.3 
-## [17] htmltools_0.5.5 knitr_1.42      sass_0.4.6</code></pre>
+##   [1] fastmatch_1.1-3        plyr_1.8.8             igraph_1.4.2          
+##   [4] lazyeval_0.2.2         sp_1.6-0               splines_4.2.3         
+##   [7] BiocParallel_1.32.5    listenv_0.9.0          scattermore_1.0       
+##  [10] GenomeInfoDb_1.34.9    digest_0.6.31          htmltools_0.5.5       
+##  [13] viridis_0.6.3          fansi_1.0.4            magrittr_2.0.3        
+##  [16] tensor_1.5             cluster_2.1.4          ROCR_1.0-11           
+##  [19] tzdb_0.3.0             graphlayouts_1.0.0     globals_0.16.2        
+##  [22] Biostrings_2.66.0      matrixStats_0.63.0     timechange_0.2.0      
+##  [25] spatstat.sparse_3.0-1  colorspace_2.1-0       ggrepel_0.9.3         
+##  [28] xfun_0.38              crayon_1.5.2           RCurl_1.98-1.12       
+##  [31] jsonlite_1.8.4         progressr_0.13.0       spatstat.data_3.0-1   
+##  [34] survival_3.5-5         zoo_1.8-12             glue_1.6.2            
+##  [37] polyclip_1.10-4        gtable_0.3.3           zlibbioc_1.44.0       
+##  [40] XVector_0.38.0         leiden_0.4.3           future.apply_1.10.0   
+##  [43] BiocGenerics_0.44.0    abind_1.4-5            scales_1.2.1          
+##  [46] spatstat.random_3.1-4  miniUI_0.1.1.1         Rcpp_1.0.10           
+##  [49] viridisLite_0.4.2      xtable_1.8-4           reticulate_1.28       
+##  [52] stats4_4.2.3           htmlwidgets_1.6.2      httr_1.4.5            
+##  [55] RColorBrewer_1.1-3     ellipsis_0.3.2         ica_1.0-3             
+##  [58] farver_2.1.1           pkgconfig_2.0.3        sass_0.4.6            
+##  [61] uwot_0.1.14            deldir_1.0-6           utf8_1.2.3            
+##  [64] tidyselect_1.2.0       rlang_1.1.0            reshape2_1.4.4        
+##  [67] later_1.3.1            munsell_0.5.0          tools_4.2.3           
+##  [70] cachem_1.0.7           cli_3.6.1              generics_0.1.3        
+##  [73] ggridges_0.5.4         evaluate_0.20          fastmap_1.1.1         
+##  [76] yaml_2.3.7             goftest_1.2-3          knitr_1.42            
+##  [79] tidygraph_1.2.3        fitdistrplus_1.1-11    RANN_2.6.1            
+##  [82] pbapply_1.7-0          future_1.32.0          nlme_3.1-162          
+##  [85] mime_0.12              RcppRoll_0.3.0         compiler_4.2.3        
+##  [88] rstudioapi_0.14        plotly_4.10.1          png_0.1-8             
+##  [91] spatstat.utils_3.0-2   tweenr_2.0.2           bslib_0.4.2           
+##  [94] stringi_1.7.12         lattice_0.21-8         Matrix_1.5-4          
+##  [97] vctrs_0.6.1            pillar_1.9.0           lifecycle_1.0.3       
+## [100] spatstat.geom_3.1-0    lmtest_0.9-40          jquerylib_0.1.4       
+## [103] RcppAnnoy_0.0.20       data.table_1.14.8      cowplot_1.1.1         
+## [106] bitops_1.0-7           irlba_2.3.5.1          httpuv_1.6.9          
+## [109] patchwork_1.1.2        GenomicRanges_1.50.2   R6_2.5.1              
+## [112] promises_1.2.0.1       KernSmooth_2.23-21     gridExtra_2.3         
+## [115] IRanges_2.32.0         parallelly_1.35.0      codetools_0.2-19      
+## [118] MASS_7.3-60            withr_2.5.0            sctransform_0.3.5     
+## [121] Rsamtools_2.14.0       S4Vectors_0.36.2       GenomeInfoDbData_1.2.9
+## [124] parallel_4.2.3         hms_1.1.3              grid_4.2.3            
+## [127] rmarkdown_2.21         Rtsne_0.16             ggforce_0.4.1         
+## [130] spatstat.explore_3.1-0 shiny_1.7.4</code></pre>
 </div>
 
 

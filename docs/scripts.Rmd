@@ -13,6 +13,12 @@ output:
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(eval = FALSE)
+
+# Load libraries to record version in Session Info section
+library(tidyverse)
+library(Seurat)
+library(Signac)
+library(clustree)
 ```
 
 # HEATER {-}
@@ -28,16 +34,16 @@ HEATER Project:
 ```{r, file = "src/00_pheno/cs_pheno.R"}
 ```
 
-# **Nuclei isolation**
+<!-- # **Nuclei isolation** -->
 
-## Nuclei quality
+<!-- ## Nuclei quality -->
 
-## Nuclei counts
+<!-- ## Nuclei counts -->
 
-The data is loaded and then the species are grouped.
+<!-- The data is loaded and then the species are grouped. -->
 
-```{r, file = "src/00_pheno/cs_pheno_fig.R"}
-```
+<!-- ```{r, file = "src/00_pheno/cs_pheno.R"} -->
+<!-- ``` -->
 
 # **Cell Ranger ARC**
 
@@ -60,41 +66,36 @@ The data is loaded and then the species are grouped.
 
 ## Create seurat object
 
-```{r, file = "src/03_seurat/01_create_seurat_object.R"}
+```{r, file = "src/03_seurat/00_create_seurat_object.R"}
 ```
 
 ## Quality control and filtering
 
-```{r, file = "src/03_seurat/02_quality_control_filtering.R"}
+```{r, file = "src/03_seurat/01_quality_control_filtering.R"}
 ```
 
-## Clustering
+## Initial clustering
 
-```{r, file = "src/03_seurat/03_cluster.R"}
+```{r, file = "src/03_seurat/02_initial_cluster.R"}
 ```
 
-## Cluster Plots
+## `AMULET` for ATAC doublet id
 
-```{r, file = "src/03_seurat/04_cluster_plots.R"}
+```{r, file = "src/03_seurat/03_amulet.R"}
 ```
 
-## Cluster Markers
+## `DoubletFinder` for RNA doublet id
 
-```{r, file = "src/03_seurat/05_cluster_markers.R"}
+```{r, file = "src/03_seurat/04_doublet_finder.R"}
 ```
 
-## Differentially expressed genes
+## Remove identified multiplets
 
-```{r, file = "src/03_seurat/06_degs.R"}
-```
-
-## Feature plots
-
-```{r, file = "src/03_seurat/08_feature_plots.R"}
+```{r, file = "src/03_seurat/05_rm_multiplets.R"}
 ```
 
 # Session Info {-}
 
-```{r}
+```{r, echo = FALSE, eval = TRUE}
 sessionInfo()
 ```
