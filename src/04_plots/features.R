@@ -10,7 +10,7 @@ library(Seurat)
 library(Signac)
 
 # Load data
-dat <- readRDS(here::here("data/processed/seurat_object/03_dat_clustered.rds"))
+dat <- readRDS(here::here("data/processed/seurat_object/06_dat_cluster.rds"))
 
 # Gene
 gene <- "sesB"
@@ -28,8 +28,6 @@ VlnPlot(dat,
         gene,
         cols = c("#43aa8b", "#f3722c"),
         split.by = "acc_temp", 
-        pt.size = 0)
+        pt.size = 0) +
+  scale_y_continuous(expand = c(0, 0))
 
-# Idents(dat) <- "clust_acc"
-# RidgePlot(dat, 
-#           gene)
