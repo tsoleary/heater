@@ -10,7 +10,7 @@ library(Seurat)
 library(Signac)
 
 # Load data
-dat <- readRDS(here::here("data/processed/seurat_object/03_dat_clustered.rds"))
+dat <- readRDS(here::here("data/processed/seurat_object/06_dat_cluster.rds"))
 
 # Quick bar plot counting the number of cells for each cluster -----------------
 dat@meta.data %>%
@@ -25,6 +25,19 @@ dat@meta.data %>%
   scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   cowplot::theme_minimal_hgrid()
 
+# Joint UMAP projection -------
+DimPlot(dat, 
+        label = TRUE, 
+        repel = TRUE, 
+        reduction = "umap",
+        split.by = "acc_temp") + 
+  NoLegend()
+
+DimPlot(dat, 
+        repel = TRUE, 
+        reduction = "umap",
+        group.by = "acc_temp")
+
 # Save plot
 ggsave(here::here("output/figs/cluster/cells_per_cluster.pdf"),
        height = 15,
@@ -34,6 +47,9 @@ ggsave(here::here("output/figs/cluster/cells_per_cluster.png"),
        height = 15,
        width = 30,
        units = "cm")
+
+# RNA UMAP projections ---------------------------------------------------------
+DefaultAssay(dat) <- "RNA"
 
 # Acclimation temperature conditions plotted on top of each other --------------
 DimPlot(dat, 
@@ -71,25 +87,6 @@ ggsave(here::here("output/figs/cluster/umap_18_25_split_labeled.pdf"),
        width = 30,
        units = "cm")
 ggsave(here::here("output/figs/cluster/umap_18_25_split_labeled.png"),
-       height = 15,
-       width = 30,
-       units = "cm")
-
-# Without labels on the plot
-DimPlot(dat, 
-        split.by = "acc_temp") +
-  theme_void() +
-  theme(legend.position = "bottom") +
-  guides(color = guide_legend(byrow = TRUE,
-                              nrow = 1,
-                              override.aes = list(size = 2)))
-
-# Save plot
-ggsave(here::here("output/figs/cluster/umap_18_25_split.pdf"),
-       height = 15,
-       width = 30,
-       units = "cm")
-ggsave(here::here("output/figs/cluster/umap_18_25_split.png"),
        height = 15,
        width = 30,
        units = "cm")

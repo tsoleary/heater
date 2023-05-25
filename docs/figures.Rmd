@@ -8,14 +8,22 @@ output:
     theme: lumen
     number_sections: true
     toc: true
+    toc_depth: 2
     toc_float: true
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(shiny)
 ```
 
 # **Quality control**
+
+## Calling nuclei barcodes
+
+- First, we used Cell Ranger ARC called cell barcodes -- algorithm described [here](https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/algorithms/cell-calling). 14,301 barcodes out of 2,215,183.
+- Second, because the Cell Ranger ARC cell calling algorithm is very permissive to barcodes with very low counts (_i.e._, a minimum of a single count in each library), barcodes were additionally filtered to a low count threshold in both the ATAC and RNA libraries based on the clearly defined population of cells in the RNA and ATAC count scatterplot. Additionally, barcodes with more than 5% of RNA reads mapping to genes on the mitochondrial genome were excluded. A total of 886 barcodes were filtered out for 13,145 left.
+- Last, multiplets were filtered out using two independent methods, relying on either the ATAC or RNA libraries to call multiplets. [AMULET](https://github.com/UcarLab/AMULET) relies on the assumption that in snATAC-seq of diploids there should be at most two overlapping fragments with the same cell barcode. The presence of more than two overlapping fragments is a potential indication of a multiplet. Doublets were also identified using the RNA-seq libraries with [DoubletFinder](https://github.com/chris-mcginnis-ucsf/DoubletFinder). An additional 1,103 multiplet barcodes filtered out, for a final number of 12,042 high quality nuceli barcodes.
 
 ## Knee plot
 
@@ -23,43 +31,105 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 knitr::include_graphics(here::here("output/figs/qc/knee_plots.png"))
 ```
 
-## Scatter plot of counts
+## Scatter plot of counts {.tabset}
+
+### Cells after all filtering {- .tabset}
 
 ```{r}
-knitr::include_graphics(here::here("output/figs/qc/scatter_rna_atac_10x_cells.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/scatter_rna_atac_final_filter.png")
+)
 ```
 
-## Violin QC plots
+### Cell Ranger ARC only {- .tabset}
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/qc/scatter_rna_atac_10x_cells.png")
+)
+```
+
+### And low count threshold {- .tabset}
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/qc/scatter_rna_atac_cells_threshold.png")
+)
+```
+
+## Violin QC plots {.tabset}
+
+### After filtering {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/violin_qc_metrics_post_filter.png"))
+```
+
+### Before filtering {- .tabset}
 
 ```{r}
 knitr::include_graphics(here::here("output/figs/qc/violin_qc_metrics.png"))
+```
+
+## Multiplets {.tabset}
+
+### Mapped onto UMAP projection  {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/multiplet_umap.png"))
+```
+
+### Counts {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/counts_umap.png"))
+```
+
+### Count histograms {-}
+
+#### Multiplets {-}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/multiplets_hist.png"))
+```
+
+#### After filtering {-}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/singlets_only_hist.png"))
 ```
 
 # **Seurat**
 
 ## Clusters
 
-### Cells per cluster
+### Cells per cluster {-}
 
 ```{r}
 knitr::include_graphics(here::here("output/figs/cluster/cells_per_cluster.png"))
 ```
 
-### Acclimation clusters
+### Acclimation clusters {- .tabset}
 
-#### Together
+#### Together {- .tabset}
 
 ```{r}
-knitr::include_graphics(here::here("output/figs/cluster/umap_18_25_overlay.png"))
+knitr::include_graphics(
+  here::here("output/figs/cluster/umap_18_25_overlay.png")
+)
 ```
 
-#### Split
+#### Split {- .tabset}
 
 ```{r}
-knitr::include_graphics(here::here("output/figs/cluster/umap_18_25_split.png"))
+knitr::include_graphics(
+  here::here("output/figs/cluster/umap_18_25_split.png")
+)
 ```
 
 ## Features
+
+
 
 ### Gene expression
 
