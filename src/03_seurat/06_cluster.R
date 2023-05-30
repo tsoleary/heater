@@ -55,6 +55,15 @@ reference <- LoadH5Seurat(
   here::here("scratch/calderon/data/pbmc_multimodal.h5seurat")
 )
 
+DimPlot(object = reference, 
+        reduction = "wnn.umap", 
+        group.by = "celltype.l1", 
+        raster = FALSE,
+        label = TRUE, 
+        label.size = 3, 
+        repel = TRUE) + 
+  NoLegend()
+
 # transfer cell type labels from reference to query
 transfer_anchors <- FindTransferAnchors(
   reference = reference,

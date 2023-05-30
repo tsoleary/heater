@@ -14,7 +14,6 @@ output:
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
-library(shiny)
 ```
 
 # **Scripts**
@@ -101,6 +100,45 @@ knitr::include_graphics(here::here("output/figs/qc/multiplets_hist.png"))
 
 ```{r}
 knitr::include_graphics(here::here("output/figs/qc/singlets_only_hist.png"))
+```
+
+## Per sample QC metrics {.tabset}
+
+### Number of cells {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/cells_sample.png"))
+```
+
+### ATAC counts {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/median_atac_sample.png"))
+```
+
+### RNA counts {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/median_rna_sample.png"))
+```
+
+### TSS Enrichment {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/tss_enrichment_samples.png"))
+```
+
+### FRiP {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/frip_samples.png"))
+```
+
+
+### FRiT {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/qc/frit_samples.png"))
 ```
 
 # **Seurat**
