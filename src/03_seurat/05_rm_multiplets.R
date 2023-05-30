@@ -19,8 +19,7 @@ doublet_finder <- readRDS(here::here("data/processed/qc/doublet_finder.rds"))
 # Load seurat object
 dat <- readRDS(
   here::here("data/processed/seurat_object/02_dat_initial_cluster.rds")
-  ) %>%
-  DietSeurat()
+) 
 
 # Mark amulet described multiplet barcodes
 dat$doublet_amulet <- ifelse(colnames(dat) %in% doublet_amulet, 
