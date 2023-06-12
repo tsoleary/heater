@@ -14,17 +14,17 @@ library(tidyverse)
 dat <- read_csv(here::here("data/raw/pheno/embryo_acc_pheno.csv"))
 
 # Filter only Canton S data
-dat <- dat %>%
-  filter(Genotype == "CantonS") %>%
+dat <- dat |>
+  filter(Genotype == "CantonS") |>
   filter(Stage == "Early")
 
 # Count the number of eggs per acclimation treatment
-dat %>%
-  group_by(Acclimation) %>%
+dat |>
+  group_by(Acclimation) |>
   summarise(total_eggs = sum(Number_Eggs))
 
 # Acclimation effect
-dat %>%
+dat |>
   glm(Survival ~ Acclimation, 
       data = .,
       weights = Number_Eggs,

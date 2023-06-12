@@ -27,18 +27,18 @@ low_ATAC <- 800
 low_RNA <- 200
 
 # Cells called by Cell Ranger ARC & low count threshold
-dat_raw@meta.data %>%
+dat_raw@meta.data |>
   filter(nCount_RNA >= 1 &
-           nCount_ATAC >= 1) %>%
-  rownames_to_column("cells") %>%
+           nCount_ATAC >= 1) |>
+  rownames_to_column("cells") |>
   mutate(cells_10x = ifelse(cells %in% Cells(dat) &
                               nCount_RNA >= low_RNA &
                               nCount_ATAC >= low_ATAC, 
                             "Cells", 
-                            "Non-cell barcodes")) %>%
+                            "Non-cell barcodes")) |>
   mutate(cells_10x = factor(cells_10x,
                             levels = c("Non-cell barcodes",
-                                       "Cells"))) %>%
+                                       "Cells"))) |>
   ggplot(aes(x = nCount_RNA,
              y = nCount_ATAC)) +
   geom_point(aes(color = cells_10x),
@@ -79,8 +79,8 @@ ggsave(here::here("output/figs/qc/scatter_rna_atac_final_filter.png"),
        units = "cm")
 
 # Violin plot after filtering
-p1 <- dat@meta.data %>%
-  mutate(project = "heater") %>%
+p1 <- dat@meta.data |>
+  mutate(project = "heater") |>
   ggplot() +
   geom_violin(aes(y = nCount_RNA, 
                   x = project),
@@ -92,8 +92,8 @@ p1 <- dat@meta.data %>%
                      name = element_blank()) +
   theme_classic()
 
-p2 <- dat@meta.data %>%
-  mutate(project = "heater") %>%
+p2 <- dat@meta.data |>
+  mutate(project = "heater") |>
   ggplot() +
   geom_violin(aes(y = nCount_ATAC, 
                   x = project),
@@ -105,8 +105,8 @@ p2 <- dat@meta.data %>%
                      name = element_blank()) +
   theme_classic()
 
-p3 <- dat@meta.data %>%
-  mutate(project = "heater") %>%
+p3 <- dat@meta.data |>
+  mutate(project = "heater") |>
   ggplot() +
   geom_violin(aes(y = TSS.enrichment, 
                   x = project),
@@ -117,8 +117,8 @@ p3 <- dat@meta.data %>%
   ylab(element_blank()) +
   theme_classic()
 
-p4 <- dat@meta.data %>%
-  mutate(project = "heater") %>%
+p4 <- dat@meta.data |>
+  mutate(project = "heater") |>
   ggplot() +
   geom_violin(aes(y = nucleosome_signal, 
                   x = project),
@@ -129,8 +129,8 @@ p4 <- dat@meta.data %>%
   ylab(element_blank()) +
   theme_classic()
 
-p5 <- dat@meta.data %>%
-  mutate(project = "heater") %>%
+p5 <- dat@meta.data |>
+  mutate(project = "heater") |>
   ggplot() +
   geom_violin(aes(y = percent.mt/100, 
                   x = project),
@@ -189,13 +189,13 @@ ggsave(here::here("output/figs/qc/fragment_hist.png"),
        units = "cm")
 
 # FRiP
-dat@meta.data %>%
-  group_by(sample_name) %>%
-  summarise(FRiP = median(FRiP))  %>%
+dat@meta.data |>
+  group_by(sample_name) |>
+  summarise(FRiP = median(FRiP))  |>
   mutate(sample_name = factor(sample_name, levels = c(c("25C_Rep2",
                                                         "25C_Rep1",
                                                         "18C_Rep2",
-                                                        "18C_Rep1")))) %>%
+                                                        "18C_Rep1")))) |>
   ggplot(aes(x = FRiP,
              y = sample_name,
              label = round(FRiP, digits = 3))) +
@@ -223,13 +223,13 @@ ggsave(here::here("output/figs/qc/frip_samples.png"),
        units = "cm")
 
 # FRiT
-dat@meta.data %>%
-  group_by(sample_name) %>%
-  summarise(FRiT = median(FRiT))  %>%
+dat@meta.data |>
+  group_by(sample_name) |>
+  summarise(FRiT = median(FRiT))  |>
   mutate(sample_name = factor(sample_name, levels = c(c("25C_Rep2",
                                                         "25C_Rep1",
                                                         "18C_Rep2",
-                                                        "18C_Rep1")))) %>%
+                                                        "18C_Rep1")))) |>
   ggplot(aes(x = FRiT,
              y = sample_name,
              label = round(FRiT, digits = 3))) +
@@ -257,13 +257,13 @@ ggsave(here::here("output/figs/qc/frit_samples.png"),
        units = "cm")
   
 # Cells per sample
-dat@meta.data %>%
-  group_by(sample_name) %>%
+dat@meta.data |>
+  group_by(sample_name) |>
   mutate(sample_name = factor(sample_name, levels = c(c("25C_Rep2",
                                                         "25C_Rep1",
                                                         "18C_Rep2",
-                                                        "18C_Rep1")))) %>%
-  tally() %>%
+                                                        "18C_Rep1")))) |>
+  tally() |>
   ggplot(aes(x = n,
              y = sample_name,
              label = n)) +
@@ -291,14 +291,14 @@ ggsave(here::here("output/figs/qc/cells_sample.png"),
        units = "cm")
 
 # Median RNA and ATAC counts
-dat@meta.data %>%
-  group_by(sample_name) %>%
+dat@meta.data |>
+  group_by(sample_name) |>
   summarise(nCount_RNA_median = median(nCount_RNA),
-            nCount_ATAC_median = median(nCount_ATAC))  %>%
+            nCount_ATAC_median = median(nCount_ATAC))  |>
   mutate(sample_name = factor(sample_name, levels = c(c("25C_Rep2",
                                                         "25C_Rep1",
                                                         "18C_Rep2",
-                                                        "18C_Rep1")))) %>%
+                                                        "18C_Rep1")))) |>
   ggplot(aes(x = nCount_RNA_median,
              y = sample_name,
              label = nCount_RNA_median)) +
@@ -326,14 +326,14 @@ ggsave(here::here("output/figs/qc/median_rna_sample.png"),
        units = "cm")
 
 # Median RNA and ATAC counts
-dat@meta.data %>%
-  group_by(sample_name) %>%
+dat@meta.data |>
+  group_by(sample_name) |>
   summarise(nCount_RNA_median = median(nCount_RNA),
-            nCount_ATAC_median = median(nCount_ATAC))  %>%
+            nCount_ATAC_median = median(nCount_ATAC))  |>
   mutate(sample_name = factor(sample_name, levels = c(c("25C_Rep2",
                                                         "25C_Rep1",
                                                         "18C_Rep2",
-                                                        "18C_Rep1")))) %>%
+                                                        "18C_Rep1")))) |>
   ggplot(aes(x = nCount_ATAC_median,
              y = sample_name,
              label = nCount_ATAC_median)) +

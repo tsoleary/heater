@@ -33,10 +33,10 @@ low_RNA <- 200
 
 # Knee-plot for ATAC -----------------------------------------------------------
 p1 <- tibble(nCount_ATAC = sort(dat_raw$nCount_ATAC,
-                          decreasing = TRUE)) %>%
-  rownames_to_column("rank") %>%
-  mutate(rank = as.numeric(rank)) %>%
-  head(100000) %>%
+                          decreasing = TRUE)) |>
+  rownames_to_column("rank") |>
+  mutate(rank = as.numeric(rank)) |>
+  head(100000) |>
   ggplot() +
   geom_point(aes(x = rank,
                  y = nCount_ATAC),
@@ -59,10 +59,10 @@ p1 <- tibble(nCount_ATAC = sort(dat_raw$nCount_ATAC,
 
 # Knee-plot for RNA ------------------------------------------------------------
 p2 <- tibble(nCount_RNA = sort(dat_raw$nCount_RNA,
-                         decreasing = TRUE)) %>%
-  rownames_to_column("rank") %>%
-  mutate(rank = as.numeric(rank)) %>%
-  head(100000) %>%
+                         decreasing = TRUE)) |>
+  rownames_to_column("rank") |>
+  mutate(rank = as.numeric(rank)) |>
+  head(100000) |>
   ggplot() +
   geom_point(aes(x = rank,
                  y = nCount_RNA),
@@ -100,16 +100,16 @@ ggsave(here::here("output/figs/qc/knee_plots.png"),
 # Scatter plot of ATAC & RNA counts --------------------------------------------
 
 # Cells called by Cell Ranger ARC
-dat_raw@meta.data %>%
+dat_raw@meta.data |>
   filter(nCount_RNA >= 1 &
-           nCount_ATAC >= 1) %>%
-  rownames_to_column("cells") %>%
+           nCount_ATAC >= 1) |>
+  rownames_to_column("cells") |>
   mutate(cells_10x = ifelse(cells %in% Cells(dat_10x), 
                             "Cell Ranger ARC cells", 
-                            "Non-cell barcodes")) %>%
+                            "Non-cell barcodes")) |>
   mutate(cells_10x = factor(cells_10x,
                             levels = c("Non-cell barcodes",
-                                       "Cell Ranger ARC cells"))) %>%
+                                       "Cell Ranger ARC cells"))) |>
   ggplot(aes(x = nCount_RNA,
              y = nCount_ATAC)) +
   geom_point(aes(color = cells_10x),
@@ -138,18 +138,18 @@ ggsave(here::here("output/figs/qc/scatter_rna_atac_10x_cells.png"),
        units = "cm")
 
 # Cells called by Cell Ranger ARC & low count threshold
-dat_raw@meta.data %>%
+dat_raw@meta.data |>
   filter(nCount_RNA >= 1 &
-           nCount_ATAC >= 1) %>%
-  rownames_to_column("cells") %>%
+           nCount_ATAC >= 1) |>
+  rownames_to_column("cells") |>
   mutate(cells_10x = ifelse(cells %in% Cells(dat_10x) &
                               nCount_RNA >= low_RNA &
                               nCount_ATAC >= low_ATAC, 
                             "Cells", 
-                            "Non-cell barcodes")) %>%
+                            "Non-cell barcodes")) |>
   mutate(cells_10x = factor(cells_10x,
                             levels = c("Non-cell barcodes",
-                                       "Cells"))) %>%
+                                       "Cells"))) |>
   ggplot(aes(x = nCount_RNA,
              y = nCount_ATAC)) +
   geom_point(aes(color = cells_10x),
@@ -192,8 +192,8 @@ ggsave(here::here("output/figs/qc/scatter_rna_atac_cells_threshold.png"),
 # Violin plot of QC metrics ----------------------------------------------------
 
 # 10x cells
-p1 <- dat_10x@meta.data %>%
-  mutate(project = "heater") %>%
+p1 <- dat_10x@meta.data |>
+  mutate(project = "heater") |>
   ggplot() +
   geom_violin(aes(y = nCount_RNA, 
                   x = project),
@@ -205,8 +205,8 @@ p1 <- dat_10x@meta.data %>%
                      name = element_blank()) +
   theme_classic()
 
-p2 <- dat_10x@meta.data %>%
-  mutate(project = "heater") %>%
+p2 <- dat_10x@meta.data |>
+  mutate(project = "heater") |>
   ggplot() +
   geom_violin(aes(y = nCount_ATAC, 
                   x = project),
@@ -218,8 +218,8 @@ p2 <- dat_10x@meta.data %>%
                      name = element_blank()) +
   theme_classic()
 
-p3 <- dat_10x@meta.data %>%
-  mutate(project = "heater") %>%
+p3 <- dat_10x@meta.data |>
+  mutate(project = "heater") |>
   ggplot() +
   geom_violin(aes(y = TSS.enrichment, 
                   x = project),
@@ -230,8 +230,8 @@ p3 <- dat_10x@meta.data %>%
   ylab(element_blank()) +
   theme_classic()
 
-p4 <- dat_10x@meta.data %>%
-  mutate(project = "heater") %>%
+p4 <- dat_10x@meta.data |>
+  mutate(project = "heater") |>
   ggplot() +
   geom_violin(aes(y = nucleosome_signal, 
                   x = project),
@@ -242,8 +242,8 @@ p4 <- dat_10x@meta.data %>%
   ylab(element_blank()) +
   theme_classic()
 
-p5 <- dat_10x@meta.data %>%
-  mutate(project = "heater") %>%
+p5 <- dat_10x@meta.data |>
+  mutate(project = "heater") |>
   ggplot() +
   geom_violin(aes(y = percent.mt/100, 
                   x = project),

@@ -42,17 +42,11 @@ total_fragments <- CountFragments(fragments = frag_path, cells = Cells(dat))
 dat$fragments <- total_fragments[total_fragments$CB == colnames(dat), "frequency_count"]
 
 # Peak calling -----------------------------------------------------------------
-# # Install macs2 using the R package Herper
-# library(Herper)
+# Installed macs2 using the R package Herper
+
+# Path to miniconda
 path_to_miniconda <-
-  "/slipstream_old/home/thomasoleary/.local/share/r-miniconda"
-# install_CondaTools(
-#   tools = "macs2", 
-#   env = "PeakCalling_analysis",
-#   pathToMiniConda = path_to_miniconda
-# )
-
-
+  "/slipstream_old/home/thomasoleary/.local/share/r-miniconda" 
 # Path to macs2 for CallPeaks function
 macs2_path <- paste0(path_to_miniconda, 
                      "/envs/PeakCalling_analysis/bin/macs2")
@@ -110,5 +104,3 @@ dat$FRiT <- dat$nCount_TSS/dat$fragments
 
 # Save seurat object with added info
 saveRDS(dat, here::here("data/processed/seurat_object/06_dat_qc.rds"))
-
-

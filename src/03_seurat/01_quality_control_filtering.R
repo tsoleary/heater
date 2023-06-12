@@ -39,7 +39,7 @@ low_RNA <- 200
 max_mt <- 5
 
 # Subset 10x data based on thresholds
-dat <- dat %>%
+dat <- dat |>
   subset(nCount_RNA >= low_RNA &
            nCount_ATAC >= low_ATAC & 
            percent.mt < max_mt)

@@ -14,18 +14,18 @@ library(tidyverse)
 dat <- read_csv(here::here("data/raw/pheno/embryo_acc_pheno.csv"))
 
 # Filter only Canton S data
-dat <- dat %>%
-  filter(Genotype == "CantonS") %>%
+dat <- dat |>
+  filter(Genotype == "CantonS") |>
   filter(Stage == "Early")
 
 # Count the number of eggs per acclimation treatment
-dat %>%
-  group_by(Acclimation) %>%
+dat |>
+  group_by(Acclimation) |>
   summarise(total_eggs = sum(Number_Eggs))
 
 # Plot Canton S Survival
-dat %>%
-  mutate(Acclimation = paste0(Acclimation, "°C")) %>%
+dat |>
+  mutate(Acclimation = paste0(Acclimation, "°C")) |>
   ggplot(aes(x = Acclimation,
              y = Survival*100)) +
   geom_boxplot(width = 0.3,
