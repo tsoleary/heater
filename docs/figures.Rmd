@@ -102,7 +102,7 @@ knitr::include_graphics(here::here("output/figs/qc/multiplets_hist.png"))
 knitr::include_graphics(here::here("output/figs/qc/singlets_only_hist.png"))
 ```
 
-## Per sample QC metrics {.tabset}
+## QC metrics per sample  {.tabset}
 
 ### Number of cells {- .tabset}
 
@@ -141,6 +141,46 @@ knitr::include_graphics(here::here("output/figs/qc/frip_samples.png"))
 knitr::include_graphics(here::here("output/figs/qc/frit_samples.png"))
 ```
 
+## QC metrics on UMAP {.tabset}
+
+### ATAC counts {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/features/qc/nCount_ATAC.png"))
+```
+
+### RNA counts {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/features/qc/nCount_RNA.png"))
+```
+
+### TSS enrichment {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/features/qc/TSS.enrichment.png"))
+```
+
+### Mito percent {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/features/qc/percent.mt.png"))
+```
+
+### FRiP {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/features/qc/FRiP.png"))
+```
+
+### FRiT {- .tabset}
+
+```{r}
+knitr::include_graphics(here::here("output/figs/features/qc/FRiT.png"))
+```
+
+
+
 # **Seurat**
 
 ## Clusters
@@ -153,7 +193,17 @@ knitr::include_graphics(here::here("output/figs/cluster/cells_per_cluster.png"))
 
 ### Acclimation clusters {- .tabset}
 
-#### Together {- .tabset}
+#### Joint UMAP {- .tabset}
+
+##### Split {- .tabset}
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/cluster/umap_18_25_split.png")
+)
+```
+
+##### Together {- .tabset}
 
 ```{r}
 knitr::include_graphics(
@@ -161,11 +211,39 @@ knitr::include_graphics(
 )
 ```
 
-#### Split {- .tabset}
+#### RNA-only UMAP {- .tabset}
+
+##### Split {- .tabset}
 
 ```{r}
 knitr::include_graphics(
-  here::here("output/figs/cluster/umap_18_25_split.png")
+  here::here("output/figs/cluster/umap_18_25_split_rna.png")
+)
+```
+
+##### Together {- .tabset}
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/cluster/umap_18_25_overlay_rna.png")
+)
+```
+
+#### ATAC-only UMAP {- .tabset}
+
+##### Split {- .tabset}
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/cluster/umap_18_25_split_atac.png")
+)
+```
+
+##### Together {- .tabset}
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/cluster/umap_18_25_overlay_atac.png")
 )
 ```
 

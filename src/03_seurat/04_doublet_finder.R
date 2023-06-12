@@ -22,7 +22,7 @@ exp_double_rate <- doublet_rate*4000
 
 # Load data
 dat <- readRDS(
-  here::here("data/processed/seurat_object/02_dat_10x_filtered.rds")) %>%
+  here::here("data/processed/seurat_object/02_dat_10x_filtered.rds")) |>
   subset(sample_name == "18C_Rep1")
 
 # Pre-process Seurat object ----------------------------------------------------
@@ -54,15 +54,15 @@ dat <- doubletFinder_v3(dat,
                         sct = FALSE)
 
 # Save the classified doublets
-doublets_18C_Rep1 <- dat@meta.data %>%
-  subset(DF.classifications_0.25_0.23_61 == "Doublet") %>%
+doublets_18C_Rep1 <- dat@meta.data |>
+  subset(DF.classifications_0.25_0.23_61 == "Doublet") |>
   rownames()
 
 # 18C_Rep2 ---------------------------------------------------------------------
 
 # Load data
 dat <- readRDS(
-  here::here("data/processed/seurat_object/02_dat_10x_filtered.rds")) %>%
+  here::here("data/processed/seurat_object/02_dat_10x_filtered.rds")) |>
   subset(sample_name == "18C_Rep2")
 
 # Pre-process Seurat object ----------------------------------------------------
@@ -94,8 +94,8 @@ dat <- doubletFinder_v3(dat,
                         sct = FALSE)
 
 # Save the classified doublets
-doublets_18C_Rep2 <- dat@meta.data %>%
-  subset(DF.classifications_0.25_0.005_103 == "Doublet") %>%
+doublets_18C_Rep2 <- dat@meta.data |>
+  subset(DF.classifications_0.25_0.005_103 == "Doublet") |>
   rownames()
 
 
@@ -103,7 +103,7 @@ doublets_18C_Rep2 <- dat@meta.data %>%
 
 # Load data
 dat <- readRDS(
-  here::here("data/processed/seurat_object/02_dat_10x_filtered.rds")) %>%
+  here::here("data/processed/seurat_object/02_dat_10x_filtered.rds")) |>
   subset(sample_name == "25C_Rep1")
 
 # Pre-process Seurat object ----------------------------------------------------
@@ -135,15 +135,15 @@ dat <- doubletFinder_v3(dat,
                         sct = FALSE)
 
 # Save the classified doublets
-doublets_25C_Rep1 <- dat@meta.data %>%
-  subset(DF.classifications_0.25_0.3_63 == "Doublet") %>%
+doublets_25C_Rep1 <- dat@meta.data |>
+  subset(DF.classifications_0.25_0.3_63 == "Doublet") |>
   rownames()
 
 # 25C_Rep2 ---------------------------------------------------------------------
 
 # Load data
 dat <- readRDS(
-  here::here("data/processed/seurat_object/02_dat_10x_filtered.rds")) %>%
+  here::here("data/processed/seurat_object/02_dat_10x_filtered.rds")) |>
   subset(sample_name == "25C_Rep2")
 
 # Pre-process Seurat object ----------------------------------------------------
@@ -175,8 +175,8 @@ dat <- doubletFinder_v3(dat,
                         sct = FALSE)
 
 # Save the classified doublets
-doublets_25C_Rep2 <- dat@meta.data %>%
-  subset(DF.classifications_0.25_0.01_72 == "Doublet") %>%
+doublets_25C_Rep2 <- dat@meta.data |>
+  subset(DF.classifications_0.25_0.01_72 == "Doublet") |>
   rownames()
 
 doublets <- c(doublets_18C_Rep1,

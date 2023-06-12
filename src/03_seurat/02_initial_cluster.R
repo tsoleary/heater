@@ -46,7 +46,7 @@ dat <- FindClusters(dat, resolution = seq(0.01, 0.1, 0.01))
 clustree::clustree(dat)
 
 # Remove the RNA_snn columns added
-dat@meta.data <- dat@meta.data %>%
+dat@meta.data <- dat@meta.data |>
   select(!contains("RNA_snn"))
 
 # Set the final clusters

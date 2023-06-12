@@ -11,8 +11,8 @@ require(Seurat)
 # Load multiplet barcodes
 doublet_amulet <- readRDS(
   here::here("data/processed/qc/doublet_amulet.rds")
-  ) %>%
-  filter(q.value < 0.05) %>%
+  ) |>
+  filter(q.value < 0.05) |>
   rownames()
 doublet_finder <- readRDS(here::here("data/processed/qc/doublet_finder.rds"))
 
@@ -35,12 +35,12 @@ dat$doublet_finder <- ifelse(colnames(dat) %in% doublet_finder,
 saveRDS(dat, here::here("data/processed/seurat_object/05_dat_multiplets.rds"))
 
 # Remove all multiplets from the data set
-dat <- dat %>%
+dat <- dat |>
   subset(doublet_amulet == "Singlet" & doublet_finder == "Singlet")
 
 # Remove cluster info
-dat@meta.data <- dat@meta.data %>%
-  select(-seurat_clusters) %>%
+dat@meta.data <- dat@meta.data |>
+  select(-seurat_clusters) |>
   select(!contains("snn"))
 
 # Save dat with multiplets removed

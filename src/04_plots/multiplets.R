@@ -12,7 +12,7 @@ dat <- readRDS(
   here::here("data/processed/seurat_object/05_dat_multiplets.rds")
   ) 
 
-dat@meta.data <- dat@meta.data %>%
+dat@meta.data <- dat@meta.data |>
   mutate(doublet = ifelse(doublet_amulet == "Multiplet" | 
                             doublet_finder == "Multiplet",
                           "Multiplet",
@@ -74,9 +74,9 @@ ggsave(here::here("output/figs/qc/counts_umap.png"),
 # Histogram out counts for RNA and ATAC libraries with multiplets --------------
 
 # RNA count multiplet histogram
-p1 <- dat@meta.data %>%
+p1 <- dat@meta.data |>
   mutate(doublet = factor(doublet,
-                          levels = c("Singlet", "Multiplet"))) %>%
+                          levels = c("Singlet", "Multiplet"))) |>
   ggplot() +
   geom_histogram(aes(x = nCount_RNA,
                      fill = doublet),
@@ -90,9 +90,9 @@ p1 <- dat@meta.data %>%
   cowplot::theme_cowplot()
 
 # ATAC count multiplet histogram
-p2 <- dat@meta.data %>%
+p2 <- dat@meta.data |>
   mutate(doublet = factor(doublet,
-                          levels = c("Singlet", "Multiplet"))) %>%
+                          levels = c("Singlet", "Multiplet"))) |>
   ggplot() +
   geom_histogram(aes(x = nCount_ATAC,
                      fill = doublet),
@@ -134,10 +134,10 @@ ggsave(here::here("output/figs/qc/multiplets_hist.png"),
 # Histogram out counts for RNA and ATAC libraries without multiplets -----------
 
 # RNA count multiplet histogram
-p1 <- dat@meta.data %>%
+p1 <- dat@meta.data |>
   mutate(doublet = factor(doublet,
-                          levels = c("Singlet", "Multiplet"))) %>%
-  filter(doublet == "Singlet") %>%
+                          levels = c("Singlet", "Multiplet"))) |>
+  filter(doublet == "Singlet") |>
   ggplot() +
   geom_histogram(aes(x = nCount_RNA),
                  fill = "grey50",
@@ -149,10 +149,10 @@ p1 <- dat@meta.data %>%
   cowplot::theme_cowplot()
 
 # ATAC count multiplet histogram
-p2 <- dat@meta.data %>%
+p2 <- dat@meta.data |>
   mutate(doublet = factor(doublet,
-                          levels = c("Singlet", "Multiplet"))) %>%
-  filter(doublet == "Singlet") %>%
+                          levels = c("Singlet", "Multiplet"))) |>
+  filter(doublet == "Singlet") |>
   ggplot() +
   geom_histogram(aes(x = nCount_ATAC),
                  fill = "grey50",

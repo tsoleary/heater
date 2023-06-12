@@ -30,8 +30,8 @@ annotation <- GetGRangesFromEnsDb(BDGP6.32)
 # "This number, which indicates which GEM well the barcode sequence came from, 
 # is called the GEM well suffix. The numbering of the GEM wells will reflect the 
 # order that the GEM wells were provided in the Aggregation CSV."
-meta_data <- tibble(cellnames = colnames(counts[[1]])) %>%
-  mutate(orig.ident = str_extract(cellnames, "[1-4]")) %>%
+meta_data <- tibble(cellnames = colnames(counts[[1]])) |> 
+  mutate(orig.ident = str_extract(cellnames, "[1-4]")) |> 
   full_join(tibble::tribble(
     ~orig.ident, ~sample_name, ~acc_temp,
     "1", "18C_Rep1", "18°C",
@@ -39,7 +39,7 @@ meta_data <- tibble(cellnames = colnames(counts[[1]])) %>%
     "3", "25C_Rep1", "25°C",
     "4", "25C_Rep2", "25°C"
   ), 
-  by = "orig.ident") %>%
+  by = "orig.ident") |> 
   column_to_rownames("cellnames")
 
 # Create a Seurat object containing the RNA data
@@ -70,8 +70,8 @@ filtered_feature_dir <- paste0(data_dir, "filtered_feature_bc_matrix")
 counts <- Read10X(filtered_feature_dir)
 
 # Meta data for counts from filtered counts
-meta_data <- tibble(cellnames = colnames(counts[[1]])) %>%
-  mutate(orig.ident = str_extract(cellnames, "[1-4]")) %>%
+meta_data <- tibble(cellnames = colnames(counts[[1]])) |>
+  mutate(orig.ident = str_extract(cellnames, "[1-4]")) |>
   full_join(tibble::tribble(
     ~orig.ident, ~sample_name, ~acc_temp,
     "1", "18C_Rep1", "18°C",
@@ -79,7 +79,7 @@ meta_data <- tibble(cellnames = colnames(counts[[1]])) %>%
     "3", "25C_Rep1", "25°C",
     "4", "25C_Rep2", "25°C"
   ), 
-  by = "orig.ident") %>%
+  by = "orig.ident") |>
   column_to_rownames("cellnames")
 
 # Create a Seurat object containing the RNA data
