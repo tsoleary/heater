@@ -11,6 +11,7 @@ library(Signac)
 
 # Load data
 dat <- readRDS(here::here("data/processed/seurat_object/07_dat_cluster.rds"))
+dat <- readRDS(here::here("data/processed/seurat_object/08_dat_linked.rds"))
 
 # Quick bar plot counting the number of cells for each cluster -----------------
 dat@meta.data |>

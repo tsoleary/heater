@@ -137,7 +137,7 @@ ggsave(here::here("output/figs/qc/multiplets_hist.png"),
 p1 <- dat@meta.data |>
   mutate(doublet = factor(doublet,
                           levels = c("Singlet", "Multiplet"))) |>
-  filter(doublet == "Singlet") |>
+  filter(doublet == "Singlet" & nCount_RNA < 10000) |>
   ggplot() +
   geom_histogram(aes(x = nCount_RNA),
                  fill = "grey50",
@@ -152,7 +152,7 @@ p1 <- dat@meta.data |>
 p2 <- dat@meta.data |>
   mutate(doublet = factor(doublet,
                           levels = c("Singlet", "Multiplet"))) |>
-  filter(doublet == "Singlet") |>
+  filter(doublet == "Singlet" & nCount_RNA < 10000) |>
   ggplot() +
   geom_histogram(aes(x = nCount_ATAC),
                  fill = "grey50",

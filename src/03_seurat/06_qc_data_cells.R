@@ -26,6 +26,7 @@ frag_path <- paste0(data_dir, "atac_fragments.tsv.gz")
 BDGP6.32 <- query(AnnotationHub(), 
                   c("EnsDb", "Drosophila melanogaster", "109"))[[1]]
 annotation <- GetGRangesFromEnsDb(BDGP6.32)
+seqlevelsStyle(annotation) <- 'UCSC'
 
 # Calculate additional QC metrics ----------------------------------------------
 
@@ -36,10 +37,14 @@ dat <- TSSEnrichment(dat, fast = FALSE)
 # Counting fraction of reads in peaks -----
 
 # Count fragments
-total_fragments <- CountFragments(fragments = frag_path, cells = Cells(dat))
+total_fragments <- CountFragments(
+  fragments = frag_path, 
+  cells = Cells(dat)
+)
 
 # Add to metadata
-dat$fragments <- total_fragments[total_fragments$CB == colnames(dat), "frequency_count"]
+dat$fragments <- total_fragments[total_fragments$CB == colnames(dat), 
+                                 "frequency_count"]
 
 # Peak calling -----------------------------------------------------------------
 # Installed macs2 using the R package Herper
@@ -54,7 +59,8 @@ macs2_path <- paste0(path_to_miniconda,
 # Call peaks
 peaks <- CallPeaks(
   dat, 
-  macs2.path = macs2_path
+  macs2.path = macs2_path,
+  effective.genome.size = 1.25e8
 )
 
 # Create the peak matrix
@@ -70,7 +76,6 @@ dat[["peaks"]] <- CreateChromatinAssay(
   annotation = annotation
 )
 
-
 # Calculate fraction of reads in peaks
 dat <- FRiP(
   dat,
@@ -81,7 +86,9 @@ dat <- FRiP(
 # Fraction of reads in TSS region ----------------------------------------------
 
 # Get the TSS sites
-TSS_sites <- GetTSSPositions(dat@assays$ATAC@annotation)
+TSS_sites <- GetTSSPositions(
+  dat@assays$ATAC@annotation
+)
 
 # # Get the 2000 bp upstream and 200 bp downstream region with promoter
 # # This is how TSS was defined in Calderon et al. 2022

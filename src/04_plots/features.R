@@ -19,7 +19,8 @@ FeaturePlot(dat,
             keep.scale = "feature") +
   cowplot::theme_nothing() +
   theme(title = element_blank(),
-        legend.position = "right")
+        legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
 
 # Save plot
 ggsave(here::here("output/figs/features/qc/nCount_RNA.png"),
@@ -34,7 +35,8 @@ FeaturePlot(dat,
             keep.scale = "feature") +
   cowplot::theme_nothing() +
   theme(title = element_blank(),
-        legend.position = "right")
+        legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
 
 # Save plot
 ggsave(here::here("output/figs/features/qc/nCount_ATAC.png"),
@@ -49,7 +51,8 @@ FeaturePlot(dat,
             keep.scale = "feature") +
   cowplot::theme_nothing() +
   theme(title = element_blank(),
-        legend.position = "right")
+        legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
 
 # Save plot
 ggsave(here::here("output/figs/features/qc/TSS.enrichment.png"),
@@ -64,7 +67,8 @@ FeaturePlot(dat,
             keep.scale = "feature") +
   cowplot::theme_nothing() +
   theme(title = element_blank(),
-        legend.position = "right")
+        legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
 
 # Save plot
 ggsave(here::here("output/figs/features/qc/percent.mt.png"),
@@ -79,7 +83,8 @@ FeaturePlot(dat,
             keep.scale = "feature") +
   cowplot::theme_nothing() +
   theme(title = element_blank(),
-        legend.position = "right")
+        legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
 
 # Save plot
 ggsave(here::here("output/figs/features/qc/FRiP.png"),
@@ -94,7 +99,8 @@ FeaturePlot(dat,
             keep.scale = "feature") +
   cowplot::theme_nothing() +
   theme(title = element_blank(),
-        legend.position = "right")
+        legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
 
 # Save plot
 ggsave(here::here("output/figs/features/qc/FRiT.png"),

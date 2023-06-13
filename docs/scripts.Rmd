@@ -64,34 +64,70 @@ HEATER Project:
 
 # **Seurat**
 
-## Create seurat object
+## Initial processing and QC
+
+### Create seurat object
 
 ```{r, file = "src/03_seurat/00_create_seurat_object.R"}
 ```
 
-## Quality control and filtering
+### Quality control and filtering
 
 ```{r, file = "src/03_seurat/01_quality_control_filtering.R"}
 ```
 
-## Initial clustering
+### Initial clustering
 
 ```{r, file = "src/03_seurat/02_initial_cluster.R"}
 ```
 
-## `AMULET` for ATAC doublet id
+### `AMULET` for ATAC doublet id
 
 ```{r, file = "src/03_seurat/03_amulet.R"}
 ```
 
-## `DoubletFinder` for RNA doublet id
+### `DoubletFinder` for RNA doublet id
 
 ```{r, file = "src/03_seurat/04_doublet_finder.R"}
 ```
 
-## Remove identified multiplets
+### Remove identified multiplets
 
 ```{r, file = "src/03_seurat/05_rm_multiplets.R"}
+```
+
+### QC metrics on filtered cells
+
+```{r, file = "src/03_seurat/06_qc_data_cells.R"}
+```
+
+## Clustering
+
+### Creating clusters
+
+```{r, file = "src/03_seurat/07_cluster.R"}
+```
+
+### Identify markers
+
+```{r, file = "src/03_seurat/08_cluster_markers.R"}
+```
+
+### Annotate clusters
+
+```{r, file = "src/03_seurat/09_cluster_annotation.R"}
+```
+
+## Integrate data
+
+### Link peaks
+
+```{r, file = "src/03_seurat/10_link_peaks.R"}
+```
+
+### Pseudobulk analysis
+
+```{r, file = "src/03_seurat/11_pseudobulk_DESeq2.R"}
 ```
 
 # Session Info {-}
