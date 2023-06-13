@@ -25,8 +25,15 @@ dat <- TSSEnrichment(dat)
 
 # Calculate the percentage of RNA reads that map to mitochondrial genes 
 DefaultAssay(dat) <- "RNA"
-dat[["percent.mt"]] <- PercentageFeatureSet(dat, 
-                                                pattern = "^mt:")
+dat[["percent.mt"]] <- PercentageFeatureSet(
+  dat,
+  pattern = "^mt:"
+)
+# Calculate the percentage of RNA reads that map to ribosomal genes
+dat[["percent.ribo"]] <- PercentageFeatureSet(
+  data, 
+  pattern = "^Rp[S|L]"
+)
 
 # Save object with Nucleosome, TSS, and mitochondria meta.data added 
 saveRDS(dat, "data/processed/seurat_object/01_dat_10x_cells.rds")
@@ -36,13 +43,18 @@ saveRDS(dat, "data/processed/seurat_object/01_dat_10x_cells.rds")
 # Define filtering thresholds
 low_ATAC <- 800
 low_RNA <- 200
-max_mt <- 5
+max_mt <- 5 #### Calderon did 25 % for both mt and rb -- ask Seth? Maybe
+#max_rb <- 5
 
 # Subset 10x data based on thresholds
 dat <- dat |>
-  subset(nCount_RNA >= low_RNA &
-           nCount_ATAC >= low_ATAC & 
-           percent.mt < max_mt)
+  subset(
+    nCount_RNA >= low_RNA &
+      nCount_ATAC >= low_ATAC & 
+      percent.mt < max_mt # &
+      # percent.ribo < max_rb
+    )
+
 # Save object
 saveRDS(dat, "data/processed/seurat_object/01_dat_10x_filtered.rds")
 

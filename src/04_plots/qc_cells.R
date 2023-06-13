@@ -174,19 +174,19 @@ ggsave(here::here("output/figs/qc/tss_enrichment_samples.png"),
        width = 25,
        units = "cm")
 
-# Fragment histogram for each sample -------------------------------------------
-FragmentHistogram(dat, 
-                  group.by = "sample_name")
-
-# Save plot
-ggsave(here::here("output/figs/qc/fragment_hist.pdf"),
-       height = 15,
-       width = 25,
-       units = "cm")
-ggsave(here::here("output/figs/qc/fragment_hist.png"),
-       height = 15,
-       width = 25,
-       units = "cm")
+# # Fragment histogram for each sample -------------------------------------------
+# FragmentHistogram(dat, 
+#                   group.by = "sample_name")
+# 
+# # Save plot
+# ggsave(here::here("output/figs/qc/fragment_hist.pdf"),
+#        height = 15,
+#        width = 25,
+#        units = "cm")
+# ggsave(here::here("output/figs/qc/fragment_hist.png"),
+#        height = 15,
+#        width = 25,
+#        units = "cm")
 
 # FRiP
 dat@meta.data |>

@@ -15,7 +15,7 @@ dat <- readRDS(
   here::here("data/processed/seurat_object/06_dat_qc.rds")
 )
 
-# Joint Clustering based on Signac tutorial url below --------------------------
+# Joint Clustering based on Signac tutorial ------------------------------------
 # https://stuartlab.org/signac/articles/pbmc_multiomic.html
 
 # RNA data processing
@@ -67,8 +67,11 @@ dat <- FindClusters(dat,
 # Save data
 saveRDS(dat, here::here("data/processed/seurat_object/07_dat_cluster.rds"))
 
+################################################################################
+# To see how and if the dimensional reduction of only ATAC or RNA libraries 
+# looks different -- save these data below
 
-# RNA-only clustering ----------------------------------------------------------
+# RNA-only dim-reduction -------------------------------------------------------
 # Load data
 dat <- readRDS(
   here::here("data/processed/seurat_object/07_dat_cluster.rds")
@@ -84,7 +87,7 @@ saveRDS(dat,
   here::here("data/processed/seurat_object/07_dat_rna_umap.rds")
 )
 
-# ATAC-only clustering ---------------------------------------------------------
+# ATAC-only dim-reduction ------------------------------------------------------
 # Load data
 dat <- readRDS(
   here::here("data/processed/seurat_object/07_dat_cluster.rds")
@@ -101,7 +104,3 @@ dat <- dat |>
 saveRDS(dat,
   here::here("data/processed/seurat_object/07_dat_atac_umap.rds")
 )
-
-dat |> 
-  DimPlot(
-    split.by = "acc_temp")

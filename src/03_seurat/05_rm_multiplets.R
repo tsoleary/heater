@@ -38,7 +38,13 @@ saveRDS(dat, here::here("data/processed/seurat_object/05_dat_multiplets.rds"))
 dat <- dat |>
   subset(doublet_amulet == "Singlet" & doublet_finder == "Singlet")
 
-# Remove cluster info
+# There are still two outlier barcodes with exceptionally high nCount_RNA when
+# compared to the remaining high quality nuclei – 12-13k compared to 6-7k for 
+# the next highest cells -- so let's remove those two outliers now
+dat <- dat |> 
+  subset(nCount_RNA < 10000)
+
+# Remove cluster info from that initial clustering
 dat@meta.data <- dat@meta.data |>
   select(-seurat_clusters) |>
   select(!contains("snn"))

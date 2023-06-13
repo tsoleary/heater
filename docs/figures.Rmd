@@ -14,6 +14,9 @@ output:
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(kableExtra)
+library(bslib)
 ```
 
 # **Scripts**
@@ -26,7 +29,7 @@ The code used for analysis is located [on GitHub](https://github.com/tsoleary/he
 
 - First, we used Cell Ranger ARC called cell barcodes -- algorithm described [here](https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/algorithms/cell-calling). 14,301 barcodes out of 2,215,183.
 - Second, because the Cell Ranger ARC cell calling algorithm is very permissive to barcodes with very low counts (_i.e._, a minimum of a single count in each library), barcodes were additionally filtered to a low count threshold in both the ATAC and RNA libraries based on the clearly defined population of cells in the RNA and ATAC count scatterplot. Additionally, barcodes with more than 5% of RNA reads mapping to genes on the mitochondrial genome were excluded. A total of 886 barcodes were filtered out for 13,145 left.
-- Last, multiplets were filtered out using two independent methods, relying on either the ATAC or RNA libraries to call multiplets. [AMULET](https://github.com/UcarLab/AMULET) relies on the assumption that in snATAC-seq of diploids there should be at most two overlapping fragments with the same cell barcode. The presence of more than two overlapping fragments is a potential indication of a multiplet. Doublets were also identified using the RNA-seq libraries with [DoubletFinder](https://github.com/chris-mcginnis-ucsf/DoubletFinder). An additional 1,103 multiplet barcodes filtered out, for a final number of 12,042 high quality nuceli barcodes.
+- Last, multiplets were filtered out using two independent methods, relying on either the ATAC or RNA libraries to call multiplets. [AMULET](https://github.com/UcarLab/AMULET) relies on the assumption that in snATAC-seq of diploids there should be at most two overlapping fragments with the same cell barcode. The presence of more than two overlapping fragments is a potential indication of a multiplet. Doublets were also identified using the RNA-seq libraries with [DoubletFinder](https://github.com/chris-mcginnis-ucsf/DoubletFinder). After removing the 1,103 multiplet barcodes, there were still two barcodes that had substantially higher number of RNA reads after all filtering (i.e., n_Count_RNA around 12-13k when the next highest are around 6-7k). So I removed those two for a final number of 12,040 high quality nuceli barcodes.
 
 ## Knee plot
 
@@ -193,9 +196,9 @@ knitr::include_graphics(here::here("output/figs/cluster/cells_per_cluster.png"))
 
 ### Acclimation clusters {- .tabset}
 
-#### Joint UMAP {- .tabset}
+#### Joint UMAP  {- .tabset .tabset-pills}
 
-##### Split {- .tabset}
+##### Split {-}
 
 ```{r}
 knitr::include_graphics(
@@ -203,17 +206,17 @@ knitr::include_graphics(
 )
 ```
 
-##### Together {- .tabset}
+##### Together {-}
 
-```{r}
+```{r, out.width = "75%"}
 knitr::include_graphics(
   here::here("output/figs/cluster/umap_18_25_overlay.png")
 )
 ```
 
-#### RNA-only UMAP {- .tabset}
+#### RNA-only UMAP {- .tabset .tabset-pills}
 
-##### Split {- .tabset}
+##### Split {-}
 
 ```{r}
 knitr::include_graphics(
@@ -221,17 +224,17 @@ knitr::include_graphics(
 )
 ```
 
-##### Together {- .tabset}
+##### Together {-}
 
-```{r}
+```{r, out.width = "75%"}
 knitr::include_graphics(
   here::here("output/figs/cluster/umap_18_25_overlay_rna.png")
 )
 ```
 
-#### ATAC-only UMAP {- .tabset}
+#### ATAC-only UMAP {- .tabset .tabset-pills}
 
-##### Split {- .tabset}
+##### Split {-}
 
 ```{r}
 knitr::include_graphics(
@@ -239,18 +242,39 @@ knitr::include_graphics(
 )
 ```
 
-##### Together {- .tabset}
+##### Together {-}
 
-```{r}
+```{r, out.width = "75%"}
 knitr::include_graphics(
   here::here("output/figs/cluster/umap_18_25_overlay_atac.png")
 )
 ```
 
-## Features
+## Annotation
+
+### Annotation results
+
+```{r}
+readRDS(here::here("data/processed/annot/cluster_annot_all.rds")) |> 
+  mutate(cluster = as.numeric(cluster)) |> 
+  filter(padj < 0.05) |> 
+  arrange(cluster, padj) |> 
+  kable(format = "html", escape = F) |> 
+  kable_styling("striped") |> 
+  scroll_box(width = "100%", height = "500px")
+```
+
+### Manual annotations
+
+```{r}
+readRDS(here::here("data/processed/annot/cluster_annot_manual.rds")) |> 
+  kable(format = "html", escape = F) |> 
+  kable_styling("striped") |> 
+  scroll_box(width = "100%", height = "450px")
+```
 
 
 
-### Gene expression
+> Note: Cluster 11 is likely also unknown or ubiquitous, as it does not have an annotation that passes FDR.
 
 
