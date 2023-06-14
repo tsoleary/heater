@@ -28,7 +28,7 @@ tso_theme <- bs_theme(primary = "#FFA6F7",
 # Load data etc ----------------------------------------------------------------
 # Latest Seurat Object
 dat <- readRDS(
-  here::here("data/processed/seurat_object/08_dat_linked.rds")
+  here::here("data/processed/seurat_object/10_dat_linked.rds")
 )
 # Pseudobulk analysis from DESeq2
 res <- readRDS(
