@@ -1,6 +1,6 @@
 ---
-title: "How Embryos Acclimate to Temperature through Epigenetic Regulation"
-author: 
+title: "How embryos acclimate to temperature through epigenetic regulation"
+authors: 
   - "Thomas O’Leary, Emily Mikucki, Sumaetee Tangwancharoen, Sara Helms Cahan, Seth Frietze, Brent L. Lockwood"
 format:
   html:
@@ -16,6 +16,7 @@ format:
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(tidyverse)
 library(kableExtra)
+library(shiny)
 ```
 
 # **Code** {-}
@@ -132,6 +133,46 @@ library(kableExtra)
 #| code-fold: true
 #| file: "../src/03_seurat/11_pseudobulk_DESeq2.R"
 ```
+
+## Figures
+
+```{r, filename = "pheno.R"}
+#| eval: false
+#| echo: true
+#| code-fold: true
+#| file: "../src/04_plots/pheno.R"
+```
+
+```{r, filename = "qc.R"}
+#| eval: false
+#| echo: true
+#| code-fold: true
+#| file: "../src/04_plots/qc.R"
+```
+
+```{r, filename = "qc_cells.R"}
+#| eval: false
+#| echo: true
+#| code-fold: true
+#| file: "../src/04_plots/qc_cells.R"
+```
+
+```{r, filename = "multiplets.R"}
+#| eval: false
+#| echo: true
+#| code-fold: true
+#| file: "../src/04_plots/multiplets.R"
+```
+
+```{r, filename = "cluster.R"}
+#| eval: false
+#| echo: true
+#| code-fold: true
+#| file: "../src/04_plots/cluster.R"
+```
+
+
+
 :::
 
 ::: {.callout-note}
@@ -140,8 +181,6 @@ The code used for analysis is located [on GitHub](https://github.com/tsoleary/he
 
 
 # **Quality control**
-
-
 
 ::: {.callout-caution collapse=true, icon=false}
 ## Criteria for filtering all barcodes to high-quality nuclei
@@ -154,10 +193,12 @@ The code used for analysis is located [on GitHub](https://github.com/tsoleary/he
 :::
 
 
-
 ## Knee plot
 
 ```{r}
+#| label: fig-plot
+#| fig-cap: "Knee plot of the number of ATAC reads and RNA reads in the raw data."
+
 knitr::include_graphics(here::here("output/figs/qc/knee_plots.png"))
 ```
 
@@ -227,7 +268,7 @@ knitr::include_graphics(here::here("output/figs/qc/counts_umap.png"))
 
 :::
 
-### Count histograms
+### Count histograms {-}
 
 ::: {.panel-tabset}
 
@@ -440,6 +481,88 @@ readRDS(here::here("data/processed/annot/cluster_annot_manual.rds")) |>
 Cluster 11 is likely also unknown or ubiquitous, as it does not have an annotation that passes FDR.
 :::
 
+
+# **Differential expression**
+
+## Cluster
+
+```{r}
+degs_cluster <- readRDS(here::here("output/degs/degs_clusters.rds")) |> 
+  filter(p_val_adj < 0.05)
+```
+
+::: {.panel-tabset}
+
+### Number of DEGs
+
+```{r}
+degs_cluster |> 
+  mutate(cluster = fct_relevel(cluster, as.character(11:1))) |> 
+  group_by(cluster) |> 
+  tally() |> 
+  ggplot() +
+  geom_col(aes(x = n,
+               y = cluster),
+           na.rm = TRUE,
+           color = "grey20",
+           fill = "grey80") +
+  
+  scale_x_continuous(position = "top",
+                     name = "Number of differentially expressed genes",
+                     expand = c(0, 0.5)) +
+  cowplot::theme_cowplot()
+```
+
+### Table of DEGs
+
+```{r}
+degs_cluster |> 
+  kable(format = "html", escape = F) |> 
+  kable_styling("striped") |> 
+  scroll_box(width = "100%", height = "450px")
+```
+
+:::
+
+
+## Psuedobulk
+
+::: {.panel-tabset}
+
+### DESeq2
+
+```{r}
+pseudobulk_DESeq <- readRDS(here::here("output/degs/pseudobulk_DESeq.rds")) |> 
+  filter(padj < 0.05) 
+
+pseudobulk_DESeq |> 
+  kable(format = "html", escape = F) |> 
+  kable_styling("striped") |> 
+  scroll_box(width = "100%", height = "450px")
+
+```
+
+### Seurat
+
+```{r}
+degs <- readRDS(here::here("output/degs/degs.rds")) |> 
+  filter(p_val_adj < 0.05) |> 
+  rownames_to_column("gene")
+
+degs |> 
+  kable(format = "html", escape = F) |> 
+  kable_styling("striped") |> 
+  scroll_box(width = "100%", height = "450px")
+```
+
+### Stats
+
+
+DESeq2 finds `r nrow(pseudobulk_DESeq)` differentially expressed genes and Seurat finds `r nrow(degs)` DEGs with `r length(intersect(pseudobulk_DESeq$gene, degs$gene))` genes overlapping between the two methods. 
+
+List of overlapping genes separated by a semicolon:  `r paste(intersect(pseudobulk_DESeq$gene, degs$gene), collapse = "; ")`
+
+:::
 
 # Session Info {-}
 
