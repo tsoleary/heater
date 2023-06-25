@@ -12,6 +12,9 @@ library(Signac)
 # Load data
 dat <- readRDS(here::here("data/processed/seurat_object/07_dat_cluster.rds"))
 
+# Set resolution for the seurat_clusters
+dat@meta.data$seurat_clusters <- dat@meta.data$wknn_res.1
+
 # Find markers of each cluster that are conserved between the two conditions ---
 
 # Create empty list to populate in the for loop

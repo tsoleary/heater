@@ -5,9 +5,6 @@
 # ------------------------------------------------------------------------------
 
 # Load libraries
-require(tidyverse)
-
-# Load libraries
 library(tidyverse)
 library(Seurat)
 library(Signac)
@@ -359,5 +356,3 @@ ggsave(here::here("output/figs/qc/median_atac_sample.png"),
        height = 10,
        width = 20,
        units = "cm")
-
-

@@ -1,6 +1,6 @@
 # ------------------------------------------------------------------------------
 # Find differentially expressed genes between conditions
-# May 17, 2023
+# June 23, 2023
 # TS O'Leary
 # ------------------------------------------------------------------------------
 
@@ -8,7 +8,18 @@
 require(tidyverse)
 
 # Load data
-dat <- readRDS(here::here("data/processed/seurat_object/03_dat_clustered.rds"))
+dat <- readRDS(here::here("data/processed/seurat_object/10_dat_linked.rds"))
+
+degs_cluster <- readRDS(here::here("output/degs/degs_clusters.rds")) |> 
+  filter(p_val_adj < 0.05)
+
+
+write_tsv(
+  degs_cluster |> 
+    filter(cluster == "mesoderm primordium") |> 
+    select(gene, avg_log2FC_18_25), 
+  here::here("output/degs/degs_meso_lfc.tsv")
+)
 
 # Set default assay
 DefaultAssay(dat) <- "RNA"

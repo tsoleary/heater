@@ -4,7 +4,7 @@
 # TS O'Leary
 # ------------------------------------------------------------------------------
 
-# Load libraries -----
+# Load libraries ---------------------------------------------------------------
 require(tidyverse)
 require(Seurat)
 require(Signac)
@@ -18,8 +18,7 @@ library(bsicons)
 library(plotly)
 library(DESeq2)
 
-
-# Set themes and stuff
+# Set themes and stuff ---------------------------------------------------------
 tso_theme <- bs_theme(primary = "#FFA6F7", 
                       font_scale = NULL, 
                       bootswatch = "united")
@@ -35,33 +34,69 @@ res <- readRDS(
   here::here("output/degs/pseudobulk_DESeq_res.rds")
 )
 
-
 # Cards ------------------------------------------------------------------------
-test_card <- card(
-  card_header("Test",
+about_card <- card(
+  card_header("About",
+              class = "bg-info"),
+  "This is an interactive Shiny App for the HEATER project. Instructions and overview to appear on this page.",
+  max_height = 400
+)
+
+dev_card <- card(
+  card_header("Under Development",
+              class = "bg-warning"),
+  "This app is under development",
+  max_height = 400
+)
+
+analysis_card <- card(
+  card_header("Analysis",
               class = "bg-dark"),
-  "This is a test body"
+  markdown('Here is a [link](https://tsoleary.github.io/heater/docs/analysis.html) to an overview of all the analysis involved in the project'),
+  max_height = 400
+)
+
+# Plot cards -----
+dim_plot_card <- card(
+  height = 700,
+  full_screen = TRUE,
+  card_header(
+    class = "d-flex justify-content-between",
+    "UMAP plot",
+    checkboxInput(
+      "split", 
+      "Split by acclimation", 
+      TRUE)
+  ),
+  plotOutput("Dim_Plot"),
+)
+
+feature_qc_plot_card <- card(
+  height = 700,
+  full_screen = TRUE,
+  card_header("Quality contro feature plot", class = "bg-dark"),
+  plotOutput("Feature_QC_Plot"),
 )
 
 coverage_plot_card <- card(
-  height = 700,
+  height = 400,
   full_screen = TRUE,
   card_header("Chromatin accessibility and gene expression", class = "bg-dark"),
   plotOutput("Coverage_Plot"),
 )
 
-dim_plot_card <- card(
-  height = 700,
+feat_plot_card <- card(
+  height = 400,
   full_screen = TRUE,
-  card_header("UMAP plot", class = "bg-dark"),
-  plotOutput("Dim_Plot"),
+  card_header("Feature plot", class = "bg-dark"),
+  plotOutput("Feature_Plot"),
 )
 
-gene_error_card <- card(
-  max_height = 200,
-  max_width = 200,
-  card_header("Error", class = "error"),
-  "Please enter a valid gene name from the dropdown menu."
+vln_plot_card <- card(
+  height = 400,
+  full_screen = TRUE,
+  card_header("Violin Plot", class = "bg-dark"),
+  plotOutput("Violin_Plot"),
 )
 
 volcano_card <- card(
@@ -81,14 +116,13 @@ cell_number_box <- value_box(
   max_width = 400,
   max_height = 200
 )
+
 qc_card <- card(
   card_header("Quality control"),
   lorem::ipsum(1),
   width = 400,
   max_height = 200
 )
-
-
 
 ################################################################################
 # Define UI for application ----------------------------------------------------
@@ -97,71 +131,83 @@ ui <- page_navbar(
   
   # Main options ------------
   theme = tso_theme,
-  title = "HEATER Project",
+  title = "HEATER Project App",
 
   # Panel setups ---------------------------------------
+  
+  # Home page
   tabPanel(title = "Home",
-           volcano_card),
+           fluidPage(
+             fluidRow(
+               column(
+                 3,
+                 about_card,
+                 analysis_card
+               ),
+               column(
+                 2,
+                 dev_card
+               ),
+             )
+           )
+           ),
   
   # Quality Control Tab
   tabPanel(title = "Quality Control",
            layout_column_wrap(
              width = 1/3, height = 300, 
              cell_number_box, qc_card
-           )
+           ),
+           # A select input for gene of interest
+           selectizeInput(inputId = "feature",
+                          label = "QC Feature:",
+                          select = "nCount_RNA",
+                          choices = colnames(dat@meta.data)[c(2:3,6:12)]),
+           feat_plot_card
   ),
   
-  # GOI on UMAP Feature Plots
-  tabPanel(title = "UMAP Plot",
-           sidebarLayout(
-             sidebarPanel(
-               tags$style(".well {background-color:#ffffff;}"),
-               # Split Acclimation Temp
-               shinyThings::radioSwitchButtons(
-                 inputId = "split",
-                 choices = c("Split", "Together"),
-                 selected_background = "#00589a",
-                 not_selected_background = "grey90"
-               ),
-               width = 3
-             ),
-             # Show generated plot
-             mainPanel(
-               as_fill_carrier(dim_plot_card),
-               width = 9
-             )
-           )
-  ),
+  # Cell types and clusters panel
+  tabPanel(title = "Cell types",
+           as_fill_carrier(dim_plot_card)
+    ),
   
   
-  # Coverage Plot Panel
-  tabPanel(title = "Coverage Plot",
+  # Gene plotting panel
+  tabPanel(title = "Gene of Interest",
     sidebarLayout(
         sidebarPanel(
           tags$style(".well {background-color:#ffffff;}"),
             # A select input for gene of interest
             selectizeInput(inputId = "gene",
                            label = "Gene:",
-                           choices = NULL),
-            # Split Acclimation Temp
-            shinyThings::radioSwitchButtons(
-              inputId = "Split",
-              choices = c("Split", "Together"),
-              selected_background = "#00589a",
-              not_selected_background = "grey90"
-            ),
-            width = 3
-        ),
+                           select = "lola",
+                           choices = sort(dat@assays$SCT@counts@Dimnames[[1]])),
+          width = 3
+          ),
+          
         # Show generated plot
         mainPanel(
-          as_fill_carrier(coverage_plot_card),
+          fluidRow(
+            column(8,
+                   as_fill_carrier(coverage_plot_card)
+            ),
+            column(4,
+                   as_fill_carrier(feat_plot_card)
+            )
+          ),
+          fluidRow(
+            as_fill_carrier(vln_plot_card)
+          ),
            width = 9
-        )
-    )
+        ),
+    ),
   ),
+
   nav_spacer(),
+
+
   tabPanel(title = "About",
-           test_card)
+           about_card)
 )
 
 
@@ -173,30 +219,30 @@ server <- function(input, output, session) {
   
   # Coverage plot --------------------------------------------------------------
   
-  # Server side selectize for faster rendering
-  updateSelectizeInput(session,
-                 inputId = "gene",
-                 label = "Gene:",
-                 choices = sort(dat@assays$SCT@counts@Dimnames[[1]]),
-                 server = TRUE)
+  # # Server side selectize for faster rendering
+  # updateSelectizeInput(session,
+  #                inputId = "gene",
+  #                label = "Gene:",
+  #                choices = sort(dat@assays$SCT@counts@Dimnames[[1]]),
+  #                server = TRUE)
   
     output$Coverage_Plot <- renderPlot({
       
-      # Validate for coverage plot
-      validate(
-        need(
-          input$gene %in% dat@assays$SCT@counts@Dimnames[[1]],
-          message = "Please enter a valid gene name from the dropdown menu."
-          )
-        )
+      # Set Default assay to peaks
+      DefaultAssay(dat) <- "peaks"
       
-      # Modal to show while rendering the plot
-      show_modal_spinner(spin = "fingerprint",
-                         color = "#782c54",
-                         text = "Rendering plot")
-      
-      # Set Default Assay for the Coverage Plot
-      DefaultAssay(dat) <- "ATAC"
+      # # Validate for coverage plot
+      # validate(
+      #   need(
+      #     input$gene %in% dat@assays$SCT@counts@Dimnames[[1]],
+      #     message = "Please enter a valid gene name from the dropdown menu."
+      #     )
+      #   )
+      # 
+      # # Modal to show while rendering the plot
+      # show_modal_spinner(spin = "fingerprint",
+      #                    color = "#782c54",
+      #                    text = "Rendering plot")
       
       # Create plot for just the 18°C
       p18 <- CoveragePlot(
@@ -246,18 +292,63 @@ server <- function(input, output, session) {
         ncol = 1,
         rel_heights = c(0.1, 1)
       )
-      remove_modal_spinner()
+      #remove_modal_spinner()
       # Print out plot
       p
     })
     # End of coverage plot -----------------------------------------------------
     
-    # Dim Plot or Features -----------------------------------------------------
+    # Feature plot -------------------------------------------------------------
+    output$Feature_Plot <- renderPlot({
+      
+      # # Validate for coverage plot
+      # validate(
+      #   need(
+      #     input$gene %in% dat@assays$SCT@counts@Dimnames[[1]],
+      #     message = "Please enter a valid gene name from the dropdown menu."
+      #   )
+      # )
+      
+      # Create Feature Plot
+      DefaultAssay(dat) <- "SCT"
+      
+      FeaturePlot(dat, 
+                  features = input$gene,
+                  reduction = "umap",
+                  split.by = "acc_temp",
+                  pt.size = 1)
+    })
+    # End Feature plot ---------------------------------------------------------
+    
+    # Violin plot --------------------------------------------------------------
+    output$Violin_Plot <- renderPlot({
+      
+      # # Validate for coverage plot
+      # validate(
+      #   need(
+      #     input$gene %in% dat@assays$SCT@counts@Dimnames[[1]],
+      #     message = "Please enter a valid gene name from the dropdown menu."
+      #   )
+      # )
+      
+      # Create Feature Plot
+      DefaultAssay(dat) <- "SCT"
+      
+      VlnPlot(dat, 
+              features = input$gene,
+              split.by = "acc_temp",
+              pt.size = 0)
+    })
+    # End of Violin plots ------------------------------------------------------
+    
+    
+    
+    # Dim Plot -----------------------------------------------------------------
     output$Dim_Plot <- renderPlot({
       # Create plot
       ifelse(
         # Conditional test
-        input$split == "Split",
+        input$split,
         
         # Split plot
         p <- DimPlot(dat, 
@@ -296,16 +387,7 @@ server <- function(input, output, session) {
     })
     # End of Dim Plot ----------------------------------------------------------
     
-    
-    # QC plots -----------------------------------------------------------------
-    output$QC_plots <- renderPlot({
-      # Create QC plot
-      
-      
-    })
-    # End of QC plots ----------------------------------------------------------
-    
-    # Volcano plots -----------------------------------------------------------------
+    # Volcano plots ------------------------------------------------------------
     output$Volcano_Plot <- renderPlot({
       # Create Volcano plot
       p <- res |>
@@ -333,8 +415,20 @@ server <- function(input, output, session) {
       
       plotly::ggplotly(p, tooltip = c("gene"))
     })
-    # End of QC plots ----------------------------------------------------------
+    # End of Volcano plots -----------------------------------------------------
     
+    
+    # QC plots -----------------------------------------------------------------
+    output$Feature_QC_Plot <- renderPlot({
+      # QC Plot of Features
+      dat |>
+        FeaturePlot(
+          features = "nCount_RNA",
+          split.by = "acc_temp"
+        )
+
+    })
+    # End of Volcano plots -----------------------------------------------------
 }
 
 # Run the application ----------------------------------------------------------

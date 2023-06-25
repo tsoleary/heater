@@ -11,7 +11,7 @@ library(Signac)
 library(BSgenome.Dmelanogaster.UCSC.dm6)
 
 # Load data
-dat <- readRDS(here::here("data/processed/seurat_object/07_dat_cluster.rds"))
+dat <- readRDS(here::here("data/processed/seurat_object/09_dat_annot.rds"))
 seqlevelsStyle(BSgenome.Dmelanogaster.UCSC.dm6) <- "NCBI"
 
 # Set assay

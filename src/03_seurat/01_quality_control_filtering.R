@@ -31,12 +31,15 @@ dat[["percent.mt"]] <- PercentageFeatureSet(
 )
 # Calculate the percentage of RNA reads that map to ribosomal genes
 dat[["percent.ribo"]] <- PercentageFeatureSet(
-  data, 
+  dat, 
   pattern = "^Rp[S|L]"
 )
 
 # Save object with Nucleosome, TSS, and mitochondria meta.data added 
-saveRDS(dat, "data/processed/seurat_object/01_dat_10x_cells.rds")
+saveRDS(
+  dat, 
+  here::here("data/processed/seurat_object/01_dat_10x_cells.rds")
+)
 
 # Filter out barcodes with low counts or high mitochondrial content ------------
 
@@ -44,19 +47,22 @@ saveRDS(dat, "data/processed/seurat_object/01_dat_10x_cells.rds")
 low_ATAC <- 800
 low_RNA <- 200
 max_mt <- 5 #### Calderon did 25 % for both mt and rb -- ask Seth? Maybe
-#max_rb <- 5
+max_rb <- 5
 
 # Subset 10x data based on thresholds
 dat <- dat |>
   subset(
     nCount_RNA >= low_RNA &
       nCount_ATAC >= low_ATAC & 
-      percent.mt < max_mt # &
-      # percent.ribo < max_rb
+      percent.mt < max_mt &
+      percent.ribo < max_rb
     )
 
 # Save object
-saveRDS(dat, "data/processed/seurat_object/01_dat_10x_filtered.rds")
+saveRDS(
+  dat, 
+  here::here("data/processed/seurat_object/01_dat_10x_filtered.rds")
+)
 
 # Create a filtered fragment file to be used in the amulet doublet finder ------
 

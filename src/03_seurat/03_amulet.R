@@ -9,9 +9,6 @@ library(tidyverse)
 library(Seurat)
 library(scDblFinder)
 
-# needs higher read depth maybe?? (10-15K) max performance at 25k/cell
-# median(dat@meta.data$nCount_ATAC) is ~6,032
-
 # Path to filtered fragment file
 data_dir <- here::here("data/processed/seq/all/outs/")
 frag_path <- paste0(data_dir, "atac_fragments_cells.tsv.gz")

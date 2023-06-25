@@ -10,11 +10,12 @@ library(Seurat)
 library(Signac)
 
 # Load data
-dat <- readRDS(here::here("data/processed/seurat_object/08_dat_linked.rds"))
+dat <- readRDS(here::here("data/processed/seurat_object/10_dat_linked.rds"))
 
 # Coverage plot example -----
-Idents(dat) <- "seurat_clusters"
-gene <- "Ldh"
+Idents(dat) <- "cell_type"
+gene <- "lola"
+
 p1 <- CoveragePlot(
   object = dat |> subset(acc_temp == "18°C"),
   region = gene,
@@ -55,3 +56,39 @@ cowplot::plot_grid(
   ncol = 1,
   rel_heights = c(0.1, 1)
 )
+
+dat |> 
+  subset(cell_type == "mesoderm prim.") |> 
+  CoveragePlot(
+    region = gene,
+    features = gene,
+    split.by = "acc_temp",
+    expression.assay = "SCT",
+    extend.upstream = 500,
+    extend.downstream = 1000
+  )
+
+ggsave(here::here("output/figs/degs", gene, "coverage.png"),
+       height = 25,
+       width = 20,
+       units = "cm")
+
+# Violin Plot
+VlnPlot(dat,
+        features = gene,
+        split.by = "acc_temp",
+        pt.size = 0,
+        assay = "SCT") +
+  scale_y_continuous(expand = c(0, 0.05),
+                     position = "right") +
+  scale_x_discrete(name = element_blank()) +
+  scale_fill_manual(values = c("#43aa8b", "#f3722c")) +
+  coord_flip() +
+  cowplot::theme_cowplot()
+
+
+ggsave(here::here("output/figs/degs", gene, "vln.png"),
+       height = 25,
+       width = 20,
+       units = "cm")
+

@@ -98,6 +98,35 @@ ggsave(here::here("output/figs/qc/knee_plots.png"),
        units = "cm")
 
 # Scatter plot of ATAC & RNA counts --------------------------------------------
+# Cells called by Cell Ranger ARC
+dat_raw@meta.data |>
+  filter(nCount_RNA >= 1 &
+           nCount_ATAC >= 1) |>
+  ggplot(aes(x = nCount_RNA,
+             y = nCount_ATAC)) +
+  geom_point(color = "grey70",
+             shape = 21) +
+  scale_x_continuous(trans = "log10", 
+                     breaks = c(1, 10, 100, 1000, 10000, 100000),
+                     labels = c("1", "10", "100", "1k", "10k", "100k"),
+                     name = "RNA counts") +
+  scale_y_continuous(trans = "log10", 
+                     breaks = c(1, 10, 100, 1000, 10000, 100000),
+                     labels = c("1", "10", "100", "1k", "10k", "100k"),
+                     name = "ATAC counts") +
+  cowplot::theme_minimal_grid()
+
+# Save scatter plot
+ggsave(here::here("output/figs/qc/scatter_rna_atac_all_barcodes.pdf"),
+       height = 20,
+       width = 20,
+       units = "cm")
+ggsave(here::here("output/figs/qc/scatter_rna_atac_all_barcodes.png"),
+       height = 20,
+       width = 20,
+       units = "cm")
+
+
 
 # Cells called by Cell Ranger ARC
 dat_raw@meta.data |>

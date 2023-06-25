@@ -9,7 +9,7 @@ library(tidyverse)
 library(Seurat)
 
 # Load data
-dat <- readRDS(here::here("data/processed/seurat_object/10_dat_linked.rds"))
+dat <- readRDS(here::here("data/processed/seurat_object/09_dat_annot.rds"))
 
 # Set default assay
 DefaultAssay(dat) <- "RNA"
@@ -30,16 +30,16 @@ saveRDS(degs, here::here("output/degs/degs.rds"))
 # Differential expression between conditions within clusters -------------------
 
 # Create combined groups of clusters and acclimation temperatures
-dat$clust_acc <- paste(dat$seurat_clusters, dat$acc_temp, sep = "_")
+dat$celltype_acc <- paste(dat$cell_type, dat$acc_temp, sep = "_")
 
 # Set that new variable as the ident
-Idents(dat) <- "clust_acc"
+Idents(dat) <- "celltype_acc"
 
 # Find markers genes between different clusters 
 degs <- list()
 
 # Loop through each cluster
-for (i in levels(dat$seurat_clusters)) {
+for (i in unique(dat$cell_type)) {
   degs[[i]] <- FindMarkers(dat, 
                       ident.1 = paste0(i, "_18°C"),
                       ident.2 = paste0(i, "_25°C")) %>%
@@ -49,16 +49,26 @@ for (i in levels(dat$seurat_clusters)) {
 # Combine all clusters together
 degs <- bind_rows(degs, .id = "cluster")
 
+# Rename cols for later and adjust p-vals again to account for all clusters 
+# being tested at the same time groups
+degs <- degs |> 
+  rename(avg_log2FC_18_25 = avg_log2FC,
+         pct.18 = pct.1,
+         pct.25 = pct.2) |> 
+  mutate(padj = p.adjust(p_val_adj, method = "BH"))
+
 # Save the degs_clusters
 saveRDS(degs, here::here("output/degs/degs_clusters.rds"))
 
 # Total number of DEGs
 degs %>%
-  filter(p_val_adj < 0.05) %>%
+  filter(padj < 0.05) %>%
   tally()
 
 # Number of DEGs per cluster -----
 degs %>%
-  filter(p_val_adj < 0.05) %>%
+  filter(padj < 0.05) %>%
   group_by(cluster) %>%
-  tally()
+  tally() |> 
+  arrange(desc(n))
+
