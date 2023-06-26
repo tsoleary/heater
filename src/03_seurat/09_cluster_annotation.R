@@ -153,6 +153,7 @@ cluster_annot_manual <- list(
   "unknown" = c(24, 25)
 )
 
+
 # Save the consensus results
 saveRDS(
   cluster_annot_manual, 
@@ -186,3 +187,12 @@ dat@meta.data <- dat@meta.data |>
 
 # Save data
 saveRDS(dat, here::here("data/processed/seurat_object/09_dat_annot.rds"))
+
+
+annot <- dat@meta.data |> 
+  rownames_to_column("gene") |> 
+  select(seurat_clusters, cell_type) |> 
+  distinct(seurat_clusters, .keep_all = TRUE) |> 
+  arrange(seurat_clusters)
+
+saveRDS(annot, here::here("data/processed/annot/annot.rds"))

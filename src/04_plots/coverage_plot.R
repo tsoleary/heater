@@ -14,7 +14,7 @@ dat <- readRDS(here::here("data/processed/seurat_object/10_dat_linked.rds"))
 
 # Coverage plot example -----
 Idents(dat) <- "cell_type"
-gene <- "lola"
+gene <- "CG13427"
 
 p1 <- CoveragePlot(
   object = dat |> subset(acc_temp == "18°C"),
@@ -57,28 +57,30 @@ cowplot::plot_grid(
   rel_heights = c(0.1, 1)
 )
 
-dat |> 
-  subset(cell_type == "mesoderm prim.") |> 
-  CoveragePlot(
-    region = gene,
-    features = gene,
-    split.by = "acc_temp",
-    expression.assay = "SCT",
-    extend.upstream = 500,
-    extend.downstream = 1000
-  )
-
 ggsave(here::here("output/figs/degs", gene, "coverage.png"),
        height = 25,
-       width = 20,
+       width = 40,
        units = "cm")
+
+# dat |> 
+#   subset(cell_type == "mesoderm prim.") |> 
+#   CoveragePlot(
+#     region = gene,
+#     features = gene,
+#     split.by = "acc_temp",
+#     expression.assay = "SCT",
+#     extend.upstream = 500,
+#     extend.downstream = 1000
+#   )
+
+
 
 # Violin Plot
 VlnPlot(dat,
         features = gene,
         split.by = "acc_temp",
         pt.size = 0,
-        assay = "SCT") +
+        assay = "RNA") +
   scale_y_continuous(expand = c(0, 0.05),
                      position = "right") +
   scale_x_discrete(name = element_blank()) +

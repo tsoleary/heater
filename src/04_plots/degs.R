@@ -6,6 +6,8 @@
 
 # Load libraries
 require(tidyverse)
+require(Seurat)
+require(Signac)
 
 # Load data
 dat <- readRDS(here::here("data/processed/seurat_object/10_dat_linked.rds"))
