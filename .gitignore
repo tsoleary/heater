@@ -11,6 +11,7 @@ scratch/*
 data/raw/seq/*
 data/processed/seq/*
 data/processed/seurat_object/*
+docs/analysis_cache/*
 
 
 # Specific files extensions to ignore
