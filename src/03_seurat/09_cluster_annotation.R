@@ -26,6 +26,10 @@ markers <- readRDS(here::here("data/processed/genes/markers.rds")) |>
   group_by(cluster) |> 
   filter(max_pval < 0.05)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 # Fisher's Exact Test for enrichment of cell-type specific marker genes --------
 
 # Reference panel of a specific level of the in situ data
@@ -97,6 +101,7 @@ for (cluster_i in unique(markers$cluster)) {
 pb$terminate()
 
 # Adjusted pval for FDR correction
+<<<<<<< HEAD
 cluster_annot <- cluster_annot |> 
   mutate(padj = p.adjust(pval, method = "BH"))
 
@@ -153,12 +158,46 @@ cluster_annot_manual <- list(
   "unknown" = c(24, 25)
 )
 
+=======
+cluster_annot <- cluster_annot %>%
+  mutate(padj = p.adjust(pval, method = "BH"))
+
+# Save the full annotation results
+saveRDS(cluster_annot, here::here("data/processed/annot/cluster_annot_all.rds"))
+
+# Manual annotations by TSO using the 11 annotations present in at 4 to 6 hours
+# of development in the Calderon data
+cluster_annot_manual <- c(
+  "0" = "ectoderm primordium",
+  "1" = "mesoderm primordium",
+  "2" = "ventral nerve cord primordium",
+  "3" = "endoderm primordium",
+  "4" = "ectoderm primordium",
+  "5" = "muscle system primordium",
+  "6" = "tracheal primordium",
+  "7" = "ventral nerve cord primordium",
+  "8" = "plasmatocytes anlage",
+  "9" = "amnioserosa",
+  "10" = "unknown"
+)
+
+# Add in the consensus results
+cluster_annot_manual <- cluster_annot |> 
+  filter(padj < 0.05) |> 
+  mutate(cluster = as.numeric(cluster)) |> 
+  group_by(cluster) |> 
+  slice_min(padj, n = 3) |> 
+  summarise(top_3 = paste0(annot, collapse = "; ")) |> 
+  mutate(annot_manual = cluster_annot_manual) |> 
+  select(cluster, annot_manual, top_3)
+>>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 
 # Save the consensus results
 saveRDS(
   cluster_annot_manual, 
   here::here("data/processed/annot/cluster_annot_manual.rds")
 )
+<<<<<<< HEAD
 
 
 # Recode metadata with cluster annotations -----
@@ -196,3 +235,5 @@ annot <- dat@meta.data |>
   arrange(seurat_clusters)
 
 saveRDS(annot, here::here("data/processed/annot/annot.rds"))
+=======
+>>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21

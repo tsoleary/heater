@@ -98,6 +98,7 @@ ggsave(here::here("output/figs/qc/knee_plots.png"),
        units = "cm")
 
 # Scatter plot of ATAC & RNA counts --------------------------------------------
+<<<<<<< HEAD
 # Cells called by Cell Ranger ARC
 dat_raw@meta.data |>
   filter(nCount_RNA >= 1 &
@@ -127,6 +128,8 @@ ggsave(here::here("output/figs/qc/scatter_rna_atac_all_barcodes.png"),
        units = "cm")
 
 
+=======
+>>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 
 # Cells called by Cell Ranger ARC
 dat_raw@meta.data |>

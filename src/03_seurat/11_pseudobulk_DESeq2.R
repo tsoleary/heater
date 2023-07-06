@@ -25,8 +25,12 @@ counts <- AggregateExpression(dat,
 # Create metadata for counts matrix
 metadata <- tibble(
   samples = c("18C_Rep1","18C_Rep2","25C_Rep1","25C_Rep1"),
+<<<<<<< HEAD
   acc_temp = factor(c("18C", "18C", "25C", "25C"), 
                     levels = c("25C", "18C"))
+=======
+  acc_temp = as.factor(c("18C", "18C", "25C", "25C"))
+>>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 )
 
 # Create DESeq Data Set
@@ -42,7 +46,11 @@ dds <- dds[keep_genes,]
 dds <- DESeq(dds)
 
 # Generate results object
+<<<<<<< HEAD
 res <- results(dds, name = "acc_temp_18C_vs_25C")
+=======
+res <- results(dds, name = "acc_temp_25C_vs_18C")
+>>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 deg_res <- res |>
   as_tibble(rownames = "gene")
 degs <- res |>
