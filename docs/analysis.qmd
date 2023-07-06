@@ -12,18 +12,13 @@ format:
     self-contained: true
 ---
 
-<<<<<<< HEAD
 ```{r setup, include = FALSE}
-=======
-```{r, include = FALSE}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(tidyverse)
 library(kableExtra)
 library(shiny)
 ```
 
-<<<<<<< HEAD
 ::: {.callout-note collapse="true"}
 ## To do list
 
@@ -39,21 +34,15 @@ library(shiny)
 :::
 
 
-=======
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 # **Code** {-}
 
 ::: {.panel-tabset}
 
 ## Phenotype
 
-<<<<<<< HEAD
 ```{r pheno, filename = "cs_pheno.R"}
-#| cache: true
-=======
-```{r, filename = "cs_pheno.R"}
 #| eval: false
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
+#| cache: true
 #| echo: true
 #| code-fold: true
 #| file: "../src/00_pheno/cs_pheno.R"
@@ -61,33 +50,21 @@ library(shiny)
 
 ## Cell Ranger ARC
 
-<<<<<<< HEAD
 ```{r mkref, filename = "00_mkref.sh"}
-=======
-```{r, filename = "00_mkref.sh"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/02_cellranger-arc/00_mkref.sh"
 ```
 
-<<<<<<< HEAD
 ```{r count, filename = "01_count.sh"}
-=======
-```{r, filename = "01_count.sh"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/02_cellranger-arc/01_count.sh"
 ```
 
-<<<<<<< HEAD
 ```{r aggr, filename = "02_aggr.sh"}
-=======
-```{r, filename = "02_aggr.sh"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
@@ -96,45 +73,32 @@ library(shiny)
 
 ## Seurat
 
-<<<<<<< HEAD
 ```{r create, filename = "00_create_seurat_object.R"}
-#| cache: true
-=======
-```{r, filename = "00_create_seurat_object.R"}
 #| eval: false
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
+#| cache: true
 #| echo: true
 #| code-fold: true
 #| file: "../src/03_seurat/00_create_seurat_object.R"
 ```
 
-<<<<<<< HEAD
 ```{r qc-filt, filename = "01_quality_control_filtering.R"}
+#| eval: false
 #| dependson: create
 #| cache: true
-=======
-```{r, filename = "01_quality_control_filtering.R"}
-#| eval: false
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| echo: true
 #| code-fold: true
 #| file: "../src/03_seurat/01_quality_control_filtering.R"
 ```
 
-<<<<<<< HEAD
 ```{r init-clust, filename = "02_initial_cluster.R"}
 #| dependson: qc-filt
 #| cache: true
-=======
-```{r, filename = "02_initial_cluster.R"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/03_seurat/02_initial_cluster.R"
 ```
 
-<<<<<<< HEAD
 ```{r amulet, filename = "03_amulet.R"}
 #| dependson: create
 #| cache: true
@@ -146,86 +110,55 @@ library(shiny)
 
 ```{r doublet-finder, filename = "04_doublet_finder.R"}
 #| dependson: init-clust
-=======
-```{r, filename = "04_doublet_finder.R"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/03_seurat/04_doublet_finder.R"
 ```
 
-<<<<<<< HEAD
 ```{r rm-mult, filename = "05_rm_multiplets.R"}
-=======
-```{r, filename = "05_rm_multiplets.R"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/03_seurat/05_rm_multiplets.R"
 ```
 
-<<<<<<< HEAD
 ```{r qc-cells, filename = "06_qc_data_cells.R"}
-=======
-```{r, filename = "06_qc_data_cells.R"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/03_seurat/06_qc_data_cells.R"
 ```
 
-<<<<<<< HEAD
 ```{r clust, filename = "07_cluster.R"}
-=======
-```{r, filename = "07_cluster.R"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/03_seurat/07_cluster.R"
 ```
 
-<<<<<<< HEAD
 ```{r markers, filename = "08_cluster_markers.R"}
-=======
-```{r, filename = "08_cluster_markers.R"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/03_seurat/08_cluster_markers.R"
 ```
 
-<<<<<<< HEAD
 ```{r annot, filename = "09_cluster_annotation.R"}
-=======
-```{r, filename = "09_cluster_annotation.R"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/03_seurat/09_cluster_annotation.R"
 ```
 
-<<<<<<< HEAD
 ```{r link, filename = "10_link_peaks.R"}
-=======
-```{r, filename = "10_link_peaks.R"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/03_seurat/10_link_peaks.R"
 ```
 
-<<<<<<< HEAD
 ```{r pseudo, filename = "11_pseudobulk_DESeq2.R"}
-=======
-```{r, filename = "11_pseudobulk_DESeq2.R"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
@@ -234,67 +167,42 @@ library(shiny)
 
 ## Figures
 
-<<<<<<< HEAD
 ```{r fig-pheno, filename = "pheno.R"}
-#| dependson: pheno
-=======
-```{r, filename = "pheno.R"}
 #| eval: false
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
+#| dependson: pheno
 #| echo: true
 #| code-fold: true
 #| file: "../src/04_plots/pheno.R"
 ```
 
-<<<<<<< HEAD
 ```{r fig-qc, filename = "qc.R"}
-=======
-```{r, filename = "qc.R"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/04_plots/qc.R"
 ```
 
-<<<<<<< HEAD
 ```{r fig-qc_cells, filename = "qc_cells.R"}
-=======
-```{r, filename = "qc_cells.R"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/04_plots/qc_cells.R"
 ```
 
-<<<<<<< HEAD
 ```{r fig-mult, filename = "multiplets.R"}
-=======
-```{r, filename = "multiplets.R"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/04_plots/multiplets.R"
 ```
 
-<<<<<<< HEAD
 ```{r fig-clust, filename = "cluster.R"}
-=======
-```{r, filename = "cluster.R"}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/04_plots/cluster.R"
 ```
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 :::
 
 ::: {.callout-note}
@@ -302,7 +210,6 @@ The code used for analysis is located [on GitHub](https://github.com/tsoleary/he
 :::
 
 
-<<<<<<< HEAD
 # **Overview**
 
 ## Experimental design
@@ -327,8 +234,6 @@ knitr::include_graphics(
 )
 ```
 
-=======
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 # **Quality control**
 
 ::: {.callout-caution collapse=true, icon=false}
@@ -344,11 +249,7 @@ knitr::include_graphics(
 
 ## Knee plot
 
-<<<<<<< HEAD
 ```{r knee}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| label: fig-plot
 #| fig-cap: "Knee plot of the number of ATAC reads and RNA reads in the raw data."
 
@@ -361,11 +262,7 @@ knitr::include_graphics(here::here("output/figs/qc/knee_plots.png"))
 
 ### Cells after all filtering
 
-<<<<<<< HEAD
 ```{r fig-all-scatter}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(
   here::here("output/figs/qc/scatter_rna_atac_final_filter.png")
 )
@@ -373,11 +270,7 @@ knitr::include_graphics(
 
 ### Cell Ranger ARC only
 
-<<<<<<< HEAD
 ```{r fig-10x-scatter}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(
   here::here("output/figs/qc/scatter_rna_atac_10x_cells.png")
 )
@@ -385,11 +278,7 @@ knitr::include_graphics(
 
 ### And low count threshold
 
-<<<<<<< HEAD
 ```{r fig-low-scatter}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(
   here::here("output/figs/qc/scatter_rna_atac_cells_threshold.png")
 )
@@ -403,24 +292,15 @@ knitr::include_graphics(
 
 ### After filtering
 
-<<<<<<< HEAD
 ```{r qc-violin-post}
 knitr::include_graphics(
   here::here("output/figs/qc/violin_qc_metrics_post_filter.png")
 )
-=======
-```{r}
-knitr::include_graphics(here::here("output/figs/qc/violin_qc_metrics_post_filter.png"))
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 ```
 
 ### Before filtering
 
-<<<<<<< HEAD
 ```{r qc-violin-pre}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/qc/violin_qc_metrics.png"))
 ```
 
@@ -428,7 +308,6 @@ knitr::include_graphics(here::here("output/figs/qc/violin_qc_metrics.png"))
 
 ## Multiplets
 
-<<<<<<< HEAD
 ::: {.callout-warning collapse="true"}
 ## A question about detecting multiplets
 
@@ -439,27 +318,17 @@ After intial multiplet calling, some researchers seem to subcluster cells and th
 Is this an approach we should consider with our data?
 :::
 
-=======
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 ::: {.panel-tabset}
 
 ### Mapped onto UMAP projection
 
-<<<<<<< HEAD
 ```{r mult-umap}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/qc/multiplet_umap.png"))
 ```
 
 ### Counts
 
-<<<<<<< HEAD
 ```{r counts-umap}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/qc/counts_umap.png"))
 ```
 
@@ -471,21 +340,13 @@ knitr::include_graphics(here::here("output/figs/qc/counts_umap.png"))
 
 #### Multiplets
 
-<<<<<<< HEAD
 ```{r mult-hist}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/qc/multiplets_hist.png"))
 ```
 
 #### After filtering
 
-<<<<<<< HEAD
 ```{r sing-hist}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/qc/singlets_only_hist.png"))
 ```
 :::
@@ -496,62 +357,38 @@ knitr::include_graphics(here::here("output/figs/qc/singlets_only_hist.png"))
 
 ### Number of cells
 
-<<<<<<< HEAD
 ```{r cells-samp}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/qc/cells_sample.png"))
 ```
 
 ### ATAC counts
 
-<<<<<<< HEAD
 ```{r med-atac-samp}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/qc/median_atac_sample.png"))
 ```
 
 ### RNA counts
 
-<<<<<<< HEAD
 ```{r med-rna-samp}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/qc/median_rna_sample.png"))
 ```
 
 ### TSS Enrichment
 
-<<<<<<< HEAD
 ```{r med-tss-samp}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/qc/tss_enrichment_samples.png"))
 ```
 
 ### FRiP
 
-<<<<<<< HEAD
 ```{r med-frip-samp}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/qc/frip_samples.png"))
 ```
 
 
 ### FRiT
 
-<<<<<<< HEAD
 ```{r med-frit-samp}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/qc/frit_samples.png"))
 ```
 
@@ -563,61 +400,37 @@ knitr::include_graphics(here::here("output/figs/qc/frit_samples.png"))
 
 ### ATAC counts
 
-<<<<<<< HEAD
 ```{r umap-atac-count}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/features/qc/nCount_ATAC.png"))
 ```
 
 ### RNA counts
 
-<<<<<<< HEAD
 ```{r umap-rna-count}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/features/qc/nCount_RNA.png"))
 ```
 
 ### TSS enrichment
 
-<<<<<<< HEAD
 ```{r umap-tss}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/features/qc/TSS.enrichment.png"))
 ```
 
 ### Mito percent
 
-<<<<<<< HEAD
 ```{r umap-mito}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/features/qc/percent.mt.png"))
 ```
 
 ### FRiP
 
-<<<<<<< HEAD
 ```{r umap-frip}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/features/qc/FRiP.png"))
 ```
 
 ### FRiT
 
-<<<<<<< HEAD
 ```{r umap-frit}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 knitr::include_graphics(here::here("output/figs/features/qc/FRiT.png"))
 ```
 
@@ -626,7 +439,6 @@ knitr::include_graphics(here::here("output/figs/features/qc/FRiT.png"))
 
 # **Seurat**
 
-<<<<<<< HEAD
 ::: {.panel-tabset}
 
 ## Initial data processing
@@ -1095,43 +907,11 @@ knitr::include_graphics(
 ```{r res_0.8-frit}
 knitr::include_graphics(
   here::here("output/figs/cluster/res_0.8/frit_clust_violin.png")
-=======
-## Clusters
-
-### Cells per cluster {-}
-
-```{r}
-knitr::include_graphics(here::here("output/figs/cluster/cells_per_cluster.png"))
-```
-
-### Acclimation clusters
-
-::: {.panel-tabset}
-
-#### Joint UMAP  {- .tabset .tabset-pills}
-
-::: {.panel-tabset}
-
-##### Split {-}
-
-```{r}
-knitr::include_graphics(
-  here::here("output/figs/cluster/umap_18_25_split.png")
-)
-```
-
-##### Together {-}
-
-```{r, out.width = "75%"}
-knitr::include_graphics(
-  here::here("output/figs/cluster/umap_18_25_overlay.png")
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 )
 ```
 
 :::
 
-<<<<<<< HEAD
 ### `res = 1.0` {-}
 
 #### Acclimation clusters {-}
@@ -1159,31 +939,11 @@ knitr::include_graphics(
 ```{r res_1-umap_atac}
 knitr::include_graphics(
   here::here("output/figs/cluster/res_1/atac_umap_18_25_split.png")
-=======
-#### RNA-only UMAP {- .tabset .tabset-pills}
-
-::: {.panel-tabset}
-
-##### Split {-}
-
-```{r}
-knitr::include_graphics(
-  here::here("output/figs/cluster/umap_18_25_split_rna.png")
-)
-```
-
-##### Together {-}
-
-```{r, out.width = "75%"}
-knitr::include_graphics(
-  here::here("output/figs/cluster/umap_18_25_overlay_rna.png")
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 )
 ```
 
 :::
 
-<<<<<<< HEAD
 #### Cells per cluster {-}
 
 ```{r res_1-n-cells-clust}
@@ -1234,25 +994,6 @@ knitr::include_graphics(
 ```{r res_1-frit}
 knitr::include_graphics(
   here::here("output/figs/cluster/res_1/frit_clust_violin.png")
-=======
-#### ATAC-only UMAP {- .tabset .tabset-pills}
-
-::: {.panel-tabset}
-
-##### Split {-}
-
-```{r}
-knitr::include_graphics(
-  here::here("output/figs/cluster/umap_18_25_split_atac.png")
-)
-```
-
-##### Together {-}
-
-```{r, out.width = "75%"}
-knitr::include_graphics(
-  here::here("output/figs/cluster/umap_18_25_overlay_atac.png")
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 )
 ```
 
@@ -1262,7 +1003,6 @@ knitr::include_graphics(
 
 ## Annotation
 
-<<<<<<< HEAD
 ::: {.callout-note}
 ## Resolution
 
@@ -1272,14 +1012,9 @@ I have picked `res = 1.0` for the downstream analysis.
 ### Annotation results
 
 ```{r annot-res}
-=======
-### Annotation results
-
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 readRDS(here::here("data/processed/annot/cluster_annot_all.rds")) |> 
   mutate(cluster = as.numeric(cluster)) |> 
-  filter(padj < 0.05) |> 
+  dplyr::filter(padj < 0.05) |> 
   arrange(cluster, padj) |> 
   kable(format = "html", escape = F) |> 
   kable_styling("striped") |> 
@@ -1288,67 +1023,38 @@ readRDS(here::here("data/processed/annot/cluster_annot_all.rds")) |>
 
 ### Manual annotations
 
-<<<<<<< HEAD
 ```{r annot-man}
 readRDS(here::here("data/processed/annot/annot.rds")) |> 
   kable(format = "html", escape = F) |>
   kable_styling("striped") |>
-=======
-```{r}
-readRDS(here::here("data/processed/annot/cluster_annot_manual.rds")) |> 
-  kable(format = "html", escape = F) |> 
-  kable_styling("striped") |> 
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
   scroll_box(width = "100%", height = "450px")
 ```
 
 
-<<<<<<< HEAD
 # **Differential expression**
 
 ## Cell-type
 
 ```{r deg-clust}
-=======
-::: {.callout-warning}
-Cluster 11 is likely also unknown or ubiquitous, as it does not have an annotation that passes FDR.
-:::
-
-
-# **Differential expression**
-
-## Cluster
-
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 degs_cluster <- readRDS(here::here("output/degs/degs_clusters.rds")) |> 
-  filter(p_val_adj < 0.05)
+  dplyr::filter(p_val_adj < 0.05)
 ```
 
 ::: {.panel-tabset}
 
 ### Number of DEGs
 
-<<<<<<< HEAD
 ```{r n-degs-clust}
 degs_cluster |> 
   group_by(cluster) |> 
   tally() |> 
   mutate(cluster = fct_reorder(cluster, n, .fun = "identity")) |> 
-=======
-```{r}
-degs_cluster |> 
-  mutate(cluster = fct_relevel(cluster, as.character(11:1))) |> 
-  group_by(cluster) |> 
-  tally() |> 
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
   ggplot() +
   geom_col(aes(x = n,
                y = cluster),
            na.rm = TRUE,
            color = "grey20",
            fill = "grey80") +
-<<<<<<< HEAD
   labs(y = "") +
   scale_x_continuous(position = "top",
                      name = "Number of differentially expressed genes",
@@ -1400,18 +1106,6 @@ degs_cluster |>
 ### Table of DEGs
 
 ```{r tab-degs-clust}
-=======
-  
-  scale_x_continuous(position = "top",
-                     name = "Number of differentially expressed genes",
-                     expand = c(0, 0.5)) +
-  cowplot::theme_cowplot()
-```
-
-### Table of DEGs
-
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 degs_cluster |> 
   kable(format = "html", escape = F) |> 
   kable_styling("striped") |> 
@@ -1427,33 +1121,21 @@ degs_cluster |>
 
 ### DESeq2
 
-<<<<<<< HEAD
 ```{r pseudo-degseq}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 pseudobulk_DESeq <- readRDS(here::here("output/degs/pseudobulk_DESeq.rds")) |> 
-  filter(padj < 0.05) 
+  dplyr::filter(padj < 0.05) 
 
 pseudobulk_DESeq |> 
   kable(format = "html", escape = F) |> 
   kable_styling("striped") |> 
   scroll_box(width = "100%", height = "450px")
-<<<<<<< HEAD
-=======
-
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 ```
 
 ### Seurat
 
-<<<<<<< HEAD
 ```{r pseudo-seurat}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 degs <- readRDS(here::here("output/degs/degs.rds")) |> 
-  filter(p_val_adj < 0.05) |> 
+  dplyr::filter(p_val_adj < 0.05) |> 
   rownames_to_column("gene")
 
 degs |> 
@@ -1462,7 +1144,6 @@ degs |>
   scroll_box(width = "100%", height = "450px")
 ```
 
-<<<<<<< HEAD
 ### Notes
 
 ```{r scatter-degs}
@@ -1470,7 +1151,7 @@ readRDS(here::here("output/degs/degs.rds")) |>
   rownames_to_column("gene") |> 
   full_join(readRDS(here::here("output/degs/pseudobulk_DESeq.rds")),
             by = "gene") |> 
-  filter(!is.na(avg_log2FC), !is.na(log2FoldChange)) |> 
+  dplyr::filter(!is.na(avg_log2FC), !is.na(log2FoldChange)) |> 
   ggplot() +
   geom_hline(yintercept = 0, color = "grey20") +
   geom_vline(xintercept = 0, color = "grey20") +
@@ -1488,24 +1169,12 @@ readRDS(here::here("output/degs/degs.rds")) |>
 DESeq2 finds **`r nrow(pseudobulk_DESeq)` differentially expressed genes** and Seurat finds **`r nrow(degs)` DEGs** with **`r length(intersect(pseudobulk_DESeq$gene, degs$gene))`** genes overlapping between the two methods. 
 
 List of overlapping genes separated by semicolons: `r paste(intersect(pseudobulk_DESeq$gene, degs$gene), collapse = "; ")`
-=======
-### Stats
-
-
-DESeq2 finds `r nrow(pseudobulk_DESeq)` differentially expressed genes and Seurat finds `r nrow(degs)` DEGs with `r length(intersect(pseudobulk_DESeq$gene, degs$gene))` genes overlapping between the two methods. 
-
-List of overlapping genes separated by a semicolon:  `r paste(intersect(pseudobulk_DESeq$gene, degs$gene), collapse = "; ")`
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 
 :::
 
 # Session Info {-}
 
-<<<<<<< HEAD
 ```{r session-info}
-=======
-```{r}
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 #| echo: false
 #| eval: true
 sessionInfo()

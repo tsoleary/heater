@@ -15,13 +15,8 @@ dat <- read_csv(here::here("data/raw/pheno/embryo_acc_pheno.csv"))
 
 # Filter only Canton S data
 dat <- dat |>
-<<<<<<< HEAD
   dplyr::filter(Genotype == "CantonS") |>
   dplyr::filter(Stage == "Early")
-=======
-  filter(Genotype == "CantonS") |>
-  filter(Stage == "Early")
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 
 # Count the number of eggs per acclimation treatment
 dat |>

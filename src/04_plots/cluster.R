@@ -8,7 +8,6 @@
 library(tidyverse)
 library(Seurat)
 library(Signac)
-<<<<<<< HEAD
 library(clustree)
 
 # Load data
@@ -48,42 +47,6 @@ DimPlot(dat,
         group.by = "acc_temp") +
   scale_color_manual(name = element_blank(),
                      values = c("#43aa8b", "#f3722c")) +
-=======
-
-# Load data
-dat <- readRDS(here::here("data/processed/seurat_object/07_dat_cluster.rds"))
-dat <- readRDS(here::here("data/processed/seurat_object/08_dat_linked.rds"))
-
-# Quick bar plot counting the number of cells for each cluster -----------------
-dat@meta.data |>
-  ggplot(aes(x = seurat_clusters,
-             fill = acc_temp)) +
-  geom_bar(position = "dodge",
-           color = "grey50") +
-  labs(y = "Number of cells",
-       x = "Cluster") +
-  scale_fill_manual(name = element_blank(),
-                    values = c("#43aa8b", "#f3722c")) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
-  cowplot::theme_minimal_hgrid()
-
-# Save plot
-ggsave(here::here("output/figs/cluster/cells_per_cluster.pdf"),
-       height = 15,
-       width = 30,
-       units = "cm")
-ggsave(here::here("output/figs/cluster/cells_per_cluster.png"),
-       height = 15,
-       width = 30,
-       units = "cm")
-
-# # Joint UMAP projection ------------------------------------------------------
-# Acclimation temperature conditions plotted on top of each other 
-DimPlot(dat, 
-        group.by = "acc_temp") +
-  scale_color_manual(name = element_blank(),
-                    values = c("#43aa8b", "#f3722c")) +
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
   labs(title = element_blank()) +
   theme_void() +
   theme(legend.position = "bottom") +
@@ -101,7 +64,6 @@ ggsave(here::here("output/figs/cluster/umap_18_25_overlay.png"),
        width = 20,
        units = "cm")
 
-<<<<<<< HEAD
 # Joint t-SNE
 DimPlot(dat,
         reduction = "tsne",
@@ -112,25 +74,11 @@ DimPlot(dat,
   labs(title = element_blank()) +
   theme_void() +
   theme(legend.position = "bottom") +
-=======
-# Acclimation temperature split apart 
-DimPlot(dat, 
-        split.by = "acc_temp",
-        label = TRUE,
-        repel = TRUE,
-        label.color = "grey20") +
-  theme_void() +
-  theme(legend.position = "bottom",
-        strip.text = element_text(size = 16, face = "bold"),
-        strip.background = element_rect(fill = "grey95", color = "grey95")
-        ) +
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
   guides(color = guide_legend(byrow = TRUE,
                               nrow = 1,
                               override.aes = list(size = 2)))
 
 # Save plot
-<<<<<<< HEAD
 ggsave(here::here("output/figs/cluster/tsne_18_25_overlay.pdf"),
        height = 20,
        width = 20,
@@ -144,26 +92,6 @@ ggsave(here::here("output/figs/cluster/tsne_18_25_overlay.png"),
 
 # RNA-only UMAP
 DimPlot(dat_rna,
-=======
-ggsave(here::here("output/figs/cluster/umap_18_25_split.pdf"),
-       height = 15,
-       width = 30,
-       units = "cm")
-ggsave(here::here("output/figs/cluster/umap_18_25_split.png"),
-       height = 15,
-       width = 30,
-       units = "cm")
-
-
-# RNA only UMAP projection -----------------------------------------------------
-# Load RNA UMAP
-dat <- readRDS(
-  here::here("data/processed/seurat_object/07_dat_rna_umap.rds")
-)
-
-# Acclimation temperature conditions plotted on top of each other 
-DimPlot(dat, 
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
         group.by = "acc_temp") +
   scale_color_manual(name = element_blank(),
                      values = c("#43aa8b", "#f3722c")) +
@@ -184,7 +112,6 @@ ggsave(here::here("output/figs/cluster/umap_18_25_overlay_rna.png"),
        width = 20,
        units = "cm")
 
-<<<<<<< HEAD
 
 # RNA-only t-SNE
 DimPlot(dat_rna,
@@ -196,25 +123,11 @@ DimPlot(dat_rna,
   labs(title = element_blank()) +
   theme_void() +
   theme(legend.position = "bottom") +
-=======
-# Acclimation temperature split apart 
-DimPlot(dat, 
-        split.by = "acc_temp",
-        label = TRUE,
-        repel = TRUE,
-        label.color = "grey20") +
-  theme_void() +
-  theme(legend.position = "bottom",
-        strip.text = element_text(size = 16, face = "bold"),
-        strip.background = element_rect(fill = "grey95", color = "grey95")
-  ) +
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
   guides(color = guide_legend(byrow = TRUE,
                               nrow = 1,
                               override.aes = list(size = 2)))
 
 # Save plot
-<<<<<<< HEAD
 ggsave(here::here("output/figs/cluster/tsne_18_25_overlay_rna.pdf"),
        height = 20,
        width = 20,
@@ -228,26 +141,6 @@ ggsave(here::here("output/figs/cluster/tsne_18_25_overlay_rna.png"),
 
 # Acclimation temperature conditions plotted on top of each other
 DimPlot(dat_atac,
-=======
-ggsave(here::here("output/figs/cluster/umap_18_25_split_rna.pdf"),
-       height = 15,
-       width = 30,
-       units = "cm")
-ggsave(here::here("output/figs/cluster/umap_18_25_split_rna.png"),
-       height = 15,
-       width = 30,
-       units = "cm")
-
-
-# ATAC only UMAP projection ----------------------------------------------------
-# Load ATAC UMAP
-dat <- readRDS(
-  here::here("data/processed/seurat_object/07_dat_atac_umap.rds")
-)
-
-# Acclimation temperature conditions plotted on top of each other 
-DimPlot(dat, 
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
         group.by = "acc_temp") +
   scale_color_manual(name = element_blank(),
                      values = c("#43aa8b", "#f3722c")) +
@@ -268,7 +161,6 @@ ggsave(here::here("output/figs/cluster/umap_18_25_overlay_atac.png"),
        width = 20,
        units = "cm")
 
-<<<<<<< HEAD
 # ATAC-only t-SNE
 DimPlot(dat_atac,
         reduction = "tsne",
@@ -279,25 +171,11 @@ DimPlot(dat_atac,
   labs(title = element_blank()) +
   theme_void() +
   theme(legend.position = "bottom") +
-=======
-# Acclimation temperature split apart 
-DimPlot(dat, 
-        split.by = "acc_temp",
-        label = TRUE,
-        repel = TRUE,
-        label.color = "grey20") +
-  theme_void() +
-  theme(legend.position = "bottom",
-        strip.text = element_text(size = 16, face = "bold"),
-        strip.background = element_rect(fill = "grey95", color = "grey95")
-  ) +
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
   guides(color = guide_legend(byrow = TRUE,
                               nrow = 1,
                               override.aes = list(size = 2)))
 
 # Save plot
-<<<<<<< HEAD
 ggsave(here::here("output/figs/cluster/tsne_18_25_overlay_atac.pdf"),
        height = 20,
        width = 20,
@@ -550,13 +428,3 @@ for (res in res_list) {
 
 
 
-=======
-ggsave(here::here("output/figs/cluster/umap_18_25_split_atac.pdf"),
-       height = 15,
-       width = 30,
-       units = "cm")
-ggsave(here::here("output/figs/cluster/umap_18_25_split_atac.png"),
-       height = 15,
-       width = 30,
-       units = "cm")
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21

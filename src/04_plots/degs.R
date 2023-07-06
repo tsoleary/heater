@@ -1,16 +1,11 @@
 # ------------------------------------------------------------------------------
 # Find differentially expressed genes between conditions
-<<<<<<< HEAD
 # June 23, 2023
-=======
-# May 17, 2023
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 # TS O'Leary
 # ------------------------------------------------------------------------------
 
 # Load libraries
 require(tidyverse)
-<<<<<<< HEAD
 require(Seurat)
 require(Signac)
 
@@ -27,11 +22,6 @@ write_tsv(
     select(gene, avg_log2FC_18_25), 
   here::here("output/degs/degs_meso_lfc.tsv")
 )
-=======
-
-# Load data
-dat <- readRDS(here::here("data/processed/seurat_object/03_dat_clustered.rds"))
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 
 # Set default assay
 DefaultAssay(dat) <- "RNA"

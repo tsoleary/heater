@@ -10,20 +10,12 @@ library(Seurat)
 library(Signac)
 
 # Load data
-<<<<<<< HEAD
 dat <- readRDS(here::here("data/processed/seurat_object/10_dat_linked.rds"))
 
 # Coverage plot example -----
 Idents(dat) <- "cell_type"
 gene <- "CG13427"
 
-=======
-dat <- readRDS(here::here("data/processed/seurat_object/08_dat_linked.rds"))
-
-# Coverage plot example -----
-Idents(dat) <- "seurat_clusters"
-gene <- "Ldh"
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 p1 <- CoveragePlot(
   object = dat |> subset(acc_temp == "18°C"),
   region = gene,
@@ -63,7 +55,6 @@ cowplot::plot_grid(
   title, p,
   ncol = 1,
   rel_heights = c(0.1, 1)
-<<<<<<< HEAD
 )
 
 ggsave(here::here("output/figs/degs", gene, "coverage.png"),
@@ -103,6 +94,3 @@ ggsave(here::here("output/figs/degs", gene, "vln.png"),
        width = 20,
        units = "cm")
 
-=======
-)
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21

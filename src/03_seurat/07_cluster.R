@@ -23,7 +23,6 @@ DefaultAssay(dat) <- "RNA"
 dat <- SCTransform(dat)
 dat <- RunPCA(dat)
 
-<<<<<<< HEAD
 # Quick elbow plot of the first 50 PCs
 ElbowPlot(dat, ndims = 50) +
   cowplot::theme_minimal_grid()
@@ -44,8 +43,6 @@ ggsave(here::here("output/figs/qc/elbow_plot.pdf"),
 # https://satijalab.org/seurat/archive/v3.0/sctransform_vignette.html
 # https://www.biostars.org/p/423306/
 
-=======
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 # ATAC data processing
 DefaultAssay(dat) <- "peaks"
 dat <- FindTopFeatures(dat, min.cutoff = 5)
@@ -54,7 +51,6 @@ dat <- RunSVD(dat)
 
 # The first lsi component often captures sequencing depth rather than biological 
 # variation so we should not use this first component in further analysis.
-<<<<<<< HEAD
 # See plot below for ~1 corr with depth and the first component
 DepthCor(dat)
 
@@ -67,11 +63,6 @@ ggsave(here::here("output/figs/qc/lsi_depthcor.pdf"),
        width = 25,
        units = "cm")
 
-=======
-# See plot below for ~-1 corr with depth and the first component
-DepthCor(dat)
-
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 # Build a joint neighbor graph using both assays
 dat <- FindMultiModalNeighbors(
   object = dat,
@@ -96,7 +87,6 @@ dat <- RunTSNE(
   verbose = TRUE
 )
 
-<<<<<<< HEAD
 # Find Clusters on the wknn
 dat <- FindClusters(
   dat, 
@@ -104,13 +94,6 @@ dat <- FindClusters(
   graph.name = "wknn", 
   algorithm = 3
 )
-=======
-# Find Clusters based on the LSI
-dat <- FindClusters(dat, 
-                    resolution = 0.2,
-                    graph.name = "wknn", 
-                    algorithm = 3)
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 
 # Save data
 saveRDS(dat, here::here("data/processed/seurat_object/07_dat_cluster.rds"))
@@ -125,7 +108,6 @@ dat <- readRDS(
   here::here("data/processed/seurat_object/07_dat_cluster.rds")
 )
 
-<<<<<<< HEAD
 # Write over UMAP reduction with RNA-only UMAP
 dat <- RunUMAP(
   dat, 
@@ -142,16 +124,6 @@ dat <- RunTSNE(
 # Save dat with RNA only UMAP
 saveRDS(dat,
   here::here("data/processed/seurat_object/07_dat_rna_only_dim.rds")
-=======
-# RNA data processing
-DefaultAssay(dat) <- "RNA"
-dat <- SCTransform(dat)
-dat <- RunUMAP(RunPCA(dat), dims = c(1:50))
-
-# Save dat with RNA only UMAP
-saveRDS(dat,
-  here::here("data/processed/seurat_object/07_dat_rna_umap.rds")
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 )
 
 # ATAC-only dim-reduction ------------------------------------------------------
@@ -159,7 +131,6 @@ saveRDS(dat,
 dat <- readRDS(
   here::here("data/processed/seurat_object/07_dat_cluster.rds")
 )
-<<<<<<< HEAD
 
 DefaultAssay(dat) <- "peaks"
 dat <- ScaleData(dat)
@@ -170,17 +141,4 @@ dat <- RunTSNE(dat, dims = c(1:50))
 # Save dat with ATAC-only UMAP
 saveRDS(dat,
   here::here("data/processed/seurat_object/07_dat_atac_only_dim.rds")
-=======
- 
-# ATAC UMAP quick
-DefaultAssay(dat) <- "peaks"
-dat <- dat |> 
-  ScaleData() |>
-  RunPCA() |>
-  RunUMAP(dims = c(1:50))
-
-# Save dat with ATAC only UMAP
-saveRDS(dat,
-  here::here("data/processed/seurat_object/07_dat_atac_umap.rds")
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 )
