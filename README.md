@@ -2,11 +2,8 @@
 
 ## **H**ow **E**mbryos **A**cclimate to **T**emperature through **E**pigenetic **R**egulation
 
-<<<<<<< HEAD
 All analysis and code is summarized [here](https://tsoleary.github.io/heater/docs/analysis.html).
 
-=======
->>>>>>> a8de26aef8a500cdbd82fa277045d3e778c75e21
 ### Project Goal
 
 The aim of this project is to use 10X Genomics Multiome (ATAC + GEX) Single Nuclei Sequencing to understand the way that genes are regulated and expressed in response to warm and cool thermal acclimation during embryonic development in _D. melanogaster_.

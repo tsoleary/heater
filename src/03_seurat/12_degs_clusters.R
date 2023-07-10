@@ -21,7 +21,7 @@ degs <- FindMarkers(dat,
                     ident.2 = "25°C")
 
 # Filter only padj < 0.05
-degs %>%
+degs |>
   filter(p_val_adj < 0.05)
 
 # Save degs regardless of cluster
@@ -42,12 +42,12 @@ degs <- list()
 for (i in unique(dat$cell_type)) {
   degs[[i]] <- FindMarkers(dat, 
                       ident.1 = paste0(i, "_18°C"),
-                      ident.2 = paste0(i, "_25°C")) %>%
+                      ident.2 = paste0(i, "_25°C")) |>
     rownames_to_column("gene")
 }
 
 # Combine all clusters together
-degs <- bind_rows(degs, .id = "cluster")
+degs <- bind_rows(degs, .id = "cell_type")
 
 # Rename cols for later and adjust p-vals again to account for all clusters 
 # being tested at the same time groups
@@ -58,17 +58,17 @@ degs <- degs |>
   mutate(padj = p.adjust(p_val_adj, method = "BH"))
 
 # Save the degs_clusters
-saveRDS(degs, here::here("output/degs/degs_clusters.rds"))
+saveRDS(degs, here::here("output/degs/degs_cell-type.rds"))
 
 # Total number of DEGs
-degs %>%
-  filter(padj < 0.05) %>%
+degs |>
+  filter(padj < 0.05) |>
   tally()
 
-# Number of DEGs per cluster -----
-degs %>%
-  filter(padj < 0.05) %>%
-  group_by(cluster) %>%
+# Number of DEGs per cell-type -----
+degs |>
+  filter(padj < 0.05) |>
+  group_by(cell_type) |>
   tally() |> 
   arrange(desc(n))
 

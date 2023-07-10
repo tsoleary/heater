@@ -12,8 +12,17 @@ format:
     self-contained: true
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```{r setup}
+#| include: false
+
+# Set the default knitr options for the document
+knitr::opts_chunk$set(
+  echo = FALSE, 
+  warning = FALSE, 
+  message = FALSE
+)
+
+# Load packages
 library(tidyverse)
 library(kableExtra)
 library(shiny)
@@ -25,12 +34,14 @@ library(shiny)
 #### Major {-}
 
 - Quality control: Should we be more aggressive removing multiplets? – see full question in multiplet section below.
-- Calculate differentially accessible regions per cluster and maybe also a pseudobulk approach as well. 
+- Reorganize script workflow
+- Check low expression gene
+- Knitr cache setup on this document
 
 #### Minor {-}
 
 - Shiny app minimal implementation
-- Knitr cache setup on this document
+- Plotting themes and script and file standardization
 :::
 
 
@@ -1030,6 +1041,23 @@ readRDS(here::here("data/processed/annot/annot.rds")) |>
   scroll_box(width = "100%", height = "450px")
 ```
 
+## Cell-type stats
+
+### Number of genes
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/annot/genes_per_celltype.png")
+)
+```
+
+### Number of peaks
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/annot/peaks_per_celltype.png")
+)
+```
 
 # **Differential expression**
 
@@ -1045,63 +1073,10 @@ degs_cluster <- readRDS(here::here("output/degs/degs_clusters.rds")) |>
 ### Number of DEGs
 
 ```{r n-degs-clust}
-degs_cluster |> 
-  group_by(cluster) |> 
-  tally() |> 
-  mutate(cluster = fct_reorder(cluster, n, .fun = "identity")) |> 
-  ggplot() +
-  geom_col(aes(x = n,
-               y = cluster),
-           na.rm = TRUE,
-           color = "grey20",
-           fill = "grey80") +
-  labs(y = "") +
-  scale_x_continuous(position = "top",
-                     name = "Number of differentially expressed genes",
-                     expand = c(0, 0)) +
-  cowplot::theme_cowplot()
-
-# ggsave(here::here("output/figs/degs/degs_count.pdf"),
-#        height = 15,
-#        width = 30,
-#        units = "cm")
-# ggsave(here::here("output/figs/degs/degs_count.png"),
-#        height = 15,
-#        width = 30,
-#        units = "cm")
+knitr::include_graphics(
+  here::here("output/figs/degs/degs_count.png")
+)
 ```
-
-
-<!-- ```{r n-degs-vio} -->
-<!-- # degs_cluster |>  -->
-<!-- #   ggplot(aes(label = gene)) + -->
-<!-- #   geom_hline(yintercept = -log10(0.05), -->
-<!-- #              color = "grey50", -->
-<!-- #              linetype = 2) + -->
-<!-- #   geom_point(aes(y = -log10(padj), -->
-<!-- #                  x = avg_log2FC_18_25, -->
-<!-- #                  fill = padj < 0.05, -->
-<!-- #                  size = padj < 0.05), -->
-<!-- #              color = "grey90", -->
-<!-- #              stroke = 0.2, -->
-<!-- #              shape = 21) + -->
-<!-- #   scale_size_manual(values = c(1, 2)) + -->
-<!-- #   scale_fill_manual(values = c("grey80", "firebrick")) + -->
-<!-- #   cowplot::theme_cowplot() + -->
-<!-- #   theme(legend.position = "none") + -->
-<!-- #   facet_wrap(~cluster) -->
-
-<!-- # ggsave(here::here("output/figs/degs/celltype_volcano.pdf"), -->
-<!-- #        height = 30, -->
-<!-- #        width = 30, -->
-<!-- #        units = "cm") -->
-<!-- # ggsave(here::here("output/figs/degs/celltype_volcano.png"), -->
-<!-- #        height = 30, -->
-<!-- #        width = 30, -->
-<!-- #        units = "cm") -->
-<!-- ``` -->
-
-
 
 ### Table of DEGs
 
@@ -1171,6 +1146,40 @@ DESeq2 finds **`r nrow(pseudobulk_DESeq)` differentially expressed genes** and S
 List of overlapping genes separated by semicolons: `r paste(intersect(pseudobulk_DESeq$gene, degs$gene), collapse = "; ")`
 
 :::
+
+# **Differential accessibility**
+
+## Cell-type
+
+```{r, n-dars}
+knitr::include_graphics(
+  here::here("output/figs/dars/dars_celltype.png")
+)
+```
+
+## Table of DARs
+
+```{r}
+readRDS(here::here("output/dars/dars_cell-type_gene.rds")) |> 
+  filter(p_val_adj < 0.05) |> 
+  kable(format = "html", escape = F) |> 
+  kable_styling("striped") |> 
+  scroll_box(width = "100%", height = "450px")
+```
+
+## Example regions
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/dars/coverage_plots/2R-10486272-10486985.png")
+)
+```
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/dars/cov_exp/phu.png")
+)
+```
 
 # Session Info {-}
 

@@ -10,6 +10,9 @@ library(Seurat)
 library(Signac)
 library(clustree)
 
+# Set output fig_dir
+fig_dir <- "output/figs/cluster"
+
 # Load data
 # Joint dim reduction
 dat <- readRDS(
@@ -30,11 +33,11 @@ clustree(
   prefix = "wknn_res."
 )
 
-ggsave(here::here("output/figs/cluster/clustree.pdf"),
+ggsave(here::here(fig_dir, "clustree.pdf"),
        height = 24,
        width = 24,
        units = "cm")
-ggsave(here::here("output/figs/cluster/clustree.png"),
+ggsave(here::here(fig_dir, "clustree.png"),
        height = 24,
        width = 24,
        units = "cm")
@@ -55,11 +58,11 @@ DimPlot(dat,
                               override.aes = list(size = 2)))
 
 # Save plot
-ggsave(here::here("output/figs/cluster/umap_18_25_overlay.pdf"),
+ggsave(here::here(fig_dir, "umap_18_25_overlay.pdf"),
        height = 20,
        width = 20,
        units = "cm")
-ggsave(here::here("output/figs/cluster/umap_18_25_overlay.png"),
+ggsave(here::here(fig_dir, "umap_18_25_overlay.png"),
        height = 20,
        width = 20,
        units = "cm")
@@ -79,11 +82,11 @@ DimPlot(dat,
                               override.aes = list(size = 2)))
 
 # Save plot
-ggsave(here::here("output/figs/cluster/tsne_18_25_overlay.pdf"),
+ggsave(here::here(fig_dir, "tsne_18_25_overlay.pdf"),
        height = 20,
        width = 20,
        units = "cm")
-ggsave(here::here("output/figs/cluster/tsne_18_25_overlay.png"),
+ggsave(here::here(fig_dir, "tsne_18_25_overlay.png"),
        height = 20,
        width = 20,
        units = "cm")
@@ -103,11 +106,11 @@ DimPlot(dat_rna,
                               override.aes = list(size = 2)))
 
 # Save plot
-ggsave(here::here("output/figs/cluster/umap_18_25_overlay_rna.pdf"),
+ggsave(here::here(fig_dir, "umap_18_25_overlay_rna.pdf"),
        height = 20,
        width = 20,
        units = "cm")
-ggsave(here::here("output/figs/cluster/umap_18_25_overlay_rna.png"),
+ggsave(here::here(fig_dir, "umap_18_25_overlay_rna.png"),
        height = 20,
        width = 20,
        units = "cm")
@@ -128,11 +131,11 @@ DimPlot(dat_rna,
                               override.aes = list(size = 2)))
 
 # Save plot
-ggsave(here::here("output/figs/cluster/tsne_18_25_overlay_rna.pdf"),
+ggsave(here::here(fig_dir, "tsne_18_25_overlay_rna.pdf"),
        height = 20,
        width = 20,
        units = "cm")
-ggsave(here::here("output/figs/cluster/tsne_18_25_overlay_rna.png"),
+ggsave(here::here(fig_dir, "tsne_18_25_overlay_rna.png"),
        height = 20,
        width = 20,
        units = "cm")
@@ -152,11 +155,11 @@ DimPlot(dat_atac,
                               override.aes = list(size = 2)))
 
 # Save plot
-ggsave(here::here("output/figs/cluster/umap_18_25_overlay_atac.pdf"),
+ggsave(here::here(fig_dir, "umap_18_25_overlay_atac.pdf"),
        height = 20,
        width = 20,
        units = "cm")
-ggsave(here::here("output/figs/cluster/umap_18_25_overlay_atac.png"),
+ggsave(here::here(fig_dir, "umap_18_25_overlay_atac.png"),
        height = 20,
        width = 20,
        units = "cm")
@@ -176,11 +179,11 @@ DimPlot(dat_atac,
                               override.aes = list(size = 2)))
 
 # Save plot
-ggsave(here::here("output/figs/cluster/tsne_18_25_overlay_atac.pdf"),
+ggsave(here::here(fig_dir, "tsne_18_25_overlay_atac.pdf"),
        height = 20,
        width = 20,
        units = "cm")
-ggsave(here::here("output/figs/cluster/tsne_18_25_overlay_atac.png"),
+ggsave(here::here(fig_dir, "tsne_18_25_overlay_atac.png"),
        height = 20,
        width = 20,
        units = "cm")
@@ -207,7 +210,7 @@ for (res in res_list) {
   Idents(dat_atac) <- "seurat_clusters"
   
   # Set output fig_dir
-  fig_dir <- paste0("output/figs/cluster/res_", res)
+  fig_dir_res <- paste0(fig_dir, "res_", res)
   
   # UMAP acclimation temperature split apart ---------
   # Joint
@@ -226,11 +229,11 @@ for (res in res_list) {
                                 override.aes = list(size = 2)))
   
   # Save plot
-  ggsave(here::here(fig_dir, "umap_18_25_split.pdf"),
+  ggsave(here::here(fig_dir_res, "umap_18_25_split.pdf"),
          height = 15,
          width = 30,
          units = "cm")
-  ggsave(here::here(fig_dir, "umap_18_25_split.png"),
+  ggsave(here::here(fig_dir_res, "umap_18_25_split.png"),
          height = 15,
          width = 30,
          units = "cm")
@@ -251,11 +254,11 @@ for (res in res_list) {
                                 override.aes = list(size = 2)))
   
   # Save plot
-  ggsave(here::here(fig_dir, "rna_umap_18_25_split.pdf"),
+  ggsave(here::here(fig_dir_res, "rna_umap_18_25_split.pdf"),
          height = 15,
          width = 30,
          units = "cm")
-  ggsave(here::here(fig_dir, "rna_umap_18_25_split.png"),
+  ggsave(here::here(fig_dir_res, "rna_umap_18_25_split.png"),
          height = 15,
          width = 30,
          units = "cm")
@@ -276,11 +279,11 @@ for (res in res_list) {
                                 override.aes = list(size = 2)))
   
   # Save plot
-  ggsave(here::here(fig_dir, "atac_umap_18_25_split.pdf"),
+  ggsave(here::here(fig_dir_res, "atac_umap_18_25_split.pdf"),
          height = 15,
          width = 30,
          units = "cm")
-  ggsave(here::here(fig_dir, "atac_umap_18_25_split.png"),
+  ggsave(here::here(fig_dir_res, "atac_umap_18_25_split.png"),
          height = 15,
          width = 30,
          units = "cm")
@@ -299,11 +302,11 @@ for (res in res_list) {
     cowplot::theme_minimal_hgrid()
   
   # Save plot
-  ggsave(here::here(fig_dir, "cells_per_cluster.pdf"),
+  ggsave(here::here(fig_dir_res, "cells_per_cluster.pdf"),
          height = 15,
          width = 30,
          units = "cm")
-  ggsave(here::here(fig_dir, "cells_per_cluster.png"),
+  ggsave(here::here(fig_dir_res, "cells_per_cluster.png"),
          height = 15,
          width = 30,
          units = "cm")
@@ -322,11 +325,11 @@ for (res in res_list) {
     cowplot::theme_cowplot() 
   
   # Save plot
-  ggsave(here::here(fig_dir, "rna_clust_violin.pdf"),
+  ggsave(here::here(fig_dir_res, "rna_clust_violin.pdf"),
          height = 10,
          width = 20,
          units = "cm")
-  ggsave(here::here(fig_dir, "rna_clust_violin.png"),
+  ggsave(here::here(fig_dir_res, "rna_clust_violin.png"),
          height = 10,
          width = 20,
          units = "cm")
@@ -344,11 +347,11 @@ for (res in res_list) {
     cowplot::theme_cowplot() 
   
   # Save plot
-  ggsave(here::here(fig_dir, "atac_clust_violin.pdf"),
+  ggsave(here::here(fig_dir_res, "atac_clust_violin.pdf"),
          height = 10,
          width = 20,
          units = "cm")
-  ggsave(here::here(fig_dir, "atac_clust_violin.png"),
+  ggsave(here::here(fig_dir_res, "atac_clust_violin.png"),
          height = 10,
          width = 20,
          units = "cm")
@@ -367,11 +370,11 @@ for (res in res_list) {
     cowplot::theme_cowplot() 
   
   # Save plot
-  ggsave(here::here(fig_dir, "frip_clust_violin.pdf"),
+  ggsave(here::here(fig_dir_res, "frip_clust_violin.pdf"),
          height = 10,
          width = 20,
          units = "cm")
-  ggsave(here::here(fig_dir, "frip_clust_violin.png"),
+  ggsave(here::here(fig_dir_res, "frip_clust_violin.png"),
          height = 10,
          width = 20,
          units = "cm")
@@ -389,11 +392,11 @@ for (res in res_list) {
     cowplot::theme_cowplot() 
   
   # Save plot
-  ggsave(here::here(fig_dir, "frit_clust_violin.pdf"),
+  ggsave(here::here(fig_dir_res, "frit_clust_violin.pdf"),
          height = 10,
          width = 20,
          units = "cm")
-  ggsave(here::here(fig_dir, "frit_clust_violin.png"),
+  ggsave(here::here(fig_dir_res, "frit_clust_violin.png"),
          height = 10,
          width = 20,
          units = "cm")
@@ -411,11 +414,11 @@ for (res in res_list) {
     cowplot::theme_cowplot() 
   
   # Save plot
-  ggsave(here::here(fig_dir, "percent.mt_clust_violin.pdf"),
+  ggsave(here::here(fig_dir_res, "percent.mt_clust_violin.pdf"),
          height = 10,
          width = 20,
          units = "cm")
-  ggsave(here::here(fig_dir, "percent.mt_clust_violin.png"),
+  ggsave(here::here(fig_dir_res, "percent.mt_clust_violin.png"),
          height = 10,
          width = 20,
          units = "cm")
