@@ -1149,7 +1149,9 @@ List of overlapping genes separated by semicolons: `r paste(intersect(pseudobulk
 
 # **Differential accessibility**
 
-## Cell-type
+::: {.panel-tabset}
+
+## Number of DARs per Cell-type {-}
 
 ```{r, n-dars}
 knitr::include_graphics(
@@ -1157,7 +1159,7 @@ knitr::include_graphics(
 )
 ```
 
-## Table of DARs
+## Table of DARs {-}
 
 ```{r}
 readRDS(here::here("output/dars/dars_cell-type_gene.rds")) |> 
@@ -1167,19 +1169,182 @@ readRDS(here::here("output/dars/dars_cell-type_gene.rds")) |>
   scroll_box(width = "100%", height = "450px")
 ```
 
-## Example regions
+:::
+
+## A few examples
+
+::: {.panel-tabset}
+
+### _lola_ {-}
 
 ```{r}
+roi <- "2R-10486272-10486985.png"
+
 knitr::include_graphics(
-  here::here("output/figs/dars/coverage_plots/2R-10486272-10486985.png")
+  here::here("output/figs/dars/coverage_plots", roi)
 )
 ```
 
+### _Ldh_ {-}
+
 ```{r}
+roi <- "3L-6262342-6264639.png"
+
 knitr::include_graphics(
-  here::here("output/figs/dars/cov_exp/phu.png")
+  here::here("output/figs/dars/coverage_plots", roi)
 )
 ```
+
+### _DOR_ {-}
+
+```{r}
+roi <- "3L-4408296-4410088.png"
+
+knitr::include_graphics(
+  here::here("output/figs/dars/coverage_plots", roi)
+)
+```
+
+### _bowl_ {-}
+
+```{r}
+roi <- "2L-3769570-3772221.png"
+
+knitr::include_graphics(
+  here::here("output/figs/dars/coverage_plots", roi)
+)
+```
+
+### _Trim9_ {-}
+
+```{r}
+roi <- "2L-10548101-10549342.png"
+
+knitr::include_graphics(
+  here::here("output/figs/dars/coverage_plots", roi)
+)
+```
+
+:::
+
+
+# **DARs _near_ DEGs**
+
+## Table of DARs near DEGs
+
+::: {.callout-note}
+There are seven differentially expressed genes with nearby differentially accessible regions.
+
+_Near_ is defined as a peak within 5,000 bp's of a gene.
+:::
+
+```{r}
+dars_degs <- readRDS(here::here("output/dars/dars_degs.rds"))
+
+dars_degs |> 
+  select(-c("chrom", "start", "end")) |> 
+  select(cell_type, region, gene, dist, everything()) |> 
+  # rename_with(~str_remove(., '.ATAC')) |> 
+  # rename_with(~str_remove(., '.RNA')) |> 
+  kable(format = "html", escape = F) |> 
+  add_header_above(c(" " = 4, "ATAC" = 6, "RNA" = 6)) |> 
+  kable_styling("striped") |> 
+  scroll_box(width = "100%", height = "450px") 
+```
+
+### Scatter of log-fold changes
+
+::: {.callout-tip}
+## Matching log-fold changes
+
+Observed directionality of log-fold changes in expression and accessibility match.
+:::
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/dars/dars_degs_scatter.png")
+)
+```
+
+## Accesibility and expression
+
+::: {.panel-tabset}
+
+
+### _dnt_ {-}
+
+```{r}
+goi <- "dnt.png"
+
+knitr::include_graphics(
+  here::here("output/figs/dars/cov_exp", goi)
+)
+```
+
+### _DOR_ {-}
+
+```{r}
+goi <- "DOR.png"
+
+knitr::include_graphics(
+  here::here("output/figs/dars/cov_exp", goi)
+)
+```
+
+
+### _phu_ {-}
+
+```{r}
+goi <- "phu.png"
+
+knitr::include_graphics(
+  here::here("output/figs/dars/cov_exp", goi)
+)
+```
+
+### _gukh_ {-}
+
+```{r}
+goi <- "gukh.png"
+
+knitr::include_graphics(
+  here::here("output/figs/dars/cov_exp", goi)
+)
+```
+
+### _Act5C_ {-}
+
+```{r}
+goi <- "Act5C.png"
+
+knitr::include_graphics(
+  here::here("output/figs/dars/cov_exp", goi)
+)
+```
+
+### _CG43759_ {-}
+
+```{r}
+goi <- "CG43759.png"
+
+knitr::include_graphics(
+  here::here("output/figs/dars/cov_exp", goi)
+)
+```
+
+### _out_ {-}
+
+```{r}
+goi <- "out.png"
+
+knitr::include_graphics(
+  here::here("output/figs/dars/cov_exp", goi)
+)
+```
+
+:::
+
+
 
 # Session Info {-}
 

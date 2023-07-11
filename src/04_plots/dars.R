@@ -53,6 +53,9 @@ dars_degs <- dars |>
             suffix = c(".ATAC", ".RNA")) |> 
   filter(!is.na(padj.RNA))
 
+
+saveRDS(dars_degs, here::here("output/dars/dars_degs.rds"))
+
   
 # Plot number of DARs per cell-type --------------------------------------------
 dars |> 
@@ -78,6 +81,33 @@ ggsave(here::here(fig_dir, "dars_celltype.pdf"),
        units = "cm")
 ggsave(here::here(fig_dir, "dars_celltype.png"),
        height = 10,
+       width = 20,
+       units = "cm")
+
+
+dars_degs |> 
+  ggplot() +
+  geom_hline(yintercept = 0, color = "grey20") +
+  geom_vline(xintercept = 0, color = "grey20") +
+  geom_abline(slope = 1, 
+              intercept = 0,
+              linetype = 2,
+              color = "grey50") +
+  geom_point(aes(x = avg_log2FC_18_25.ATAC,
+                 y = avg_log2FC_18_25.RNA)) +
+  lims(x = c(-1.2, 1.2),
+       y = c(-1.2, 1.2)) +
+  labs(x = "ATAC peak log2FC",
+       y = "RNA expression log2FC") +
+  cowplot::theme_minimal_grid()
+
+# Save plot
+ggsave(here::here(fig_dir, "dars_degs_scatter.pdf"),
+       height = 20,
+       width = 20,
+       units = "cm")
+ggsave(here::here(fig_dir, "dars_degs_scatter.png"),
+       height = 20,
        width = 20,
        units = "cm")
 
