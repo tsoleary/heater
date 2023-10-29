@@ -1,11 +1,7 @@
 # ------------------------------------------------------------------------------
-# Quality control and filtering of low-quality cells
-# May 25, 2023
+# Quality control and filtering of low-quality barcodes to high-quality nuclei
 # TS O'Leary
 # ------------------------------------------------------------------------------
-
-# Description -----
-# Quality control metrics of final cells
 
 # Load libraries
 library(tidyverse)
@@ -17,6 +13,9 @@ library(AnnotationHub)
 dat <- readRDS(
   here::here("data/processed/seurat_object/05_dat_filtered.rds")
 )
+
+# Output dir
+out_dir <- "data/processed/seurat_object"
 
 # Load path to fragment file for later counting
 data_dir <- here::here("data/processed/seq/all/outs/")
@@ -110,4 +109,4 @@ dat$nCount_promoter <- CountsInRegion(
 dat$FRiT <- dat$nCount_TSS/dat$fragments
 
 # Save seurat object with added info
-saveRDS(dat, here::here("data/processed/seurat_object/06_dat_qc.rds"))
+saveRDS(dat, here::here(out_dir, "06_dat_qc.rds"))

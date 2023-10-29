@@ -1,6 +1,5 @@
 # ------------------------------------------------------------------------------
 # Differential expression and accessibility
-# June 13, 2023
 # TS O'Leary
 # ------------------------------------------------------------------------------
 
@@ -12,8 +11,12 @@ library(Signac)
 # Load data
 dat <- readRDS(here::here("data/processed/seurat_object/07_dat_cluster.rds"))
 
+# Output dir
+out_dir <- "output/markers"
+
 # Set resolution for the seurat_clusters
-dat@meta.data$seurat_clusters <- dat@meta.data$wknn_res.1
+dat@meta.data$seurat_clusters <- dat@meta.data$wknn_res.0.7
+Idents(dat) <- "seurat_clusters"
 
 # Find markers of each cluster that are conserved between the two conditions ---
 
@@ -34,10 +37,11 @@ markers <- bind_rows(markers,
                      .id = "cluster")
 
 # Number of markers per cluster
-markers %>%
+markers |> 
+  mutate(cluster = as.numeric(cluster)) |> 
   filter(max_pval < 0.05) |> 
   group_by(cluster) |> 
   tally()
 
 # Save markers object
-saveRDS(markers, here::here("data/processed/genes/markers.rds"))
+saveRDS(markers, here::here(out_dir, "cluster_markers.rds"))

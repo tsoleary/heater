@@ -1,6 +1,5 @@
 # ------------------------------------------------------------------------------
 # Plot differentially accessible regions
-# July 07, 2023
 # TS O'Leary
 # ------------------------------------------------------------------------------
 
@@ -10,11 +9,15 @@ require(Seurat)
 require(Signac)
 require(cowplot)
 
-# Set output fig_dir
+# Load plot themes 
+source(here::here("src/04_plots/00_plot_themes.R"))
+
+# Output fig dir
 fig_dir <- "output/figs/dars"
 
 # Load data
 dat <- readRDS(here::here("data/processed/seurat_object/10_dat_linked.rds"))
+
 degs <- readRDS(here::here("output/degs/degs_cell-type.rds")) |> 
   filter(p_val_adj < 0.05)
 dars <- readRDS(here::here("output/dars/dars_cell-type.rds")) |> 
@@ -30,16 +33,16 @@ dars <- readRDS(here::here("output/dars/dars_cell-type.rds")) |>
 dars_df <- dars |> 
   select(region, chrom, start, end)
 genes_df <- as_tibble(dat@assays$peaks@annotation) |> 
-  rename("seqnames" = "chrom")
+  dplyr::rename("chrom" = "seqnames") 
 
 # Closest gene
 gene_close <- valr::bed_closest(dars_df, genes_df) |> 
   arrange(region.x, abs(.dist)) |> 
   distinct(region.x, .keep_all = TRUE) |> 
   select(region.x, gene_name.y, .dist) |> 
-  rename("region.x" = "region",
-         "gene_name.y" = "gene",
-         ".dist" = "dist") |> 
+  rename("region"= "region.x",
+         "gene" = "gene_name.y",
+         "dist" = ".dist") |> 
   filter(abs(dist) < 5000)
 
 dars <- dars |> 
@@ -55,6 +58,119 @@ dars_degs <- dars |>
 
 
 saveRDS(dars_degs, here::here("output/dars/dars_degs.rds"))
+
+
+# Volcanoplot
+dars_pseudo <- readRDS(here::here("output/dars/dars.rds")) |> 
+  rownames_to_column("region")
+
+dp_p_df <- dars_pseudo |> 
+  slice_min(p_val_adj, n = 7) |> 
+  separate(region, 
+           sep = "-", 
+           into = c("chrom", "start", "end"),
+           convert = TRUE,
+           remove = FALSE) |> 
+  arrange(chrom, start)
+
+dp_fc_df <- dars_pseudo |> 
+  slice_max(abs(avg_log2FC), n = 7) |> 
+  separate(region, 
+           sep = "-", 
+           into = c("chrom", "start", "end"),
+           convert = TRUE,
+           remove = FALSE) |> 
+  arrange(chrom, start)
+
+dp_df <- bind_rows(dp_p_df, dp_fc_df)
+
+dars_label <- valr::bed_closest(dp_df, genes_df) |> 
+  arrange(region.x, abs(.dist)) |> 
+  distinct(region.x, .keep_all = TRUE) |> 
+  select(region.x, gene_name.y, .dist) |> 
+  rename("region"= "region.x",
+         "gene" = "gene_name.y",
+         "dist" = ".dist") |> 
+  filter(abs(dist) < 5000)
+
+
+dars_pseudo |> 
+  left_join(dars_label) |> 
+  ggplot(aes(label = gene,
+             y = -log10(p_val_adj),
+             x = avg_log2FC,
+             fill = p_val_adj < 0.05,
+             size = p_val_adj < 0.05)) +
+  geom_vline(xintercept = 0, color = "grey40") +
+  geom_hline(yintercept = 0, color = "grey40") +
+  geom_hline(yintercept = -log10(0.05),
+             color = "grey50",
+             linetype = 2) +
+  geom_point(color = "grey90",
+             stroke = 0.2,
+             shape = 21,
+             alpha = 0.9) +
+  annotate(geom = "segment",
+           x = 0.25, 
+           xend = .75, 
+           y = 35, 
+           yend = 35,
+           linewidth = 1,
+           lineend = "round",
+           linejoin = "round",
+           color = "#43aa8b",
+           alpha = 0.5,
+           arrow = arrow(length = unit(0.2, "cm"))) +
+  annotate(geom = "segment",
+           x = -0.25, 
+           xend = -0.75, 
+           y = 35, 
+           yend = 35,
+           linewidth = 1,
+           lineend = "round",
+           linejoin = "round",
+           color = "#f3722c",
+           alpha = 0.5,
+           arrow = arrow(length = unit(0.2, "cm"))) +
+  annotate(geom = "text", 
+           x = .5, 
+           y = 37, 
+           alpha = 0.5,
+           label = "Higher in 18°C", 
+           color =  "#43aa8b") +
+  annotate(geom = "text", 
+           x = -.5, 
+           y = 37, 
+           alpha = 0.5,
+           label = "Higher in 25°C", 
+           color = "#f3722c") +
+  ggrepel::geom_label_repel(
+    #data = dars_label,
+                            color = "grey20",
+                            fill = "grey90",
+                            alpha = 0.8,
+                            fontface = "bold",
+                            size = 3,
+                            max.iter = 10000,
+                            min.segment.length = 0.1,
+                            max.overlaps = 100) +
+  scale_size_manual(values = c(1, 2)) +
+  scale_fill_manual(values = c("grey80", "firebrick")) +
+  scale_y_continuous(expand = c(0, 0.5),
+                     limits = c(0, 40)) +
+  scale_x_continuous(name = "18°C vs. 25°C\nlog2(fold change)") +
+  cowplot::theme_minimal_grid() +
+  theme(legend.position = "none") 
+
+# Save volcano
+ggsave(here::here(fig_dir, "pseudobulk_volcano.pdf"),
+       height = 20,
+       width = 20,
+       units = "cm")
+ggsave(here::here(fig_dir, "pseudobulk_volcano.png"),
+       height = 20,
+       width = 20,
+       units = "cm")
 
   
 # Plot number of DARs per cell-type --------------------------------------------
@@ -84,7 +200,6 @@ ggsave(here::here(fig_dir, "dars_celltype.png"),
        width = 20,
        units = "cm")
 
-
 dars_degs |> 
   ggplot() +
   geom_hline(yintercept = 0, color = "grey20") +
@@ -112,6 +227,36 @@ ggsave(here::here(fig_dir, "dars_degs_scatter.png"),
        units = "cm")
 
 
+# all_dars <- readRDS(here::here("output/dars/dars_cell-type.rds")) |> 
+#   separate(region, 
+#            sep = "-", 
+#            into = c("chrom", "start", "end"),
+#            convert = TRUE,
+#            remove = FALSE) |> 
+#   arrange(chrom, start)|> 
+#   select(region, chrom, start, end)
+# all_dars <- valr::bed_closest(all_dars, genes_df) |>
+#   arrange(region.x, abs(.dist)) |>
+#   distinct(region.x, .keep_all = TRUE) |>
+#   select(region.x, gene_name.y, .dist) |>
+#   rename("region"= "region.x",
+#          "gene" = "gene_name.y",
+#          "dist" = ".dist") |>
+#   filter(abs(dist) < 5000)
+
+left_join(
+  dars,
+  readRDS(here::here("output/degs/degs_cell-type.rds")),
+  by = c("cell_type", "gene")
+)
+
+dars |> 
+  left_join(readRDS(here::here("output/degs/degs_cell-type.rds")), 
+            by = c("gene", "cell_type"),
+            suffix = c(".ATAC", ".RNA")) |> 
+  filter(!is.na(padj.RNA))
+
+
 # Plot Coverage Plot -----------------------------------------------------------
 dat@meta.data <- dat@meta.data |> 
   mutate(celltype_acc = paste(cell_type, acc_temp, sep = "_"))
@@ -128,7 +273,7 @@ for (i in 1:nrow(dars)){
     extend.upstream = 5000,
     extend.downstream = 5000) &
     labs(title = str_to_sentence(dars$cell_type[i])) &
-    scale_fill_manual(values = c("#43aa8b", "#f3722c")) & 
+    scale_fill_manual(values = acc_colors) & 
     scale_y_continuous(expand = c(0, 0.05),
                        name = "Normalized signal") &
     theme_minimal_hgrid() &
@@ -211,7 +356,7 @@ for (i in 1:nrow(dars_degs)){
     extend.upstream = 5000,
     extend.downstream = 5000) &
     labs(title = str_to_sentence(dars_degs$cell_type[i])) &
-    scale_fill_manual(values = c("#43aa8b", "#f3722c")) & 
+    scale_fill_manual(values = acc_colors) & 
     scale_y_continuous(expand = c(0, 0.05),
                        name = "Normalized signal") &
     theme_minimal_hgrid() &
@@ -263,7 +408,7 @@ for (i in 1:nrow(dars_degs)){
       subset(cell_type == dars_degs$cell_type[i]),
     features = dars_degs$gene[i],
     assay = "SCT") & 
-    scale_fill_manual(values = c("#43aa8b", "#f3722c")) &
+    scale_fill_manual(values = acc_colors) &
     theme_cowplot() &
     theme(legend.position = "none",
           axis.text.x = element_text(size = 10),

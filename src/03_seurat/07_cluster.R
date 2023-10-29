@@ -1,6 +1,5 @@
 # ------------------------------------------------------------------------------
 # Dimension reduction and clustering
-# May 30, 2023
 # TS O'Leary
 # ------------------------------------------------------------------------------
 
@@ -8,64 +7,64 @@
 library(tidyverse)
 library(Seurat)
 library(Signac)
-library(clustree)
 
-# Load data
+# Load data --------------------------------------------------------------------
 dat <- readRDS(
   here::here("data/processed/seurat_object/06_dat_qc.rds")
 )
+# Save S phase genes in a vector
+s_genes <- read_csv(
+  here::here("data/raw/annot/dmel_cell-cycle_genes.csv")) |> 
+  filter(phase == "S") |> 
+  select(gene) |> 
+  deframe()
+# Save G2 or M phase genes in a vector
+g2m_genes <- read_csv(
+  here::here("data/raw/annot/dmel_cell-cycle_genes.csv")) |> 
+  filter(phase == "G2/M") |> 
+  select(gene) |> 
+  deframe()
+
+# Output dir
+out_dir <- "data/processed/seurat_object"
 
 # Joint Clustering based on Signac tutorial ------------------------------------
 # https://stuartlab.org/signac/articles/pbmc_multiomic.html
+# https://satijalab.org/seurat/archive/v3.0/cell_cycle_vignette.html
 
-# RNA data processing
+# RNA data processing -----
+
+# RNA data pre-processing before cell-cycle scoring
 DefaultAssay(dat) <- "RNA"
 dat <- SCTransform(dat)
+
+# Score cell cycle
+dat <- CellCycleScoring(
+  dat,
+  s.features = s_genes,
+  g2m.features = g2m_genes,
+  set.ident = TRUE
+)
+
+# Set assay back to RNA and re-run with S.Score and G2M.Score regressed out 
+DefaultAssay(dat) <- "RNA"
+dat <- SCTransform(
+  dat, 
+  vars.to.regress = c("S.Score", "G2M.Score"),
+  variable.features.n = 3000 # Deafults to 3k, should we change to less?
+)
 dat <- RunPCA(dat)
 
-# Quick elbow plot of the first 50 PCs
-ElbowPlot(dat, ndims = 50) +
-  cowplot::theme_minimal_grid()
-
-ggsave(here::here("output/figs/qc/elbow_plot.png"),
-       height = 20,
-       width = 25,
-       units = "cm")
-ggsave(here::here("output/figs/qc/elbow_plot.pdf"),
-       height = 20,
-       width = 25,
-       units = "cm")
-
-# Keeping all 50 PCs for a few reasons -----
-# The elbow plot does not seem to entirely tail off before 50 PCs and the 
-# SCTransform is a more robust normalization method that is less likely to 
-# carry artifacts do to technical variation. Please see the below two links
-# https://satijalab.org/seurat/archive/v3.0/sctransform_vignette.html
-# https://www.biostars.org/p/423306/
-
-# ATAC data processing
+# ATAC data processing -----
 DefaultAssay(dat) <- "peaks"
 dat <- FindTopFeatures(dat, min.cutoff = 5)
 dat <- RunTFIDF(dat)
 dat <- RunSVD(dat)
 
-# The first lsi component often captures sequencing depth rather than biological 
-# variation so we should not use this first component in further analysis.
-# See plot below for ~1 corr with depth and the first component
-DepthCor(dat)
-
-ggsave(here::here("output/figs/qc/lsi_depthcor.png"),
-       height = 20,
-       width = 25,
-       units = "cm")
-ggsave(here::here("output/figs/qc/lsi_depthcor.pdf"),
-       height = 20,
-       width = 25,
-       units = "cm")
-
-# Build a joint neighbor graph using both assays
+# Build a joint neighbor graph using both assays -----
 dat <- FindMultiModalNeighbors(
   object = dat,
+  k.nn = 100,
   reduction.list = list("pca", "lsi"), 
   dims.list = list(1:50, 2:40),
   verbose = TRUE
@@ -74,6 +73,7 @@ dat <- FindMultiModalNeighbors(
 # Build a joint UMAP
 dat <- RunUMAP(
   object = dat,
+  n.neighbors = 100L,
   nn.name = "weighted.nn",
   assay = "RNA",
   verbose = TRUE
@@ -87,7 +87,7 @@ dat <- RunTSNE(
   verbose = TRUE
 )
 
-# Find Clusters on the wknn
+# Find clusters on the wknn at resolutions ranging from 0.1 to 1
 dat <- FindClusters(
   dat, 
   resolution = seq(from = 0.1, to = 1, by = 0.1),
@@ -96,11 +96,12 @@ dat <- FindClusters(
 )
 
 # Save data
-saveRDS(dat, here::here("data/processed/seurat_object/07_dat_cluster.rds"))
+saveRDS(dat, here::here(out_dir, "07_dat_cluster.rds"))
+
 
 ################################################################################
-# To see how and if the dimensional reduction of only ATAC or RNA libraries 
-# looks different -- save these data below
+# Creating RNA-only and ATAC-only dimension reductions -------------------------
+# To see how and if the dimensional reduction look different 
 
 # RNA-only dim-reduction -------------------------------------------------------
 # Load data
@@ -123,7 +124,7 @@ dat <- RunTSNE(
 
 # Save dat with RNA only UMAP
 saveRDS(dat,
-  here::here("data/processed/seurat_object/07_dat_rna_only_dim.rds")
+  here::here(out_dir, "07_dat_rna_only_dim.rds")
 )
 
 # ATAC-only dim-reduction ------------------------------------------------------
@@ -140,5 +141,5 @@ dat <- RunTSNE(dat, dims = c(1:50))
 
 # Save dat with ATAC-only UMAP
 saveRDS(dat,
-  here::here("data/processed/seurat_object/07_dat_atac_only_dim.rds")
+  here::here(out_dir, "07_dat_atac_only_dim.rds")
 )

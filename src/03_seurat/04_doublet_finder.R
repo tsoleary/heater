@@ -1,7 +1,5 @@
 # ------------------------------------------------------------------------------
-# Detecting multiplets in the multiome data sets
-# DoubleFinder and amulet
-# May 22, 2023
+# DoubletFinder for detecting multiplets in the scRNA libraries
 # TS O'Leary
 # ------------------------------------------------------------------------------
 
@@ -14,7 +12,8 @@ library(DoubletFinder)
 
 # Define expected doublet rate from 10X estimates
 doublet_rate <- 0.008/1000
-exp_double_rate <- doublet_rate*4000
+target_total_nuclei <- 4000
+exp_double_rate <- doublet_rate*target_total_nuclei
 
 # Each sample must be done separately per the instructions of DoubletFinder
 
@@ -22,8 +21,8 @@ exp_double_rate <- doublet_rate*4000
 
 # Load data
 dat <- readRDS(
-  here::here("data/processed/seurat_object/02_dat_10x_filtered.rds")) |>
-  subset(sample_name == "18C_Rep1")
+  here::here("data/processed/seurat_object/01_dat_10x_filtered.rds")) |>
+  base::subset(sample_name == "18C_Rep1")
 
 # Pre-process Seurat object ----------------------------------------------------
 DefaultAssay(dat) <- "RNA"
@@ -48,22 +47,22 @@ nExp_poi.adj <- round(nExp_poi*(1 - homotypic.prop))
 # Run DoubletFinder with varying classification stringencies -------------------
 dat <- doubletFinder_v3(dat, 
                         PCs = 1:10,
-                        pK = 0.23,
+                        pK = 0.03,
                         nExp = nExp_poi.adj,
                         reuse.pANN = FALSE, 
                         sct = FALSE)
 
 # Save the classified doublets
 doublets_18C_Rep1 <- dat@meta.data |>
-  subset(DF.classifications_0.25_0.23_61 == "Doublet") |>
-  rownames()
+  base::subset(DF.classifications_0.25_0.03_38 == "Doublet") |>
+  base::rownames()
 
 # 18C_Rep2 ---------------------------------------------------------------------
 
 # Load data
 dat <- readRDS(
-  here::here("data/processed/seurat_object/02_dat_10x_filtered.rds")) |>
-  subset(sample_name == "18C_Rep2")
+  here::here("data/processed/seurat_object/01_dat_10x_filtered.rds")) |>
+  base::subset(sample_name == "18C_Rep2")
 
 # Pre-process Seurat object ----------------------------------------------------
 DefaultAssay(dat) <- "RNA"
@@ -95,16 +94,16 @@ dat <- doubletFinder_v3(dat,
 
 # Save the classified doublets
 doublets_18C_Rep2 <- dat@meta.data |>
-  subset(DF.classifications_0.25_0.005_103 == "Doublet") |>
-  rownames()
+  base::subset(DF.classifications_0.25_0.005_107 == "Doublet") |>
+  base::rownames()
 
 
 # 25C_Rep1 ---------------------------------------------------------------------
 
 # Load data
 dat <- readRDS(
-  here::here("data/processed/seurat_object/02_dat_10x_filtered.rds")) |>
-  subset(sample_name == "25C_Rep1")
+  here::here("data/processed/seurat_object/01_dat_10x_filtered.rds")) |>
+  base::subset(sample_name == "25C_Rep1")
 
 # Pre-process Seurat object ----------------------------------------------------
 DefaultAssay(dat) <- "RNA"
@@ -129,22 +128,22 @@ nExp_poi.adj <- round(nExp_poi*(1 - homotypic.prop))
 # Run DoubletFinder with varying classification stringencies -------------------
 dat <- doubletFinder_v3(dat, 
                         PCs = 1:10,
-                        pK = 0.3,
+                        pK = 0.2,
                         nExp = nExp_poi.adj,
                         reuse.pANN = FALSE, 
                         sct = FALSE)
 
 # Save the classified doublets
 doublets_25C_Rep1 <- dat@meta.data |>
-  subset(DF.classifications_0.25_0.3_63 == "Doublet") |>
-  rownames()
+  base::subset(DF.classifications_0.25_0.2_59 == "Doublet") |>
+  base::rownames()
 
 # 25C_Rep2 ---------------------------------------------------------------------
 
 # Load data
 dat <- readRDS(
-  here::here("data/processed/seurat_object/02_dat_10x_filtered.rds")) |>
-  subset(sample_name == "25C_Rep2")
+  here::here("data/processed/seurat_object/01_dat_10x_filtered.rds")) |>
+  base::subset(sample_name == "25C_Rep2")
 
 # Pre-process Seurat object ----------------------------------------------------
 DefaultAssay(dat) <- "RNA"
@@ -169,15 +168,15 @@ nExp_poi.adj <- round(nExp_poi*(1 - homotypic.prop))
 # Run DoubletFinder with varying classification stringencies -------------------
 dat <- doubletFinder_v3(dat, 
                         PCs = 1:10,
-                        pK = 0.01,
+                        pK = 0.005,
                         nExp = nExp_poi.adj,
                         reuse.pANN = FALSE, 
                         sct = FALSE)
 
 # Save the classified doublets
 doublets_25C_Rep2 <- dat@meta.data |>
-  subset(DF.classifications_0.25_0.01_72 == "Doublet") |>
-  rownames()
+  base::subset(DF.classifications_0.25_0.005_67 == "Doublet") |>
+  base::rownames()
 
 doublets <- c(doublets_18C_Rep1,
               doublets_18C_Rep2,

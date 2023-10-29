@@ -1,6 +1,5 @@
 # ------------------------------------------------------------------------------
-# Dimension reduction and clustering
-# May 11, 2023
+# Dimension reduction and clustering to be used for DoubletFinder
 # TS O'Leary
 # ------------------------------------------------------------------------------
 
@@ -15,8 +14,8 @@ dat <- readRDS(
   here::here("data/processed/seurat_object/01_dat_10x_filtered.rds")
 )
 
-# Run the standard workflow for visualization and clustering -------------------
-# This initial clustering is just for the multiplets plots
+# Output dir
+out_dir <- "data/processed/seurat_object/"
 
 # Set RNA to the default assay set for the following set of operations 
 DefaultAssay(dat) <- "RNA"
@@ -47,7 +46,7 @@ clustree::clustree(dat)
 
 # Remove the RNA_snn columns added
 dat@meta.data <- dat@meta.data |>
-  select(!contains("RNA_snn"))
+  dplyr::select(!contains("RNA_snn"))
 
 # Set the final clusters
 dat <- FindClusters(dat, resolution = 0.03)
@@ -55,5 +54,5 @@ dat <- FindClusters(dat, resolution = 0.03)
 # Save data
 saveRDS(
   dat, 
-  here::here("data/processed/seurat_object/02_dat_initial_cluster.rds")
+  here::here(out_dir, "02_dat_initial_cluster.rds")
 )

@@ -1,11 +1,12 @@
 # ------------------------------------------------------------------------------
 # Annotating Seurat Clusters using Fisher's enrichment of BDGP in situ data
-# June 12, 2023
 # TS O'Leary
 # ------------------------------------------------------------------------------
 
 # Load libraries
 library(tidyverse)
+library(Seurat)
+library(Signac)
 
 # Load data --------------------------------------------------------------------
 
@@ -22,9 +23,12 @@ cluster_annot_calderon <- read_csv(
   distinct(`selected annotation (manual)`)
 
 # Marker genes from the Seurat clusters -- all markers with pval < 0.05
-markers <- readRDS(here::here("data/processed/genes/markers.rds")) |> 
+markers <- readRDS(here::here("output/markers/cluster_markers.rds")) |> 
   group_by(cluster) |> 
   filter(max_pval < 0.05)
+
+# Output dir 
+out_dir <- "data/processed/seurat_object"
 
 # Fisher's Exact Test for enrichment of cell-type specific marker genes --------
 
@@ -100,7 +104,8 @@ pb$terminate()
 cluster_annot <- cluster_annot |> 
   mutate(padj = p.adjust(pval, method = "BH"))
 
-x <- cluster_annot |> 
+cluster_annot |> 
+  mutate(cluster = as.numeric(cluster)) |> 
   group_by(cluster) |> 
   filter(padj < 0.05) |> 
   tally()
@@ -108,63 +113,19 @@ x <- cluster_annot |>
 # Save the full annotation results
 saveRDS(cluster_annot, here::here("data/processed/annot/cluster_annot_all.rds"))
 
-# Add in the consensus results
+# Top results
 cluster_annot_top <- cluster_annot |> 
-  filter(padj < 0.05) |> 
   mutate(cluster = as.numeric(cluster)) |> 
+  filter(padj < 0.05 | prop_overlap > 0.01) |> 
   group_by(cluster) |> 
-  arrange(padj)
-  slice_min(padj, n = 3)
-  
-# Four doesn't have an annotation that passes FDR 
-# so just looking at top annotations here
-cluster_annot |> 
-  filter(cluster == 4) |> 
-  arrange(padj) |> 
-  slice_min(padj, n = 10)
+  slice_min(padj, n = 5) |> 
+  arrange(cluster, padj) 
 
-cluster_annot |> 
-  filter(cluster == 13) |> 
-  arrange(padj) |> 
-  slice_min(padj, n = 10)
-
-cluster_annot |> 
-  filter(cluster == 27) |> 
-  arrange(padj) |> 
-  slice_min(padj, n = 10)
-
-# Add in the consensus results
-cluster_annot_together <- cluster_annot_top |> 
-  summarise(top_3 = paste0(annot, collapse = "; "))
-
-# Manual annotations by TSO using the 11 annotations present in at 4 to 6 hours
-# of development in the Calderon data
-cluster_annot_manual <- list(
-  "ubiquitous" = c(0, 2, 6, 16, 23, 27),
-  "ectoderm primordium" = c(10, 11, 15, 18, 21),
-  "endoderm primordium" = c(12, 13),
-  "mesoderm primordium" = c(1, 5, 13, 14, 20),
-  "ventral nerve cord primordium" = c(9),
-  "peripheral nervous system primordium" = c(4, 8),
-  "tracheal primordium" = c(7),
-  "foregut/hindgut primordium" = c(3, 19),
-  "amnioserosa" = c(22),
-  "yolk" = c(17, 26),
-  "unknown" = c(24, 25)
-)
-
-
-# Save the consensus results
-saveRDS(
-  cluster_annot_manual, 
-  here::here("data/processed/annot/cluster_annot_manual.rds")
-)
-
-
-# Recode metadata with cluster annotations -----
+# Recode metadata with manual cluster annotations ------------------------------
 
 # Load data
 dat <- readRDS(here::here("data/processed/seurat_object/07_dat_cluster.rds"))
+dat$seurat_clusters <- dat@meta.data$wknn_res.0.7
 
 # Recode
 dat@meta.data <- dat@meta.data |> 
@@ -172,27 +133,26 @@ dat@meta.data <- dat@meta.data |>
     cell_type = 
       case_match(
         seurat_clusters,
-        c("0", "2", "6", "16", "23", "27") ~ "ubiquitous",
-        c("10", "11", "15", "18", "21") ~ "ectoderm prim.",
-        c("12", "13") ~ "endoderm prim.",
-        c("1", "5", "13", "14", "20") ~ "mesoderm prim.",
-        c("9") ~ "ventral nerve cord prim.",
-        c("4", "8") ~ "peripheral nervous system prim.",
+        c("2", "11") ~ "ectoderm prim.",
+        c("3") ~ "endoderm prim.",
+        c("0", "6") ~ "mesoderm prim.",
+        c("1") ~ "ventral nerve cord prim.",
+        c("4") ~ "peripheral nervous system prim.",
         c("7") ~ "tracheal prim.",
-        c("3", "19") ~ "foregut/hindgut prim.",
-        c("22") ~ "amnioserosa",
-        c("17", "26") ~ "yolk nuclei",
-        c("24", "25") ~ "unknown")
+        c("8") ~ "foregut prim.",
+        c("9") ~ "hindgut prim.",
+        c("10") ~ "amnioserosa",
+        c("5") ~ "germ cell")
     )
 
-# Save data
-saveRDS(dat, here::here("data/processed/seurat_object/09_dat_annot.rds"))
+# Save data with cell-type annotations added
+saveRDS(dat, here::here(out_dir, "09_dat_annot.rds"))
 
-
+# Save summary of the manual annotations ---------------------------------------
 annot <- dat@meta.data |> 
   rownames_to_column("gene") |> 
   select(seurat_clusters, cell_type) |> 
   distinct(seurat_clusters, .keep_all = TRUE) |> 
   arrange(seurat_clusters)
 
-saveRDS(annot, here::here("data/processed/annot/annot.rds"))
+saveRDS(annot, here::here("data/processed/annot", "annot.rds"))

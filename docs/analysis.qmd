@@ -22,10 +22,12 @@ knitr::opts_chunk$set(
   message = FALSE
 )
 
-# Load packages
-library(tidyverse)
+# Load all packages used in the analysis
+library(Seurat)
+library(Signac)
+library(cowplot)
 library(kableExtra)
-library(shiny)
+library(tidyverse)
 ```
 
 ::: {.callout-note collapse="true"}
@@ -33,17 +35,21 @@ library(shiny)
 
 #### Major {-}
 
-- Quality control: Should we be more aggressive removing multiplets? – see full question in multiplet section below.
-- Reorganize script workflow
-- Check low expression gene
-- Knitr cache setup on this document
+- Figure sketch for Brent Talk?
+- Cell annotations for new clusters
+- QC figures updated
+- Marker gene violin plots
+
 
 #### Minor {-}
 
+- I am [regressing out cell cycle genes](https://satijalab.org/seurat/articles/cell_cycle_vignette.html) from downstream analysis. Should I include supplementary figures for this or is it standard enough not to include?
+
+- Optimizing kNN and clustering resolution
 - Shiny app minimal implementation
 - Plotting themes and script and file standardization
+- Driver script
 :::
-
 
 # **Code** {-}
 
@@ -51,15 +57,20 @@ library(shiny)
 
 ## Phenotype
 
-```{r pheno, filename = "cs_pheno.R"}
+```{r pheno, filename = "00_pheno.R"}
 #| eval: false
-#| cache: true
 #| echo: true
 #| code-fold: true
-#| file: "../src/00_pheno/cs_pheno.R"
+#| file: "../src/00_pheno/00_pheno.R"
 ```
 
 ## Cell Ranger ARC
+
+::: {.callout-note}
+## Cell Ranger ARC pipeline
+
+All pre-processing of the multiome sequencing data using 10X Genomics Cell Ranger ARC pipeline was executed on the VACC.
+:::
 
 ```{r mkref, filename = "00_mkref.sh"}
 #| eval: false
@@ -85,25 +96,20 @@ library(shiny)
 ## Seurat
 
 ```{r create, filename = "00_create_seurat_object.R"}
-#| eval: false
-#| cache: true
 #| echo: true
+#| eval: false
 #| code-fold: true
 #| file: "../src/03_seurat/00_create_seurat_object.R"
 ```
 
 ```{r qc-filt, filename = "01_quality_control_filtering.R"}
 #| eval: false
-#| dependson: create
-#| cache: true
 #| echo: true
 #| code-fold: true
 #| file: "../src/03_seurat/01_quality_control_filtering.R"
 ```
 
 ```{r init-clust, filename = "02_initial_cluster.R"}
-#| dependson: qc-filt
-#| cache: true
 #| eval: false
 #| echo: true
 #| code-fold: true
@@ -111,8 +117,6 @@ library(shiny)
 ```
 
 ```{r amulet, filename = "03_amulet.R"}
-#| dependson: create
-#| cache: true
 #| eval: false
 #| echo: true
 #| code-fold: true
@@ -120,7 +124,6 @@ library(shiny)
 ```
 
 ```{r doublet-finder, filename = "04_doublet_finder.R"}
-#| dependson: init-clust
 #| eval: false
 #| echo: true
 #| code-fold: true
@@ -169,45 +172,51 @@ library(shiny)
 #| file: "../src/03_seurat/10_link_peaks.R"
 ```
 
-```{r pseudo, filename = "11_pseudobulk_DESeq2.R"}
+```{r degs, filename = "11_degs.R"}
 #| eval: false
 #| echo: true
 #| code-fold: true
-#| file: "../src/03_seurat/11_pseudobulk_DESeq2.R"
+#| file: "../src/03_seurat/11_degs.R"
+```
+
+```{r dars, filename = "12_dars.R"}
+#| eval: false
+#| echo: true
+#| code-fold: true
+#| file: "../src/03_seurat/12_dars.R"
 ```
 
 ## Figures
 
-```{r fig-pheno, filename = "pheno.R"}
+```{r pheno-fig, filename = "pheno.R"}
 #| eval: false
-#| dependson: pheno
 #| echo: true
 #| code-fold: true
 #| file: "../src/04_plots/pheno.R"
 ```
 
-```{r fig-qc, filename = "qc.R"}
+```{r qc-fig, filename = "qc_initial.R"}
 #| eval: false
 #| echo: true
 #| code-fold: true
-#| file: "../src/04_plots/qc.R"
+#| file: "../src/04_plots/qc_initial.R"
 ```
 
-```{r fig-qc_cells, filename = "qc_cells.R"}
+```{r qc_cells-fig, filename = "qc_cells.R"}
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/04_plots/qc_cells.R"
 ```
 
-```{r fig-mult, filename = "multiplets.R"}
+```{r mult-fig, filename = "multiplets.R"}
 #| eval: false
 #| echo: true
 #| code-fold: true
 #| file: "../src/04_plots/multiplets.R"
 ```
 
-```{r fig-clust, filename = "cluster.R"}
+```{r clust-fig, filename = "cluster.R"}
 #| eval: false
 #| echo: true
 #| code-fold: true
@@ -221,25 +230,83 @@ The code used for analysis is located [on GitHub](https://github.com/tsoleary/he
 :::
 
 
+# **Figure sketch** {-}
+
+::: {.callout-caution}
+## Rough outline of figures for the manuscript
+
+Question for the supplementary figures: 
+
+- What am I missing? Is there are quality control metric that should be included but isn't?
+- Should I make S2 figure panels more variable in style (i.e. not all violin boxplots)?
+:::
+
+::: {.panel-tabset}
+
+## Fig. 1 {-}
+
+```{r fig-1}
+#| fig-cap: "(A) Place holder for embryonic acclimation design. (B) Boxplots of egg hatching success after acute heat shock of embryos acclimated to different temperatures. Each point represents the proportion hatched from separate trials of at least 50 eggs."
+
+knitr::include_graphics(
+  here::here("output/figs/final/fig_1.png")
+)
+```
+
+## Fig. 2 {-}
+
+- Unknown
+- UMAP with cell-type annotations
+
+## Fig. S1 {-}
+
+```{r fig-s1}
+#| fig-cap: "Sequencing quality control and barcode filtering. Knee-plots of (A) ATAC counts and (B) RNA countsversus the top hundred thousand barcodes in rank order from most counts to least. (C) Scatter plot of RNA counts and ATAC counts with non-cell barcodes colored in grey and cells that pass filter criteria colored in green. Dashed lines represent the lower-bound count threshold of 800 and 200 counts for ATAC and RNA respecitively. Bar plots representing per sample quality control metrics including (D) number of cells, total number of mapped reads in cells in each sample for (E) the ATAC  (F) RNA libraries."
+
+knitr::include_graphics(
+  here::here("output/figs/final/fig_s1.png")
+)
+```
+
+## Fig. S2 {-}
+
+```{r fig-s2}
+#| fig-cap: "Detailed quality control metrics for nuclei from ATAC- and RNA-sequenced libraries. Violin plot with overlayed boxplot showing the total number of reads per cell from RNA- (A) and ATAC- (C) sequencing in each sample. (B) The number of expressed genes detected per cell. (D) The number of unique ATAC features detected per cele. (E) Mean transcription start site (TSS) enrichment score profile. RNA reads mapped (G) ribosomes or genes in the (F) mitochondrial genome. (H) Nucelosome signal for each cell. (I) The fraction of ATAC reads in peaks (FRiP)."
+
+knitr::include_graphics(
+  here::here("output/figs/final/fig_s2.png")
+)
+```
+
+## Fig. S3 {-}
+
+Clusters and cell-type annotations
+
+- Cluster UMAP split
+- Number of cells per cluster
+- Number of cells per cell-type annotation
+
+:::
+
 # **Overview**
 
 ## Experimental design
 
 ```{r acc-exp-design}
 knitr::include_graphics(
-  here::here("output/figs/exp/acc_design.png")
+  here::here("output/figs/exp_design/acc_design.png")
 )
 ```
 
 ```{r hs-exp-design}
 knitr::include_graphics(
-  here::here("output/figs/exp/heatshock_design.png")
+  here::here("output/figs/exp_design/heatshock_design.png")
 )
 ```
 
 ## Phenotype
 
-```{r pheno-fig}
+```{r pheno-fig-print}
 knitr::include_graphics(
   here::here("output/figs/pheno/cantonS_survival.png")
 )
@@ -252,9 +319,9 @@ knitr::include_graphics(
 
 1. We used Cell Ranger ARC called cell barcodes -- algorithm described [here](https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/algorithms/cell-calling). 14,301 barcodes out of 2,215,183. 
 
-2. Because the Cell Ranger ARC cell calling algorithm is very permissive to barcodes with very low counts (_i.e._, a minimum of a single count in each library), barcodes were additionally filtered to a low count threshold in both the ATAC and RNA libraries based on the clearly defined population of cells in the RNA and ATAC count scatterplot. Additionally, barcodes with more than 5% of RNA reads mapping to genes on the mitochondrial genome were excluded. A total of 886 barcodes were filtered out for 13,145 left. 
+2. Because the Cell Ranger ARC cell calling algorithm is very permissive to barcodes with very low counts (_i.e._, a minimum of a single count in each library), barcodes were additionally filtered to a low count threshold in both the ATAC and RNA libraries based on the clearly defined population of cells in the RNA and ATAC count scatterplot. Additionally, barcodes with more than 5% of RNA reads mapping to genes on the mitochondrial genome and/or more than 25% mapping to ribosomal genes were excluded.
 
-3. Multiplets were filtered out using two independent methods, relying on either the ATAC or RNA libraries to call multiplets. [AMULET](https://github.com/UcarLab/AMULET) relies on the assumption that in snATAC-seq of diploids there should be at most two overlapping fragments with the same cell barcode. The presence of more than two overlapping fragments is a potential indication of a multiplet. Doublets were also identified using the RNA-seq libraries with [DoubletFinder](https://github.com/chris-mcginnis-ucsf/DoubletFinder). After removing the 1,103 multiplet barcodes, there were still two barcodes that had substantially higher number of RNA reads after all filtering (i.e., n_Count_RNA around 12-13k when the next highest are around 6-7k). So I removed those two for a final number of 12,040 high quality nuceli barcodes.
+3. Multiplets were filtered out using two independent methods, relying on either the ATAC or RNA libraries to call multiplets. [AMULET](https://github.com/UcarLab/AMULET) relies on the assumption that in snATAC-seq of diploids there should be at most two overlapping fragments with the same cell barcode. The presence of more than two overlapping fragments is a potential indication of a multiplet. Doublets were also identified using the RNA-seq libraries with [DoubletFinder](https://github.com/chris-mcginnis-ucsf/DoubletFinder). 
 :::
 
 
@@ -264,7 +331,7 @@ knitr::include_graphics(
 #| label: fig-plot
 #| fig-cap: "Knee plot of the number of ATAC reads and RNA reads in the raw data."
 
-knitr::include_graphics(here::here("output/figs/qc/knee_plots.png"))
+knitr::include_graphics(here::here("output/figs/qc/initial/knee_plots.png"))
 ```
 
 ## Scatter plot of counts
@@ -273,25 +340,25 @@ knitr::include_graphics(here::here("output/figs/qc/knee_plots.png"))
 
 ### Cells after all filtering
 
-```{r fig-all-scatter}
+```{r all-scatter-fig}
 knitr::include_graphics(
-  here::here("output/figs/qc/scatter_rna_atac_final_filter.png")
+  here::here("output/figs/qc/cells/scatter_rna_atac_final_filter.png")
 )
 ```
 
 ### Cell Ranger ARC only
 
-```{r fig-10x-scatter}
+```{r 10x-scatter-fig}
 knitr::include_graphics(
-  here::here("output/figs/qc/scatter_rna_atac_10x_cells.png")
+  here::here("output/figs/qc/initial/scatter_rna_atac_10x_cells.png")
 )
 ```
 
 ### And low count threshold
 
-```{r fig-low-scatter}
+```{r low-scatter-fig}
 knitr::include_graphics(
-  here::here("output/figs/qc/scatter_rna_atac_cells_threshold.png")
+  here::here("output/figs/qc/initial/scatter_rna_atac_cells_threshold.png")
 )
 ```
 
@@ -305,42 +372,38 @@ knitr::include_graphics(
 
 ```{r qc-violin-post}
 knitr::include_graphics(
-  here::here("output/figs/qc/violin_qc_metrics_post_filter.png")
+  here::here("output/figs/qc/cells/violin_qc_metrics_post_filter.png")
 )
 ```
 
 ### Before filtering
 
 ```{r qc-violin-pre}
-knitr::include_graphics(here::here("output/figs/qc/violin_qc_metrics.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/initial/violin_qc_metrics.png")
+)
 ```
 
 :::
 
 ## Multiplets
 
-::: {.callout-warning collapse="true"}
-## A question about detecting multiplets
-
-After intial multiplet calling, some researchers seem to subcluster cells and then remove entire subclusters that have higher than a certain threshold of called doublets – even if the many of the individual barcodes themselves weren't called a multiplet in the initial multiplet classification. For example, the Calderon paper did the following:
-
-> Unfortunately, this process alone did not remove all putative doublets that may have  been lost among different clusters of cells. Therefore, following clustering of the global dataset,  we individually processed each cluster identified and sub-clustered the data. We then eliminated  subclusters that were at least 15% classified as doublets. Following removal of all the initial nuclei  identified  as  doublets  and  subclusters  with  a  large  proportion  of  doublets,  we  reprocessed  the  global dataset.
-
-Is this an approach we should consider with our data?
-:::
-
 ::: {.panel-tabset}
 
 ### Mapped onto UMAP projection
 
 ```{r mult-umap}
-knitr::include_graphics(here::here("output/figs/qc/multiplet_umap.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/multiplets/multiplet_umap.png")
+)
 ```
 
 ### Counts
 
 ```{r counts-umap}
-knitr::include_graphics(here::here("output/figs/qc/counts_umap.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/multiplets/counts_umap.png")
+)
 ```
 
 :::
@@ -352,13 +415,17 @@ knitr::include_graphics(here::here("output/figs/qc/counts_umap.png"))
 #### Multiplets
 
 ```{r mult-hist}
-knitr::include_graphics(here::here("output/figs/qc/multiplets_hist.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/multiplets/multiplets_hist.png")
+)
 ```
 
 #### After filtering
 
 ```{r sing-hist}
-knitr::include_graphics(here::here("output/figs/qc/singlets_only_hist.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/multiplets/singlets_only_hist.png")
+)
 ```
 :::
 
@@ -369,38 +436,50 @@ knitr::include_graphics(here::here("output/figs/qc/singlets_only_hist.png"))
 ### Number of cells
 
 ```{r cells-samp}
-knitr::include_graphics(here::here("output/figs/qc/cells_sample.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/cells/cells_sample.png")
+)
 ```
 
 ### ATAC counts
 
 ```{r med-atac-samp}
-knitr::include_graphics(here::here("output/figs/qc/median_atac_sample.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/cells/median_atac_sample.png")
+)
 ```
 
 ### RNA counts
 
 ```{r med-rna-samp}
-knitr::include_graphics(here::here("output/figs/qc/median_rna_sample.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/cells/median_rna_sample.png")
+)
 ```
 
 ### TSS Enrichment
 
 ```{r med-tss-samp}
-knitr::include_graphics(here::here("output/figs/qc/tss_enrichment_samples.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/cells/tss_enrichment_samples.png")
+)
 ```
 
 ### FRiP
 
 ```{r med-frip-samp}
-knitr::include_graphics(here::here("output/figs/qc/frip_samples.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/cells/frip_samples.png")
+)
 ```
 
 
 ### FRiT
 
 ```{r med-frit-samp}
-knitr::include_graphics(here::here("output/figs/qc/frit_samples.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/cells/frit_samples.png")
+)
 ```
 
 :::
@@ -412,49 +491,61 @@ knitr::include_graphics(here::here("output/figs/qc/frit_samples.png"))
 ### ATAC counts
 
 ```{r umap-atac-count}
-knitr::include_graphics(here::here("output/figs/features/qc/nCount_ATAC.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/cells/features/nCount_ATAC.png")
+)
 ```
 
 ### RNA counts
 
 ```{r umap-rna-count}
-knitr::include_graphics(here::here("output/figs/features/qc/nCount_RNA.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/cells/features/nCount_RNA.png")
+)
 ```
 
 ### TSS enrichment
 
 ```{r umap-tss}
-knitr::include_graphics(here::here("output/figs/features/qc/TSS.enrichment.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/cells/features/TSS.enrichment.png")
+)
 ```
 
 ### Mito percent
 
 ```{r umap-mito}
-knitr::include_graphics(here::here("output/figs/features/qc/percent.mt.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/cells/features/percent.mt.png")
+)
 ```
 
 ### FRiP
 
 ```{r umap-frip}
-knitr::include_graphics(here::here("output/figs/features/qc/FRiP.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/cells/features/FRiP.png")
+)
 ```
 
 ### FRiT
 
 ```{r umap-frit}
-knitr::include_graphics(here::here("output/figs/features/qc/FRiT.png"))
+knitr::include_graphics(
+  here::here("output/figs/qc/cells/features/FRiT.png")
+)
 ```
 
 :::
 
 
-# **Seurat**
+# **Clustering & annotation**
 
 ::: {.panel-tabset}
 
 ## Initial data processing
 
-```{r clust-code, echo = c(13:25, 46:51, 66:96)}
+```{r clust-code}
 #| eval: false
 #| file: "../src/03_seurat/07_cluster.R"
 ```
@@ -473,7 +564,7 @@ The first LSI component is removed from downstream analysis because it is highly
 
 ```{r elbow}
 knitr::include_graphics(
-  here::here("output/figs/qc/elbow_plot.png")
+  here::here("output/figs/cluster/qc/elbow_plot.png")
 )
 ```
 
@@ -481,7 +572,7 @@ knitr::include_graphics(
 
 ```{r lsi-depth}
 knitr::include_graphics(
-  here::here("output/figs/qc/lsi_depthcor.png")
+  here::here("output/figs/cluster/qc/lsi_depthcor.png")
 )
 ```
 
@@ -499,7 +590,7 @@ knitr::include_graphics(
 
 ```{r joint-umap}
 knitr::include_graphics(
-  here::here("output/figs/cluster/umap_18_25_overlay.png")
+  here::here("output/figs/cluster/overlay/joint_umap.png")
 )
 ```
 
@@ -507,7 +598,7 @@ knitr::include_graphics(
 
 ```{r rna-umap}
 knitr::include_graphics(
-  here::here("output/figs/cluster/umap_18_25_overlay_rna.png")
+  here::here("output/figs/cluster/overlay/rna_umap.png")
 )
 ```
 
@@ -515,7 +606,7 @@ knitr::include_graphics(
 
 ```{r atac-umap}
 knitr::include_graphics(
-  here::here("output/figs/cluster/umap_18_25_overlay_atac.png")
+  here::here("output/figs/cluster/overlay/atac_umap.png")
 )
 ```
 
@@ -529,7 +620,7 @@ knitr::include_graphics(
 
 ```{r joint-tsne}
 knitr::include_graphics(
-  here::here("output/figs/cluster/tsne_18_25_overlay.png")
+  here::here("output/figs/cluster/overlay/joint_tsne.png")
 )
 ```
 
@@ -537,7 +628,7 @@ knitr::include_graphics(
 
 ```{r rna-tsne}
 knitr::include_graphics(
-  here::here("output/figs/cluster/tsne_18_25_overlay_rna.png")
+  here::here("output/figs/cluster/overlay/rna_tsne.png")
 )
 ```
 
@@ -545,7 +636,7 @@ knitr::include_graphics(
 
 ```{r atac-tsne}
 knitr::include_graphics(
-  here::here("output/figs/cluster/tsne_18_25_overlay_atac.png")
+  here::here("output/figs/cluster/overlay/atac_tsne.png")
 )
 ```
 
@@ -566,7 +657,7 @@ Here, I am presenting three clustering resolutions and their corresponding figur
 ### Clustree
 
 ```{r clustree}
-knitr::include_graphics(here::here("output/figs/cluster/clustree.png"))
+knitr::include_graphics(here::here("output/figs/cluster/qc/clustree.png"))
 ```
 
 ::: {.panel-tabset}
@@ -581,7 +672,7 @@ knitr::include_graphics(here::here("output/figs/cluster/clustree.png"))
 
 ```{r res_0.1-umap}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.1/umap_18_25_split.png")
+  here::here("output/figs/cluster/res/res_0.1/joint_umap.png")
 )
 ```
 
@@ -589,7 +680,7 @@ knitr::include_graphics(
 
 ```{r res_0.1-umap_rna}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.1/rna_umap_18_25_split.png")
+  here::here("output/figs/cluster/res/res_0.1/rna_umap.png")
 )
 ```
 
@@ -597,7 +688,7 @@ knitr::include_graphics(
 
 ```{r res_0.1-umap_atac}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.1/atac_umap_18_25_split.png")
+  here::here("output/figs/cluster/res/res_0.1/atac_umap.png")
 )
 ```
 
@@ -607,12 +698,12 @@ knitr::include_graphics(
 
 ```{r res_0.1-n-cells-clust}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.1/cells_per_cluster.png")
+  here::here("output/figs/cluster/res/res_0.1/cells_per_cluster.png")
 )
 ```
 
 
-#### CLuster specific quality control {-}
+#### Cluster specific quality control {-}
 
 ::: {.panel-tabset}
 
@@ -620,7 +711,7 @@ knitr::include_graphics(
 
 ```{r res_0.1-rna}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.1/rna_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.1/rna_vln.png")
 )
 ```
 
@@ -628,7 +719,7 @@ knitr::include_graphics(
 
 ```{r res_0.1-atac}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.1/atac_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.1/atac_vln.png")
 )
 ```
 
@@ -636,7 +727,7 @@ knitr::include_graphics(
 
 ```{r res_0.1-percent.mt}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.1/percent.mt_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.1/percent.mt_vln.png")
 )
 ```
 
@@ -644,7 +735,7 @@ knitr::include_graphics(
 
 ```{r res_0.1-frip}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.1/frip_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.1/frip_vln.png")
 )
 ```
 
@@ -652,15 +743,13 @@ knitr::include_graphics(
 
 ```{r res_0.1-frit}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.1/frit_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.1/frit_vln.png")
 )
 ```
 
 :::
 
-
-### `res = 0.2` {-}
-
+### `res = 0.3` {-}
 
 #### Acclimation clusters {-}
 
@@ -668,87 +757,86 @@ knitr::include_graphics(
 
 ##### Joint {-}
 
-```{r res_0.2-umap}
+```{r res_0.3-umap}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.2/umap_18_25_split.png")
+  here::here("output/figs/cluster/res/res_0.3/joint_umap.png")
 )
 ```
 
 ##### RNA-only {-}
 
-```{r res_0.2-umap_rna}
+```{r res_0.3-umap_rna}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.2/rna_umap_18_25_split.png")
+  here::here("output/figs/cluster/res/res_0.3/rna_umap.png")
 )
 ```
 
 ##### ATAC-only {-}
 
-```{r res_0.2-umap_atac}
+```{r res_0.3-umap_atac}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.2/atac_umap_18_25_split.png")
+  here::here("output/figs/cluster/res/res_0.3/atac_umap.png")
 )
 ```
 
 :::
 
-
 #### Cells per cluster {-}
 
-```{r res_0.2-n-cells-clust}
+```{r res_0.3-n-cells-clust}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.2/cells_per_cluster.png")
+  here::here("output/figs/cluster/res/res_0.3/cells_per_cluster.png")
 )
 ```
 
 
-#### CLuster specific quality control {-}
+#### Cluster specific quality control {-}
 
 ::: {.panel-tabset}
 
 #### RNA count
 
-```{r res_0.2-rna}
+```{r res_0.3-rna}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.2/rna_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.3/rna_vln.png")
 )
 ```
 
 #### ATAC count
 
-```{r res_0.2-atac}
+```{r res_0.3-atac}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.2/atac_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.3/atac_vln.png")
 )
 ```
 
 #### Mito percent
 
-```{r res_0.2-percent.mt}
+```{r res_0.3-percent.mt}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.2/percent.mt_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.3/percent.mt_vln.png")
 )
 ```
 
 #### FRiP
 
-```{r res_0.2-frip}
+```{r res_0.3-frip}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.2/frip_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.3/frip_vln.png")
 )
 ```
 
 #### FRiT
 
-```{r res_0.2-frit}
+```{r res_0.3-frit}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.2/frit_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.3/frit_vln.png")
 )
 ```
 
 :::
 
-### `res = 0.4` {-}
+### `res = 0.7` {-}
 
 #### Acclimation clusters {-}
 
@@ -756,113 +844,25 @@ knitr::include_graphics(
 
 ##### Joint {-}
 
-```{r res_0.4-umap}
+```{r res_0.7-umap}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.4/umap_18_25_split.png")
+  here::here("output/figs/cluster/res/res_0.7/joint_umap.png")
 )
 ```
 
 ##### RNA-only {-}
 
-```{r res_0.4-umap_rna}
+```{r res_0.7-umap_rna}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.4/rna_umap_18_25_split.png")
+  here::here("output/figs/cluster/res/res_0.7/rna_umap.png")
 )
 ```
 
 ##### ATAC-only {-}
 
-```{r res_0.4-umap_atac}
+```{r res_0.7-umap_atac}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.4/atac_umap_18_25_split.png")
-)
-```
-
-:::
-
-
-#### Cells per cluster {-}
-
-```{r res_0.4-n-cells-clust}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.4/cells_per_cluster.png")
-)
-```
-
-
-#### CLuster specific quality control {-}
-
-::: {.panel-tabset}
-
-#### RNA count
-
-```{r res_0.4-rna}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.4/rna_clust_violin.png")
-)
-```
-
-#### ATAC count
-
-```{r res_0.4-atac}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.4/atac_clust_violin.png")
-)
-```
-
-#### Mito percent
-
-```{r res_0.4-percent.mt}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.4/percent.mt_clust_violin.png")
-)
-```
-
-#### FRiP
-
-```{r res_0.4-frip}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.4/frip_clust_violin.png")
-)
-```
-
-#### FRiT
-
-```{r res_0.4-frit}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.4/frit_clust_violin.png")
-)
-```
-
-:::
-
-### `res = 0.8` {-}
-
-#### Acclimation clusters {-}
-
-::: {.panel-tabset}
-
-##### Joint {-}
-
-```{r res_0.8-umap}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.8/umap_18_25_split.png")
-)
-```
-
-##### RNA-only {-}
-
-```{r res_0.8-umap_rna}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.8/rna_umap_18_25_split.png")
-)
-```
-
-##### ATAC-only {-}
-
-```{r res_0.8-umap_atac}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.8/atac_umap_18_25_split.png")
+  here::here("output/figs/cluster/res/res_0.7/atac_umap.png")
 )
 ```
 
@@ -870,169 +870,93 @@ knitr::include_graphics(
 
 #### Cells per cluster {-}
 
-```{r res_0.8-n-cells-clust}
+```{r res_0.7-n-cells-clust}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.8/cells_per_cluster.png")
+  here::here("output/figs/cluster/res/res_0.7/cells_per_cluster.png")
 )
 ```
 
 
-#### CLuster specific quality control {-}
+#### Cluster specific quality control {-}
 
 ::: {.panel-tabset}
 
 #### RNA count
 
-```{r res_0.8-rna}
+```{r res_0.7-rna}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.8/rna_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.7/rna_vln.png")
 )
 ```
 
 #### ATAC count
 
-```{r res_0.8-atac}
+```{r res_0.7-atac}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.8/atac_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.7/atac_vln.png")
 )
 ```
 
 #### Mito percent
 
-```{r res_0.8-percent.mt}
+```{r res_0.7-percent.mt}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.8/percent.mt_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.7/percent.mt_vln.png")
 )
 ```
 
 #### FRiP
 
-```{r res_0.8-frip}
+```{r res_0.7-frip}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.8/frip_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.7/frip_vln.png")
 )
 ```
 
 #### FRiT
 
-```{r res_0.8-frit}
+```{r res_0.7-frit}
 knitr::include_graphics(
-  here::here("output/figs/cluster/res_0.8/frit_clust_violin.png")
-)
-```
-
-:::
-
-### `res = 1.0` {-}
-
-#### Acclimation clusters {-}
-
-::: {.panel-tabset}
-
-##### Joint {-}
-
-```{r res_1-umap}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_1/umap_18_25_split.png")
-)
-```
-
-##### RNA-only {-}
-
-```{r res_1-umap_rna}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_1/rna_umap_18_25_split.png")
-)
-```
-
-##### ATAC-only {-}
-
-```{r res_1-umap_atac}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_1/atac_umap_18_25_split.png")
-)
-```
-
-:::
-
-#### Cells per cluster {-}
-
-```{r res_1-n-cells-clust}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_1/cells_per_cluster.png")
-)
-```
-
-
-#### CLuster specific quality control {-}
-
-::: {.panel-tabset}
-
-#### RNA count
-
-```{r res_1-rna}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_1/rna_clust_violin.png")
-)
-```
-
-#### ATAC count
-
-```{r res_1-atac}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_1/atac_clust_violin.png")
-)
-```
-
-#### Mito percent
-
-```{r res_1-percent.mt}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_1/percent.mt_clust_violin.png")
-)
-```
-
-#### FRiP
-
-```{r res_1-frip}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_1/frip_clust_violin.png")
-)
-```
-
-#### FRiT
-
-```{r res_1-frit}
-knitr::include_graphics(
-  here::here("output/figs/cluster/res_1/frit_clust_violin.png")
+  here::here("output/figs/cluster/res/res_0.7/frit_vln.png")
 )
 ```
 
 :::
 
 :::
+
+## Marker genes for `res = 0.7` clusters
+
+```{r marker-genes}
+readRDS(here::here("output/markers/cluster_markers.rds")) |> 
+  mutate(cluster = as.numeric(cluster)) |> 
+  group_by(cluster) |> 
+  slice_min(minimump_p_val, n = 10, with_ties = FALSE) |> 
+  kable(format = "html", escape = F) |> 
+  kable_styling("striped") |> 
+  scroll_box(width = "100%", height = "450px")
+```
 
 ## Annotation
 
 ::: {.callout-note}
 ## Resolution
 
-I have picked `res = 1.0` for the downstream analysis. 
+I have picked `res = 0.7` for the downstream analysis. 
 :::
 
-### Annotation results
 
-```{r annot-res}
-readRDS(here::here("data/processed/annot/cluster_annot_all.rds")) |> 
-  mutate(cluster = as.numeric(cluster)) |> 
-  dplyr::filter(padj < 0.05) |> 
-  arrange(cluster, padj) |> 
-  kable(format = "html", escape = F) |> 
-  kable_styling("striped") |> 
-  scroll_box(width = "100%", height = "500px")
+::: {.panel-tabset}
+
+### UMAP
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/annot/umap_18_25_split.png")
+)
 ```
 
-### Manual annotations
+### Cluster to cell-type
 
 ```{r annot-man}
 readRDS(here::here("data/processed/annot/annot.rds")) |> 
@@ -1041,7 +965,26 @@ readRDS(here::here("data/processed/annot/annot.rds")) |>
   scroll_box(width = "100%", height = "450px")
 ```
 
+### Top annotation results
+
+```{r annot-res}
+df <- readRDS(here::here("data/processed/annot/cluster_annot_all.rds")) |>
+  mutate(cluster = as.numeric(cluster)) |>
+  filter(padj < 0.05 | prop_overlap > 0.01) |>
+  group_by(cluster) |>
+  slice_min(padj, n = 5) |>
+  arrange(cluster, padj)
+
+df |>
+  kable(format = "html", escape = F) |>
+  kable_styling("striped") |>
+  row_spec(which(df$padj < 0.05), color = "firebrick") |>
+  scroll_box(width = "100%", height = "500px")
+```
+
 ## Cell-type stats
+
+::: {.panel-tabset}
 
 ### Number of genes
 
@@ -1059,13 +1002,19 @@ knitr::include_graphics(
 )
 ```
 
-# **Differential expression**
+:::
 
-## Cell-type
+:::
+
+# **Differential expression & accessibility**
+
+### RNA
+
+#### Cell-type
 
 ```{r deg-clust}
-degs_cluster <- readRDS(here::here("output/degs/degs_clusters.rds")) |> 
-  dplyr::filter(p_val_adj < 0.05)
+degs <- readRDS(here::here("output/degs/degs_cell-type.rds")) |> 
+  filter(p_val_adj < 0.05)
 ```
 
 ::: {.panel-tabset}
@@ -1081,7 +1030,7 @@ knitr::include_graphics(
 ### Table of DEGs
 
 ```{r tab-degs-clust}
-degs_cluster |> 
+degs |> 
   kable(format = "html", escape = F) |> 
   kable_styling("striped") |> 
   scroll_box(width = "100%", height = "450px")
@@ -1094,11 +1043,19 @@ degs_cluster |>
 
 ::: {.panel-tabset}
 
-### DESeq2
+### Volcano plot
+
+```{r vol-plot-}
+knitr::include_graphics(
+  here::here("output/figs/degs/pseudobulk_volcano.png")
+)
+```
+
+### Table
 
 ```{r pseudo-degseq}
 pseudobulk_DESeq <- readRDS(here::here("output/degs/pseudobulk_DESeq.rds")) |> 
-  dplyr::filter(padj < 0.05) 
+  filter(padj < 0.05) 
 
 pseudobulk_DESeq |> 
   kable(format = "html", escape = F) |> 
@@ -1106,52 +1063,40 @@ pseudobulk_DESeq |>
   scroll_box(width = "100%", height = "450px")
 ```
 
-### Seurat
 
-```{r pseudo-seurat}
-degs <- readRDS(here::here("output/degs/degs.rds")) |> 
-  dplyr::filter(p_val_adj < 0.05) |> 
-  rownames_to_column("gene")
 
-degs |> 
+:::
+
+## ATAC
+
+### Psuedobulk
+
+::: {.panel-tabset}
+
+#### Volcano plot
+
+```{r vol-plot-dars}
+knitr::include_graphics(
+  here::here("output/figs/dars/pseudobulk_volcano.png")
+)
+```
+
+#### Table
+
+```{r pseudo-dars}
+pseudobulk_DESeq <- readRDS(here::here("output/dars/dars.rds"))
+
+pseudobulk_DESeq |> 
   kable(format = "html", escape = F) |> 
   kable_styling("striped") |> 
   scroll_box(width = "100%", height = "450px")
 ```
 
-### Notes
-
-```{r scatter-degs}
-readRDS(here::here("output/degs/degs.rds")) |> 
-  rownames_to_column("gene") |> 
-  full_join(readRDS(here::here("output/degs/pseudobulk_DESeq.rds")),
-            by = "gene") |> 
-  dplyr::filter(!is.na(avg_log2FC), !is.na(log2FoldChange)) |> 
-  ggplot() +
-  geom_hline(yintercept = 0, color = "grey20") +
-  geom_vline(xintercept = 0, color = "grey20") +
-  geom_abline(slope = 1, 
-              intercept = 0,
-              linetype = 2,
-              color = "grey50") +
-  geom_point(aes(x = avg_log2FC,
-                 y = log2FoldChange)) +
-  labs(x = "Seurat log2FC",
-       y = "DESeq2 log2FC") +
-  cowplot::theme_minimal_grid()
-```
-
-DESeq2 finds **`r nrow(pseudobulk_DESeq)` differentially expressed genes** and Seurat finds **`r nrow(degs)` DEGs** with **`r length(intersect(pseudobulk_DESeq$gene, degs$gene))`** genes overlapping between the two methods. 
-
-List of overlapping genes separated by semicolons: `r paste(intersect(pseudobulk_DESeq$gene, degs$gene), collapse = "; ")`
-
 :::
-
-# **Differential accessibility**
 
 ::: {.panel-tabset}
 
-## Number of DARs per Cell-type {-}
+### Number of DARs per Cell-type {-}
 
 ```{r, n-dars}
 knitr::include_graphics(
@@ -1159,9 +1104,9 @@ knitr::include_graphics(
 )
 ```
 
-## Table of DARs {-}
+### Table of DARs {-}
 
-```{r}
+```{r dar-tab}
 readRDS(here::here("output/dars/dars_cell-type_gene.rds")) |> 
   filter(p_val_adj < 0.05) |> 
   kable(format = "html", escape = F) |> 
@@ -1171,23 +1116,13 @@ readRDS(here::here("output/dars/dars_cell-type_gene.rds")) |>
 
 :::
 
-## A few examples
+### A few examples
 
 ::: {.panel-tabset}
 
-### _lola_ {-}
+#### _Ldh_ {-}
 
-```{r}
-roi <- "2R-10486272-10486985.png"
-
-knitr::include_graphics(
-  here::here("output/figs/dars/coverage_plots", roi)
-)
-```
-
-### _Ldh_ {-}
-
-```{r}
+```{r roi-ldh}
 roi <- "3L-6262342-6264639.png"
 
 knitr::include_graphics(
@@ -1195,30 +1130,42 @@ knitr::include_graphics(
 )
 ```
 
-### _DOR_ {-}
+#### _lola_ {-}
 
-```{r}
-roi <- "3L-4408296-4410088.png"
-
-knitr::include_graphics(
-  here::here("output/figs/dars/coverage_plots", roi)
-)
-```
-
-### _bowl_ {-}
-
-```{r}
-roi <- "2L-3769570-3772221.png"
+```{r roi-lola}
+roi <- "2R-10486272-10486985.png"
 
 knitr::include_graphics(
   here::here("output/figs/dars/coverage_plots", roi)
 )
 ```
 
-### _Trim9_ {-}
 
-```{r}
-roi <- "2L-10548101-10549342.png"
+
+#### _mbl_ {-}
+
+```{r roi-mbl}
+roi <- "2R-17261661-17263174.png"
+
+knitr::include_graphics(
+  here::here("output/figs/dars/coverage_plots", roi)
+)
+```
+
+#### _lac_ {-}
+
+```{r roi-lac}
+roi <- "2R-12460368-12461108.png"
+
+knitr::include_graphics(
+  here::here("output/figs/dars/coverage_plots", roi)
+)
+```
+
+#### _Ref2_ {-}
+
+```{r roi-ref2}
+roi <- "2L-12611799-12612226.png"
 
 knitr::include_graphics(
   here::here("output/figs/dars/coverage_plots", roi)
@@ -1227,32 +1174,29 @@ knitr::include_graphics(
 
 :::
 
+## DARs _near_ DEGs
 
-# **DARs _near_ DEGs**
-
-## Table of DARs near DEGs
+### Table of DARs near DEGs
 
 ::: {.callout-note}
-There are seven differentially expressed genes with nearby differentially accessible regions.
+There are only two differentially expressed genes with nearby differentially accessible regions.
 
 _Near_ is defined as a peak within 5,000 bp's of a gene.
 :::
 
-```{r}
+```{r dar-deg-tab}
 dars_degs <- readRDS(here::here("output/dars/dars_degs.rds"))
 
 dars_degs |> 
   select(-c("chrom", "start", "end")) |> 
   select(cell_type, region, gene, dist, everything()) |> 
-  # rename_with(~str_remove(., '.ATAC')) |> 
-  # rename_with(~str_remove(., '.RNA')) |> 
   kable(format = "html", escape = F) |> 
   add_header_above(c(" " = 4, "ATAC" = 6, "RNA" = 6)) |> 
   kable_styling("striped") |> 
   scroll_box(width = "100%", height = "450px") 
 ```
 
-### Scatter of log-fold changes
+#### Scatter of log-fold changes
 
 ::: {.callout-tip}
 ## Matching log-fold changes
@@ -1260,71 +1204,19 @@ dars_degs |>
 Observed directionality of log-fold changes in expression and accessibility match.
 :::
 
-```{r}
+```{r dar-deg-scatter}
 knitr::include_graphics(
   here::here("output/figs/dars/dars_degs_scatter.png")
 )
 ```
 
-## Accesibility and expression
+### Accesibility and expression
 
 ::: {.panel-tabset}
 
+#### _CG43759_ {-}
 
-### _dnt_ {-}
-
-```{r}
-goi <- "dnt.png"
-
-knitr::include_graphics(
-  here::here("output/figs/dars/cov_exp", goi)
-)
-```
-
-### _DOR_ {-}
-
-```{r}
-goi <- "DOR.png"
-
-knitr::include_graphics(
-  here::here("output/figs/dars/cov_exp", goi)
-)
-```
-
-
-### _phu_ {-}
-
-```{r}
-goi <- "phu.png"
-
-knitr::include_graphics(
-  here::here("output/figs/dars/cov_exp", goi)
-)
-```
-
-### _gukh_ {-}
-
-```{r}
-goi <- "gukh.png"
-
-knitr::include_graphics(
-  here::here("output/figs/dars/cov_exp", goi)
-)
-```
-
-### _Act5C_ {-}
-
-```{r}
-goi <- "Act5C.png"
-
-knitr::include_graphics(
-  here::here("output/figs/dars/cov_exp", goi)
-)
-```
-
-### _CG43759_ {-}
-
-```{r}
+```{r goi-dar-deg-cg43759}
 goi <- "CG43759.png"
 
 knitr::include_graphics(
@@ -1332,10 +1224,10 @@ knitr::include_graphics(
 )
 ```
 
-### _out_ {-}
+#### _chn_ {-}
 
-```{r}
-goi <- "out.png"
+```{r goi-dar-deg-chn}
+goi <- "chn.png"
 
 knitr::include_graphics(
   here::here("output/figs/dars/cov_exp", goi)
@@ -1344,6 +1236,130 @@ knitr::include_graphics(
 
 :::
 
+# **Weighted correlation network analysis**
+
+## RNA
+
+### Overview plots
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna", "softpower_threshold.png")
+)
+```
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna", "dendrogram.png")
+)
+```
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna", "module_correlogram.png")
+)
+```
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna", "module_feature_plot.png")
+)
+```
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna", "DME_lolipops.png")
+)
+```
+
+### Significant modules
+
+#### Red
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna/red/red_all.png")
+)
+```
+
+#### Brown
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna/brown/brown_top_100.png")
+)
+```
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna/brown/brown_top_101-200.png")
+)
+```
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna/brown/brown_top_201-300.png")
+)
+```
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna/brown/brown_top_301-346.png")
+)
+```
+
+## ATAC
+
+### Overview plots
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna/atac", "softpower_threshold.png")
+)
+```
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna/atac", "dendrogram.png")
+)
+```
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna/atac", "module_correlogram.png")
+)
+```
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna/atac", "module_feature_plot.png")
+)
+```
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna/atac", "DME_lolipops.png")
+)
+```
+
+
+### Significant modules
+
+#### Turquoise
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna/atac/turquoise_20.png")
+)
+```
+
+#### Brown
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/wgcna/atac/brown_20.png")
+)
+```
 
 
 # Session Info {-}

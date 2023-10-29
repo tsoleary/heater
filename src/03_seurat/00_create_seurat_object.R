@@ -1,18 +1,13 @@
 # ------------------------------------------------------------------------------
-# Load data and set up Seurat object
-# May 11, 2023
+# Load Data: Load in raw RNA-Seq count data and the ATAC-Seq peak fragment data 
+# and save as an rds file to be used for quality control and filtering
 # TS O'Leary
 # ------------------------------------------------------------------------------
-
-# Description 
-# Load in the RNA-Seq count data and the ATAC-Seq peak fragment data and save as
-# an rds file to be used for quality control and filtering.
 
 # Load libraries
 library(tidyverse)
 library(Seurat)
 library(Signac)
-library(AnnotationHub)
 
 # Load the RNA-Seq and ATAC-Seq data -------------------------------------------
 data_dir <- here::here("data/processed/seq/all/outs/")
@@ -20,8 +15,11 @@ raw_feature_dir <- paste0(data_dir, "raw_feature_bc_matrix")
 frag_path <- paste0(data_dir, "atac_fragments.tsv.gz")
 counts <- Read10X(raw_feature_dir)
 
+# Output dir
+out_dir <- "data/processed/seurat_object"
+
 # Get gene annotations for dm6 -------------------------------------------------
-BDGP6.32 <- query(AnnotationHub(), 
+BDGP6.32 <- AnnotationHub::query(AnnotationHub::AnnotationHub(), 
                   c("EnsDb", "Drosophila melanogaster", "109"))[[1]]
 annotation <- GetGRangesFromEnsDb(BDGP6.32)
 
@@ -61,7 +59,7 @@ dat[["ATAC"]] <- CreateChromatinAssay(
 )
 
 # Save raw Seurat object
-saveRDS(dat, here::here("data/processed/seurat_object/00_dat_raw.rds"))
+saveRDS(dat, here::here(out_dir, "00_dat_raw.rds"))
 
 # Create Seurat object from the filtered matrix from 10X Cell Ranger ARC -------
 
@@ -100,4 +98,4 @@ dat[["ATAC"]] <- CreateChromatinAssay(
 )
 
 # Save 10X Cell Ranger ARC filtered Seurat object
-saveRDS(dat, here::here("data/processed/seurat_object/00_dat_10x_cells.rds"))
+saveRDS(dat, here::here(out_dir, "00_dat_10x_cells.rds"))

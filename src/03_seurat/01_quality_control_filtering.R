@@ -1,12 +1,8 @@
 # ------------------------------------------------------------------------------
-# Quality control and filtering of low-quality cells
-# March 27, 2023
-# TS O'Leary
-# ------------------------------------------------------------------------------
-
-# Description -----
 # Basic quality control metrics and filtering out non-cell barcodes from the 10X 
 # Cell Ranger ARC called cells.
+# TS O'Leary
+# ------------------------------------------------------------------------------
 
 # Load libraries
 library(tidyverse)
@@ -17,6 +13,9 @@ library(Signac)
 dat <- readRDS(
   here::here("data/processed/seurat_object/00_dat_10x_cells.rds")
 )
+
+# Output dir
+out_dir <- "data/processed/seurat_object"
 
 # Calculate Nucleosome Signal and TSS Enrichment for ATAC QC metrics
 DefaultAssay(dat) <- "ATAC"
@@ -38,7 +37,7 @@ dat[["percent.ribo"]] <- PercentageFeatureSet(
 # Save object with Nucleosome, TSS, and mitochondria meta.data added 
 saveRDS(
   dat, 
-  here::here("data/processed/seurat_object/01_dat_10x_cells.rds")
+  here::here(out_dir, "01_dat_10x_cells.rds")
 )
 
 # Filter out barcodes with low counts or high mitochondrial content ------------
@@ -46,8 +45,8 @@ saveRDS(
 # Define filtering thresholds
 low_ATAC <- 800
 low_RNA <- 200
-max_mt <- 5 #### Calderon did 25 % for both mt and rb -- ask Seth? Maybe
-max_rb <- 5
+max_mt <- 5
+max_rb <- 25
 
 # Subset 10x data based on thresholds
 dat <- dat |>
@@ -61,16 +60,18 @@ dat <- dat |>
 # Save object
 saveRDS(
   dat, 
-  here::here("data/processed/seurat_object/01_dat_10x_filtered.rds")
+  here::here(out_dir, "01_dat_10x_filtered.rds")
 )
 
-# Create a filtered fragment file to be used in the amulet doublet finder ------
+# Create a filtered fragment file to be used in the Amulet doublet finder ------
 
 # Path to fragment file with all barcodes included
-data_dir <- here::here("data/processed/seq/all/outs/")
-frag_path <- paste0(data_dir, "atac_fragments.tsv.gz")
+data_dir <- "data/processed/seq/all/outs"
+frag_path <- here::here(data_dir, "atac_fragments.tsv.gz")
 
 # Write the file with fragments from only the filtered barcodes
-FilterCells(frag_path,
-            Cells(dat),
-            outfile = paste0(data_dir, "atac_fragments_cells.tsv.gz"))
+FilterCells(
+  frag_path,
+  Cells(dat),
+  outfile = here::here(data_dir, "atac_fragments_cells.tsv.gz")
+)

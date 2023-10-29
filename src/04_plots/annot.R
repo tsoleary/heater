@@ -1,6 +1,5 @@
 # ------------------------------------------------------------------------------
-# Cluster and expression plots
-# June 23, 2023
+# Plots: Cell-type annotation related cell plots
 # TS O'Leary
 # ------------------------------------------------------------------------------
 
@@ -8,45 +7,52 @@
 library(tidyverse)
 library(Seurat)
 library(Signac)
+library(cowplot)
+source(here::here("src/04_plots/00_plot_themes.R"))
 
 # Load data
 dat <- readRDS(
   here::here("data/processed/seurat_object/09_dat_annot.rds")
 )
 
-# Set output fig_dir
+# Output fig dir
 fig_dir <- "output/figs/annot"
 
 # Set cell-type as the primary identity
 Idents(dat) <- "cell_type"
 
-# 
+# UMAP colored by cell-types
 plot <- DimPlot(dat, 
+                reduction = "umap",
         split.by = "acc_temp",
         repel = TRUE,
         label.color = "grey20",
-        pt.size = 1.5) +
+        pt.size = 0.2) +
   theme_void() +
   theme(legend.position = "none",
         strip.text = element_text(size = 16, face = "bold"),
         strip.background = element_rect(fill = "grey95", color = "grey95")) +
   scale_color_manual(
-    values = c("#ADD9F4",
+    values = c("grey90",
+               "#ADD9F4",
                "#57A4B2",
                "#D39C9E",
                "#FEF29A",
                "#F9DCEE",
-               "grey90",
                "#819FC5",
                "#A7BF9B",
                "#F9FADC",
-               "grey95",
-               "pink")
+               "grey80")
     )
 
 LabelClusters(plot = plot, 
               id = "ident",
               box = TRUE,
+              size = 3,
+              # nudge_x = c(0, 3, 3, -1, -12, 2, 2, 2, 2, -3),
+              # nudge_y = c(-3, -2, -2, 2, 2, 2, 2, -2, -2, 0),
+              position = "nearest",
+              label.padding = unit(0.1, "lines"),
               alpha = 0.75,
               color = c("grey10"))
 
@@ -81,7 +87,7 @@ dat@meta.data |>
   labs(y = "",
        x = "Number of cells") +
   scale_fill_manual(name = element_blank(),
-                    values = c("#43aa8b", "#f3722c")) +
+                    values = acc_colors) +
   scale_x_continuous(expand = expansion(mult = c(0, 0.05)),
                      position = "top") +
   cowplot::theme_minimal_vgrid()
@@ -95,7 +101,6 @@ ggsave(here::here(fig_dir, "cells_per_celltype.png"),
        height = 15,
        width = 30,
        units = "cm")
-
 
 # Quick bar plot counting the number of cells for cell type
 dat@meta.data |>
@@ -117,7 +122,7 @@ dat@meta.data |>
   labs(y = "",
        x = "Number of cells") +
   scale_fill_manual(name = element_blank(),
-                    values = c("#43aa8b", "#f3722c")) +
+                    values = acc_colors) +
   scale_x_continuous(expand = expansion(mult = c(0, 0.05)),
                      position = "top") +
   cowplot::theme_minimal_vgrid()
@@ -164,7 +169,7 @@ dat@meta.data |>
   labs(y = "",
        x = "") +
   scale_fill_manual(name = element_blank(),
-                    values = c("#43aa8b", "#f3722c")) +
+                    values = acc_colors) +
   scale_x_continuous(expand = expansion(mult = c(0, 0.05)),
                      labels = scales::percent,
                      position = "top") +
@@ -194,7 +199,7 @@ dat@meta.data |>
                      limits = c(0, 1650),
                      expand = c(0, 0.05)) +
   scale_y_discrete(name = element_blank()) +
-  theme_minimal_vgrid()
+  cowplot::theme_minimal_vgrid()
 
 # Save plot
 ggsave(here::here(fig_dir, "genes_per_celltype.png"),
@@ -220,7 +225,7 @@ dat@meta.data |>
                      limits = c(0, 6200),
                      expand = c(0, 0.05),) +
   scale_y_discrete(name = element_blank()) +
-  theme_minimal_vgrid()
+  cowplot::theme_minimal_vgrid()
 
 # Save plot
 ggsave(here::here(fig_dir, "peaks_per_celltype.png"),

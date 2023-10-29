@@ -1,6 +1,5 @@
 # ------------------------------------------------------------------------------
-# Plots for Quality Control metrics after cell calling
-# May 25, 2023
+# Plots: Quality control metrics after cell calling
 # TS O'Leary
 # ------------------------------------------------------------------------------
 
@@ -9,12 +8,15 @@ library(tidyverse)
 library(Seurat)
 library(Signac)
 
+# Output fig dir
+fig_dir <- "output/figs/qc/cells"
+
 # Load raw data
 dat_raw <- readRDS(
   here::here("data/processed/seurat_object/00_dat_raw.rds")
 )
 
-# Load filtered cells - mutiplets removed
+# Load filtered high quality cells
 dat <- readRDS(
   here::here("data/processed/seurat_object/06_dat_qc.rds")
 )
@@ -36,6 +38,7 @@ dat_raw@meta.data |>
   mutate(cells_10x = factor(cells_10x,
                             levels = c("Non-cell barcodes",
                                        "Cells"))) |>
+  arrange(cells_10x) |> 
   ggplot(aes(x = nCount_RNA,
              y = nCount_ATAC)) +
   geom_point(aes(color = cells_10x),
@@ -66,11 +69,11 @@ dat_raw@meta.data |>
   theme(legend.position = "bottom")
 
 # Save scatter plot
-ggsave(here::here("output/figs/qc/scatter_rna_atac_final_filter.pdf"),
+ggsave(here::here(fig_dir, "scatter_rna_atac_final_filter.pdf"),
        height = 20,
        width = 20,
        units = "cm")
-ggsave(here::here("output/figs/qc/scatter_rna_atac_final_filter.png"),
+ggsave(here::here(fig_dir, "scatter_rna_atac_final_filter.png"),
        height = 20,
        width = 20,
        units = "cm")
@@ -144,17 +147,18 @@ cowplot::plot_grid(p2, p3, p4, p1, p5,
                    nrow = 2)
 
 # Save plot
-ggsave(here::here("output/figs/qc/violin_qc_metrics_post_filter.pdf"),
+ggsave(here::here(fig_dir, "violin_qc_metrics_post_filter.pdf"),
        height = 15,
        width = 30,
        units = "cm")
-ggsave(here::here("output/figs/qc/violin_qc_metrics_post_filter.png"),
+ggsave(here::here(fig_dir, "violin_qc_metrics_post_filter.png"),
        height = 15,
        width = 30,
        units = "cm")
 
 # TSS Enrichment plot for each sample ------------------------------------------
 TSSPlot(dat, 
+        assay = "ATAC",
         group.by = "sample_name") +
   scale_color_manual(values = rep("grey50",4)) +
   cowplot::theme_cowplot() +
@@ -162,28 +166,28 @@ TSSPlot(dat,
 
 
 # Save plot
-ggsave(here::here("output/figs/qc/tss_enrichment_samples.pdf"),
+ggsave(here::here(fig_dir, "tss_enrichment_samples.pdf"),
        height = 15,
        width = 25,
        units = "cm")
-ggsave(here::here("output/figs/qc/tss_enrichment_samples.png"),
+ggsave(here::here(fig_dir, "tss_enrichment_samples.png"),
        height = 15,
        width = 25,
        units = "cm")
 
 # # Fragment histogram for each sample -------------------------------------------
-# FragmentHistogram(dat, 
-#                   group.by = "sample_name")
-# 
-# # Save plot
-# ggsave(here::here("output/figs/qc/fragment_hist.pdf"),
-#        height = 15,
-#        width = 25,
-#        units = "cm")
-# ggsave(here::here("output/figs/qc/fragment_hist.png"),
-#        height = 15,
-#        width = 25,
-#        units = "cm")
+FragmentHistogram(dat,
+                  group.by = "sample_name")
+
+# Save plot
+ggsave(here::here(fig_dir, "fragment_hist.pdf"),
+       height = 15,
+       width = 25,
+       units = "cm")
+ggsave(here::here(fig_dir, "fragment_hist.png"),
+       height = 15,
+       width = 25,
+       units = "cm")
 
 # FRiP
 dat@meta.data |>
@@ -210,11 +214,11 @@ dat@meta.data |>
   cowplot::theme_cowplot() 
  
 # Save plot
-ggsave(here::here("output/figs/qc/frip_samples.pdf"),
+ggsave(here::here(fig_dir, "frip_samples.pdf"),
        height = 10,
        width = 20,
        units = "cm")
-ggsave(here::here("output/figs/qc/frip_samples.png"),
+ggsave(here::here(fig_dir, "frip_samples.png"),
        height = 10,
        width = 20,
        units = "cm")
@@ -244,11 +248,11 @@ dat@meta.data |>
   cowplot::theme_cowplot() 
 
 # Save plot
-ggsave(here::here("output/figs/qc/frit_samples.pdf"),
+ggsave(here::here(fig_dir, "frit_samples.pdf"),
        height = 10,
        width = 20,
        units = "cm")
-ggsave(here::here("output/figs/qc/frit_samples.png"),
+ggsave(here::here(fig_dir, "frit_samples.png"),
        height = 10,
        width = 20,
        units = "cm")
@@ -278,11 +282,11 @@ dat@meta.data |>
   cowplot::theme_cowplot() 
 
 # Save plot
-ggsave(here::here("output/figs/qc/cells_sample.pdf"),
+ggsave(here::here(fig_dir, "cells_sample.pdf"),
        height = 10,
        width = 20,
        units = "cm")
-ggsave(here::here("output/figs/qc/cells_sample.png"),
+ggsave(here::here(fig_dir, "cells_sample.png"),
        height = 10,
        width = 20,
        units = "cm")
@@ -313,11 +317,11 @@ dat@meta.data |>
   cowplot::theme_cowplot() 
 
 # Save plot
-ggsave(here::here("output/figs/qc/median_rna_sample.pdf"),
+ggsave(here::here(fig_dir, "median_rna_sample.pdf"),
        height = 10,
        width = 20,
        units = "cm")
-ggsave(here::here("output/figs/qc/median_rna_sample.png"),
+ggsave(here::here(fig_dir, "median_rna_sample.png"),
        height = 10,
        width = 20,
        units = "cm")
@@ -348,11 +352,109 @@ dat@meta.data |>
   cowplot::theme_cowplot() 
 
 # Save plot
-ggsave(here::here("output/figs/qc/median_atac_sample.pdf"),
+ggsave(here::here(fig_dir, "median_atac_sample.pdf"),
        height = 10,
        width = 20,
        units = "cm")
-ggsave(here::here("output/figs/qc/median_atac_sample.png"),
+ggsave(here::here(fig_dir, "median_atac_sample.png"),
        height = 10,
        width = 20,
+       units = "cm")
+       
+# QC metrics plotted on FeaturePlot --------------------------------------------
+       
+# nCount_RNA -----
+FeaturePlot(dat, 
+            "nCount_RNA", 
+            cols = c("grey95", "darkgreen"),
+            keep.scale = "feature") +
+  cowplot::theme_nothing() +
+  theme(title = element_blank(),
+        legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
+
+# Save plot
+ggsave(here::here(fig_dir, "features/nCount_RNA.png"),
+       height = 15,
+       width = 15,
+       units = "cm")
+
+# nCount_ATAC -----
+FeaturePlot(dat, 
+            "nCount_ATAC", 
+            cols = c("grey95", "darkgreen"),
+            keep.scale = "feature") +
+  cowplot::theme_nothing() +
+  theme(title = element_blank(),
+        legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
+
+# Save plot
+ggsave(here::here(fig_dir, "features/nCount_ATAC.png"),
+       height = 15,
+       width = 15,
+       units = "cm")
+
+# TSS.enrichment -----
+FeaturePlot(dat, 
+            "TSS.enrichment", 
+            cols = c("grey95", "darkgreen"),
+            keep.scale = "feature") +
+  cowplot::theme_nothing() +
+  theme(title = element_blank(),
+        legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
+
+# Save plot
+ggsave(here::here(fig_dir, "features/TSS.enrichment.png"),
+       height = 15,
+       width = 15,
+       units = "cm")
+
+# percent.mt -----
+FeaturePlot(dat, 
+            "percent.mt", 
+            cols = c("grey95", "darkgreen"),
+            keep.scale = "feature") +
+  cowplot::theme_nothing() +
+  theme(title = element_blank(),
+        legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
+
+# Save plot
+ggsave(here::here(fig_dir, "features/percent.mt.png"),
+       height = 15,
+       width = 15,
+       units = "cm")
+
+# FRiP -----
+FeaturePlot(dat, 
+            "FRiP", 
+            cols = c("grey95", "darkgreen"),
+            keep.scale = "feature") +
+  cowplot::theme_nothing() +
+  theme(title = element_blank(),
+        legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
+
+# Save plot
+ggsave(here::here(fig_dir, "features/FRiP.png"),
+       height = 15,
+       width = 15,
+       units = "cm")
+
+# FRiT -----
+FeaturePlot(dat, 
+            "FRiT", 
+            cols = c("grey95", "darkgreen"),
+            keep.scale = "feature") +
+  cowplot::theme_nothing() +
+  theme(title = element_blank(),
+        legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
+
+# Save plot
+ggsave(here::here(fig_dir, "features/FRiT.png"),
+       height = 15,
+       width = 15,
        units = "cm")
