@@ -43,5 +43,13 @@ markers |>
   group_by(cluster) |> 
   tally()
 
-# Save markers object
+# Save markers object and csv for additional manual annotation
 saveRDS(markers, here::here(out_dir, "cluster_markers.rds"))
+write_csv(markers, here::here(out_dir, "cluster_markers_all.csv"))
+write_csv(
+  markers |> 
+    mutate(cluster = as.numeric(cluster)) |> 
+    group_by(cluster) |>
+    slice_min(max_pval, n = 10),
+  here::here(out_dir, "cluster_markers_top_10.csv")
+)

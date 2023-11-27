@@ -42,9 +42,12 @@ degs <- list()
 
 # Loop through each cluster
 for (i in unique(dat$cell_type)) {
-  degs[[i]] <- FindMarkers(dat, 
-                      ident.1 = paste0(i, "_18°C"),
-                      ident.2 = paste0(i, "_25°C")) |>
+  degs[[i]] <- FindMarkers(
+    dat, 
+    ident.1 = paste0(i, "_18°C"),
+    ident.2 = paste0(i, "_25°C"),
+    logfc.threshold = 0,
+    min.pct = 0.02) |>
     rownames_to_column("gene")
 }
 
@@ -60,7 +63,7 @@ degs <- degs |>
   mutate(padj = p.adjust(p_val_adj, method = "BH"))
 
 # Save the degs cell types
-saveRDS(degs, here::here(out_dir, "degs_cell-type.rds"))
+saveRDS(degs, here::here(out_dir, "degs_cell-type_lfc_0_min.pct_0.02.rds"))
 
 # Total number of DEGs
 degs |>
@@ -69,10 +72,15 @@ degs |>
 
 # Number of DEGs per cell-type -----
 degs |>
+  group_by(cell_type) |> 
+  add_tally(name = "n_genes") |> 
   filter(padj < 0.05) |>
   group_by(cell_type) |>
-  tally() |> 
-  arrange(desc(n))
+  add_tally() |> 
+  mutate(prop_deg = n/n_genes) |> 
+  distinct(cell_type, .keep_all = TRUE) |> 
+  select(cell_type, n , n_genes, prop_deg) |> 
+  arrange(desc(prop_deg))
 
 # Pseudobulk analysis with DESeq2 ----------------------------------------------
 

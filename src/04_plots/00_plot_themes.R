@@ -7,8 +7,8 @@
 
 # Acclimation colors
 acc_colors <- c(
-  "#43aa8b", 
-  "#f3722c"
+  "#8698C0", 
+  "#D09F7B"
 )
 
 

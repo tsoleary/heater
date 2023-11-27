@@ -41,8 +41,7 @@ plot <- DimPlot(dat,
                "#F9DCEE",
                "#819FC5",
                "#A7BF9B",
-               "#F9FADC",
-               "grey80")
+               "#bfa3a4")
     )
 
 LabelClusters(plot = plot, 
@@ -69,17 +68,18 @@ ggsave(here::here(fig_dir, "umap_18_25_split.png"),
 # Quick bar plot counting the number of cells for cell type
 dat@meta.data |>
   mutate(cell_type = factor(cell_type,
-                            levels = c("unknown",
-                                       "amnioserosa",
-                                       "yolk nuclei",
+                            levels = c("amnioserosa",
                                        "tracheal prim.",
-                                       "ventral nerve cord prim.",
+                                       "foregut & hindgut prim.",
+                                       "germ cell",
                                        "endoderm prim.",
-                                       "foregut/hindgut prim.",
-                                       "peripheral nervous system prim.",
                                        "ectoderm prim.",
-                                       "mesoderm prim.",
-                                       "ubiquitous"))) |> 
+                                       "peripheral nervous system prim.",
+                                       "ventral nerve cord prim.",
+                                       "mesoderm prim."))) |>
+  mutate(acc_temp = factor(acc_temp,
+                            levels = c("18°C",
+                                       "25°C"))) |>
   ggplot(aes(y = cell_type,
              fill = acc_temp)) +
   geom_bar(position = "dodge",
@@ -105,17 +105,15 @@ ggsave(here::here(fig_dir, "cells_per_celltype.png"),
 # Quick bar plot counting the number of cells for cell type
 dat@meta.data |>
   mutate(cell_type = factor(cell_type,
-                            levels = c("unknown",
-                                       "amnioserosa",
-                                       "yolk nuclei",
+                            levels = c("amnioserosa",
                                        "tracheal prim.",
-                                       "ventral nerve cord prim.",
+                                       "foregut & hindgut prim.",
+                                       "germ cell",
                                        "endoderm prim.",
-                                       "foregut/hindgut prim.",
-                                       "peripheral nervous system prim.",
                                        "ectoderm prim.",
-                                       "mesoderm prim.",
-                                       "ubiquitous"))) |> 
+                                       "peripheral nervous system prim.",
+                                       "ventral nerve cord prim.",
+                                       "mesoderm prim."))) |>
   ggplot(aes(y = cell_type)) +
   geom_bar(fill = "grey80",
            color = "grey20") +
@@ -145,22 +143,20 @@ ggsave(here::here(fig_dir, "cells_per_celltype_combined.png"),
 ################################################################################
 dat@meta.data |>
   mutate(cell_type = factor(cell_type,
-                            levels = c("unknown",
-                                       "amnioserosa",
-                                       "yolk nuclei",
+                            levels = c("amnioserosa",
                                        "tracheal prim.",
-                                       "ventral nerve cord prim.",
+                                       "foregut & hindgut prim.",
+                                       "germ cell",
                                        "endoderm prim.",
-                                       "foregut/hindgut prim.",
-                                       "peripheral nervous system prim.",
                                        "ectoderm prim.",
-                                       "mesoderm prim.",
-                                       "ubiquitous"))) |> 
+                                       "peripheral nervous system prim.",
+                                       "ventral nerve cord prim.",
+                                       "mesoderm prim."))) |>
   group_by(cell_type,
            acc_temp) |> 
   tally() |> 
-  mutate(prop = ifelse(acc_temp == "18°C", n/6284,
-                       n/5756)) |> 
+  mutate(prop = ifelse(acc_temp == "18°C", n/5298,
+                       n/5092)) |> 
   ggplot(aes(x = prop,
              y = cell_type)) +
   geom_col(aes(fill = acc_temp),

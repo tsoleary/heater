@@ -118,24 +118,67 @@ ggsave(here::here(fig_dir, "pseudobulk_volcano.png"),
 degs |> 
   group_by(cell_type) |> 
   tally() |> 
-  mutate(cell_type = fct_reorder(cell_type, n, .fun = "identity")) |> 
+  full_join(color_cell_type) |> 
+  mutate(colors = colorspace::desaturate(colors, amount = 0.6)) |> 
+  mutate(cell_type = fct_reorder(cell_type, n, .fun = "identity")) |>
   ggplot() +
   geom_col(aes(x = n,
-               y = cell_type),
+               y = cell_type,
+               fill = colors),
            na.rm = TRUE,
            color = "grey20",
-           fill = "grey80") +
+           alpha = 0.5) +
   labs(y = "") +
   scale_x_continuous(position = "top",
                      name = "Number of differentially expressed genes",
                      expand = c(0, 0)) +
-  cowplot::theme_cowplot()
+  scale_fill_identity() +
+  cowplot::theme_minimal_vgrid()
 
 ggsave(here::here(fig_dir, "degs_count.pdf"),
        height = 15,
        width = 30,
        units = "cm")
 ggsave(here::here(fig_dir, "degs_count.png"),
+       height = 15,
+       width = 30,
+       units = "cm")
+
+n_genes <- readRDS(here::here(out_dir, "degs_cell-type_lfc_0_min.pct_0.02.rds")) |> 
+  group_by(cell_type) |> 
+  tally(name = "n_genes")
+
+readRDS(here::here("output/degs/degs_cell-type.rds")) |> 
+  filter(p_val_adj < 0.05) |> 
+  group_by(cell_type) |> 
+  tally(name = "n_degs") |> 
+  full_join(n_genes) |> 
+  mutate(proportion_degs = n_degs/n_genes) |> 
+  select(cell_type, proportion_degs) |> 
+  distinct(cell_type, .keep_all = TRUE) |> 
+  ungroup() |> 
+  full_join(color_cell_type) |> 
+  mutate(colors = colorspace::desaturate(colors, amount = 0.6)) |> 
+  mutate(cell_type = fct_reorder(cell_type, proportion_degs)) |>
+  ggplot() +
+  geom_col(aes(x = proportion_degs,
+               y = cell_type,
+               fill = colors),
+           na.rm = TRUE,
+           color = "grey20") +
+  labs(y = "") +
+  scale_x_continuous(position = "top",
+                     name = "Percent differentially expressed genes",
+                     labels = scales::percent_format(accuracy = 0.01),
+                     expand = c(0, 0)) +
+  scale_fill_identity() +
+  cowplot::theme_minimal_vgrid()
+
+ggsave(here::here(fig_dir, "degs_percent.pdf"),
+       height = 15,
+       width = 30,
+       units = "cm")
+ggsave(here::here(fig_dir, "degs_percent.png"),
        height = 15,
        width = 30,
        units = "cm")
@@ -291,4 +334,262 @@ ggsave(here::here(fig_dir, gene, "vln.png"),
        width = 20,
        units = "cm")
 
+################################################################################
+# CLEAN ########################################################################
+################################################################################
+
+degs <- readRDS(here::here("output/degs/degs_cell-type.rds"))
+
+color_cell_type <- tibble(
+  cell_type = c(
+    "germ cell", 
+    "peripheral nervous system prim.",
+    "ectoderm prim.",
+    "mesoderm prim.",
+    "endoderm prim.",
+    "foregut & hindgut prim.",
+    "ventral nerve cord prim.",
+    "tracheal prim.",
+    "amnioserosa"
+  ), 
+  colors = c(
+    "grey90", 
+    "#ADD9F4",
+    "#57A4B2",
+    "#D39C9E",
+    "#FEF29A",
+    "#F9DCEE",
+    "#819FC5",
+    "#A7BF9B",
+    "#bfa3a4"
+  )
+)
+
+degs |>  
+  group_by(cell_type) |> 
+  add_tally() |> 
+  summarise(n = mean(n),
+            avg_log2FC = mean(avg_log2FC_18_25)) |> 
+  full_join(color_cell_type) |> 
+  mutate(cell_type = fct_reorder(cell_type, avg_log2FC)) |> 
+  ggplot(aes(y = cell_type,
+             x = avg_log2FC)) +
+  geom_segment(aes(xend = 0, 
+                   yend = cell_type,
+                   color = colors),
+               linewidth = 1) +
+  geom_vline(xintercept = 0, color = "grey50") +
+  geom_point(aes(fill = colors, 
+                 size = n), 
+             color = "grey80",
+             shape = 21) +
+  scale_x_continuous(name = "log2(fold-change)",
+                     limits = c(-0.25, 0.25)) +
+  scale_color_identity() +
+  scale_fill_identity() +
+  scale_size_continuous(range = c(2, 10)) +
+  labs(y = element_blank()) +
+  cowplot::theme_minimal_vgrid() +
+  theme(panel.grid.major.y = element_line(color = "grey95"),
+        axis.ticks.y = element_blank(),
+        axis.line.y = element_blank())
+
+# Save
+ggsave(here::here(fig_dir, "exp_lollipop.png"),
+       height = 12,
+       width = 20,
+       units = "cm")
+
+degs |> 
+  filter(p_val_adj < 0.05) |> 
+  group_by(cell_type) |> 
+  add_tally() |> 
+  summarise(n = mean(n),
+            avg_log2FC = mean(avg_log2FC_18_25)) |> 
+  full_join(color_cell_type) |> 
+  mutate(cell_type = fct_reorder(cell_type, avg_log2FC)) |> 
+  ggplot(aes(y = cell_type,
+             x = avg_log2FC)) +
+  geom_segment(aes(xend = 0, 
+                   yend = cell_type,
+                   color = colors),
+               linewidth = 1) +
+  geom_vline(xintercept = 0, color = "grey50") +
+  geom_point(aes(fill = colors, 
+               size = n), 
+           color = "grey80",
+           shape = 21) +
+  scale_x_continuous(name = "log2(fold-change)",
+                     limits = c(-0.6, 0.6)) +
+  scale_color_identity() +
+  scale_fill_identity() +
+  scale_size_continuous(range = c(2, 10),
+                        breaks = c(1, 5, 10, 20)) +
+  labs(y = element_blank()) +
+  cowplot::theme_minimal_vgrid() +
+  theme(panel.grid.major.y = element_line(color = "grey95"),
+        axis.ticks.y = element_blank(),
+        axis.line.y = element_blank())
+
+# Save
+ggsave(here::here(fig_dir, "degs_lollipop_p_val_adj.png"),
+       height = 12,
+       width = 20,
+       units = "cm")
+
+degs |> 
+  filter(padj < 0.05) |> 
+  group_by(cell_type) |> 
+  add_tally() |> 
+  summarise(n = mean(n),
+            avg_log2FC = mean(avg_log2FC_18_25)) |> 
+  full_join(color_cell_type) |> 
+  mutate(cell_type = fct_reorder(cell_type, avg_log2FC)) |> 
+  ggplot(aes(y = cell_type,
+             x = avg_log2FC)) +
+  geom_segment(aes(xend = 0, 
+                   yend = cell_type,
+                   color = colors),
+               linewidth = 1) +
+  geom_vline(xintercept = 0, color = "grey50") +
+  geom_point(aes(fill = colors, 
+                 size = n), 
+             color = "grey80",
+             shape = 21) +
+  scale_x_continuous(name = "log2(fold-change)",
+                     limits = c(-0.75, 0.75)) +
+  scale_color_identity() +
+  scale_fill_identity() +
+  scale_size_continuous(range = c(2, 10)) +
+  labs(y = element_blank()) +
+  cowplot::theme_minimal_vgrid() +
+  theme(legend.position = "none",
+        panel.grid.major.y = element_line(color = "grey95"),
+        axis.ticks.y = element_blank(),
+        axis.line.y = element_blank())
+
+# Save
+ggsave(here::here(fig_dir, "degs_lollipop_padj.png"),
+       height = 12,
+       width = 20,
+       units = "cm")
+
+dars <- readRDS(here::here("output/dars/dars_cell-type.rds"))
+
+
+dars |> 
+  group_by(cell_type) |> 
+  add_tally() |> 
+  summarise(n = mean(n),
+            avg_log2FC = mean(avg_log2FC_18_25)) |> 
+  full_join(color_cell_type) |> 
+  filter(!is.na(n)) |> 
+  mutate(cell_type = fct_reorder(cell_type, avg_log2FC)) |> 
+  ggplot(aes(y = cell_type,
+             x = avg_log2FC)) +
+  geom_segment(aes(xend = 0, 
+                   yend = cell_type,
+                   color = colors),
+               linewidth = 1) +
+geom_point(aes(fill = colors, 
+               size = n), 
+           color = "grey80",
+           shape = 21) +
+  geom_vline(xintercept = 0, color = "grey50") +
+  scale_x_continuous(name = "log2(fold-change)",
+                     limits = c(-0.3, 0.3)) +
+  scale_color_identity() +
+  scale_fill_identity() +
+  scale_size_continuous(range = c(5, 10)) +
+  labs(y = element_blank()) +
+  cowplot::theme_minimal_vgrid() +
+  theme(legend.position = "none",
+        panel.grid.major.y = element_line(color = "grey95"),
+        axis.ticks.y = element_blank(),
+        axis.line.y = element_blank())
+
+# Save
+ggsave(here::here(fig_dir, "atac_lollipop.png"),
+       height = 12,
+       width = 20,
+       units = "cm")
+
+# atac
+dars |> 
+  filter(p_val_adj < 0.05) |> 
+  group_by(cell_type) |> 
+  add_tally() |> 
+  summarise(n = mean(n),
+            avg_log2FC = mean(avg_log2FC_18_25)) |> 
+  full_join(color_cell_type) |> 
+  filter(!is.na(n)) |> 
+  mutate(cell_type = fct_reorder(cell_type, avg_log2FC)) |> 
+  ggplot(aes(y = cell_type,
+             x = avg_log2FC)) +
+  geom_segment(aes(xend = 0, 
+                   yend = cell_type,
+                   color = colors),
+               linewidth = 1) +
+  geom_point(aes(fill = colors, 
+                 size = n), 
+             color = "grey80",
+             shape = 21) +
+  geom_vline(xintercept = 0, color = "grey50") +
+  scale_x_continuous(name = "log2(fold-change)",
+                     limits = c(-0.8, 0.8)) +
+  scale_color_identity() +
+  scale_fill_identity() +
+  scale_size_continuous(range = c(2, 10)) +
+  labs(y = element_blank()) +
+  cowplot::theme_minimal_vgrid() +
+  theme(legend.position = "none",
+        panel.grid.major.y = element_line(color = "grey95"),
+        axis.ticks.y = element_blank(),
+        axis.line.y = element_blank())
+
+# Save
+ggsave(here::here(fig_dir, "atac_lollipop_p_val_adj.png"),
+       height = 12,
+       width = 20,
+       units = "cm")
+
+
+# atac
+dars |> 
+  filter(padj < 0.05) |> 
+  group_by(cell_type) |> 
+  add_tally() |> 
+  summarise(n = mean(n),
+            avg_log2FC = mean(avg_log2FC_18_25)) |> 
+  full_join(color_cell_type) |> 
+  filter(!is.na(n)) |> 
+  mutate(cell_type = fct_reorder(cell_type, avg_log2FC)) |> 
+  ggplot(aes(y = cell_type,
+             x = avg_log2FC)) +
+  geom_segment(aes(xend = 0, 
+                   yend = cell_type,
+                   color = colors),
+               linewidth = 1) +
+  geom_point(aes(fill = colors, 
+                 size = n), 
+             color = "grey80",
+             shape = 21) +
+  geom_vline(xintercept = 0, color = "grey50") +
+  scale_x_continuous(name = "log2(fold-change)",
+                     limits = c(-1.25, 1.25)) +
+  scale_color_identity() +
+  scale_fill_identity() +
+  scale_size_continuous(range = c(2, 10)) +
+  labs(y = element_blank()) +
+  cowplot::theme_minimal_vgrid() +
+  theme(legend.position = "none",
+        panel.grid.major.y = element_line(color = "grey95"),
+        axis.ticks.y = element_blank(),
+        axis.line.y = element_blank())
+
+# Save
+ggsave(here::here(fig_dir, "atac_lollipop_padj.png"),
+       height = 12,
+       width = 20,
+       units = "cm")
 

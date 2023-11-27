@@ -21,7 +21,7 @@ dat <- readRDS(here::here("data/processed/seurat_object/10_dat_linked.rds"))
 degs <- readRDS(here::here("output/degs/degs_cell-type.rds")) |> 
   filter(p_val_adj < 0.05)
 dars <- readRDS(here::here("output/dars/dars_cell-type.rds")) |> 
-  filter(padj < 0.05) |> 
+  filter(p_val_adj < 0.05) |> 
   separate(region, 
            sep = "-", 
            into = c("chrom", "start", "end"),
@@ -48,7 +48,7 @@ gene_close <- valr::bed_closest(dars_df, genes_df) |>
 dars <- dars |> 
   left_join(gene_close, by = "region") |> 
   dplyr::select(cell_type, region, gene, dist, everything())
-
+    
 saveRDS(dars, here::here("output/dars/dars_cell-type_gene.rds"))
 
 dars_degs <- dars |> 
@@ -174,21 +174,27 @@ ggsave(here::here(fig_dir, "pseudobulk_volcano.png"),
 
   
 # Plot number of DARs per cell-type --------------------------------------------
-dars |> 
+readRDS(here::here("output/dars/dars_cell-type.rds")) |> 
+  filter(p_val_adj < 0.05) |> 
   group_by(cell_type) |> 
   tally() |> 
+  full_join(color_cell_type) |> 
+  filter(!is.na(n)) |> 
+  mutate(colors = colorspace::desaturate(colors, amount = 0.6)) |> 
   mutate(cluster = fct_reorder(cell_type, n, .fun = "identity")) |> 
   ggplot() +
   geom_col(aes(x = n,
-               y = cluster),
+               y = cluster,
+               fill = colors),
            na.rm = TRUE,
-           color = "grey20",
-           fill = "grey80") +
+           alpha = 0.5,
+           color = "grey20") +
   labs(y = "") +
   scale_x_continuous(position = "top",
                      name = "Number of differentially accessible regions",
                      expand = c(0, 0)) +
-  cowplot::theme_cowplot()
+  scale_fill_identity() +
+  cowplot::theme_minimal_vgrid()
 
 # Save plot
 ggsave(here::here(fig_dir, "dars_celltype.pdf"),
@@ -196,6 +202,42 @@ ggsave(here::here(fig_dir, "dars_celltype.pdf"),
        width = 20,
        units = "cm")
 ggsave(here::here(fig_dir, "dars_celltype.png"),
+       height = 10,
+       width = 20,
+       units = "cm")
+
+# Plot percentage of of DARs per cell-type -------------------------------------
+readRDS(here::here("output/dars/dars_cell-type.rds")) |> 
+  group_by(cell_type) |> 
+  add_tally(name = "n_peaks") |> 
+  filter(p_val_adj < 0.05) |> 
+  group_by(cell_type) |> 
+  add_tally(name = "n_dars") |> 
+  mutate(proportion_dars = n_dars/n_peaks) |> 
+  select(cell_type, proportion_dars) |> 
+  distinct(cell_type, .keep_all = TRUE) |> 
+  ungroup() |> 
+  mutate(cell_type = fct_reorder(cell_type, proportion_dars)) |>
+  ggplot() +
+  geom_col(aes(x = proportion_dars,
+               y = cell_type),
+           na.rm = TRUE,
+           color = "grey20",
+           fill = "grey80") +
+  labs(y = "") +
+  scale_x_continuous(position = "top",
+                     name = "Percentage of differentially accessible regions",
+                     labels = scales::percent_format(accuracy = 1),
+                     expand = c(0, 0), 
+                     limits = c(0, 0.09)) +
+  cowplot::theme_minimal_vgrid()
+
+# Save plot
+ggsave(here::here(fig_dir, "dars_celltype_percent.pdf"),
+       height = 10,
+       width = 20,
+       units = "cm")
+ggsave(here::here(fig_dir, "dars_celltype_percent.png"),
        height = 10,
        width = 20,
        units = "cm")
