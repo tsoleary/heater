@@ -1,0 +1,288 @@
+﻿time window (modeled),cluster #,top annotaion (automated pipeline),p-value,top annotaion (automated pipeline stg7-8),p-value,selected annotation (manual),germ layer (of selected annotation),other possible annotation?,comments,HEX code
+0-2,0,unknown,,,,maternal,maternal,,,#B2B7B0
+0-2,1,maternal,3.70E-90,,,maternal,maternal,,,#B2B7B0
+0-2,2,maternal,2.98E-05,,,maternal,maternal,,,#B2B7B0
+0-2,3,maternal,8.43E-97,,,maternal,maternal,,,#B2B7B0
+0-2,4,maternal,1.89E-50,,,maternal,maternal,,,#B2B7B0
+0-2,5,maternal,5.57E-20,,,maternal,maternal,,,#B2B7B0
+0-2,6,maternal,5.77E-21,,,maternal,maternal,,,#B2B7B0
+0-2,7,maternal,9.02E-41,,,maternal,maternal,,,#B2B7B0
+0-2,8,maternal,1.58E-73,,,maternal,maternal,,,#B2B7B0
+0-2,9,maternal,0.131104532,,,maternal,maternal,,,#B2B7B0
+0-2,10,maternal,3.94E-63,,,maternal,maternal,,,#B2B7B0
+0-2,11,maternal,4.06E-114,,,maternal,maternal,,,#B2B7B0
+0-2,12,maternal,3.93E-22,,,maternal,maternal,,,#B2B7B0
+0-2,13,maternal,4.58E-22,,,maternal,maternal,,,#B2B7B0
+0-2,14,maternal,5.52E-117,,,maternal,maternal,,,#B2B7B0
+0-2,15,maternal,0.000531169,,,maternal,maternal,,,#B2B7B0
+2-4,0,anlage in statu nascendi,5.66E-94,ventral ectoderm primordium P2,6.36E-55,ectoderm anlage in statu nascendi,ectoderm,,,#E9DFAB
+2-4,1,ubiquitous,1.67E-23,ubiquitous,1.39E-22,cellular blastoderm / pole cell,blastoderm / pole,,,#656565
+2-4,2,ubiquitous,4.25E-14,ubiquitous,8.03E-15,ubiquitous,unknown,,,#C8CCC7
+2-4,3,pole cell,4.84E-30,pole cell,8.55E-35,cellular blastoderm / pole cell,blastoderm / pole,,,#656565
+2-4,4,pole cell,3.01E-30,pole cell,2.30E-41,cellular blastoderm / pole cell,blastoderm / pole,,,#656565
+2-4,5,ubiquitous,8.92E-106,ubiquitous,1.34E-105,cellular blastoderm / pole cell,blastoderm / pole,,,#656565
+2-4,6,ubiquitous,2.74E-18,ubiquitous,1.87E-12,ubiquitous,unknown,,,#C8CCC7
+2-4,7,anlage in statu nascendi,1.77E-145,procephalic ectoderm anlage,3.21E-84,anlage in statu nascendi,,,,#B7B88B
+2-4,8,ubiquitous,3.84E-12,ubiquitous,1.66E-11,ubiquitous,unknown,,,#C8CCC7
+2-4,9,ubiquitous,7.07E-56,ubiquitous,1.65E-69,ubiquitous,unknown,,,#C8CCC7
+2-4,10,ubiquitous,2.86E-72,ubiquitous,3.10E-81,ubiquitous,unknown,,,#C8CCC7
+2-4,11,ubiquitous,4.60E-65,ubiquitous,3.43E-67,ubiquitous,unknown,,,#C8CCC7
+2-4,12,ubiquitous,1.87E-18,ubiquitous,5.45E-20,ubiquitous,unknown,,,#C8CCC7
+2-4,13,anlage in statu nascendi,4.81E-71,ventral ectoderm primordium P2,7.14E-43,anlage in statu nascendi,,,,#B7B88B
+2-4,14,ubiquitous,3.77E-120,ubiquitous,1.32E-145,ubiquitous,unknown,,,#C8CCC7
+2-4,15,anlage in statu nascendi,4.33E-61,procephalic ectoderm anlage,6.16E-53,ectoderm anlage,ectoderm,,,#F8E68A
+2-4,16,anlage in statu nascendi,4.61E-55,yolk nuclei,8.75E-36,yolk nuclei,extra-embryonic,,,#6E6363
+4-6,0,ventral ectoderm primordium,1.91E-59,,,ectoderm primordium,ectoderm,,,#F9F0C3
+4-6,1,ubiquitous,5.49E-240,,,ubiquitous,unknown,,,#C8CCC7
+4-6,2,ubiquitous,9.22E-106,,,ubiquitous,unknown,,,#C8CCC7
+4-6,3,ubiquitous,3.94E-14,,,ubiquitous,unknown,,,#C8CCC7
+4-6,4,ubiquitous,4.08E-29,,,ubiquitous,unknown,,,#C8CCC7
+4-6,5,ubiquitous,1.70E-92,,,ubiquitous,unknown,,,#C8CCC7
+4-6,6,procephalic ectoderm primordium,1.79E-09,,,ectoderm primordium,ectoderm,,,#F9F0C3
+4-6,7,ubiquitous,3.01E-27,,,ubiquitous,unknown,,,#C8CCC7
+4-6,8,ventral ectoderm primordium,4.49E-24,,,mesoderm primordium,mesoderm,ectoderm primordium,,#D0646A
+4-6,9,ubiquitous,9.68E-12,,,ubiquitous,unknown,,,#C8CCC7
+4-6,10,ubiquitous,6.40E-221,,,ubiquitous,unknown,,,#C8CCC7
+4-6,11,ventral ectoderm primordium,1.63E-29,,,ectoderm primordium,ectoderm,,,#F9F0C3
+4-6,12,procephalic ectoderm primordium,1.70E-28,,,peripheral nervous system primordium,neuroectoderm,ectoderm primordium,,#91CBC7
+4-6,13,ubiquitous,3.03E-28,,,ubiquitous,unknown,,,#C8CCC7
+4-6,14,ubiquitous,7.11E-73,,,ubiquitous,unknown,,,#C8CCC7
+4-6,15,dorsal ectoderm primordium,2.32E-39,,,ectoderm primordium,ectoderm,,,#F9F0C3
+4-6,16,ubiquitous,1.27E-232,,,ubiquitous,unknown,,,#C8CCC7
+4-6,17,ventral ectoderm primordium,4.69E-31,,,ectoderm primordium,ectoderm,,,#F9F0C3
+4-6,18,ubiquitous,1.60E-18,,,ubiquitous,unknown,,,#C8CCC7
+4-6,19,ubiquitous,1.56E-49,,,germ cell,germ cell,,,#AE9797
+4-6,20,yolk nuclei,2.02E-62,,,yolk nuclei,extra-embryonic,,,#6E6363
+4-6,21,anterior endoderm primordium,8.98E-36,,,endoderm primordium,endoderm,,,#8DBE8B
+4-6,22,ubiquitous,2.84E-18,,,ubiquitous,unknown,,,#C8CCC7
+4-6,23,ubiquitous,6.49E-33,,,ubiquitous,unknown,,,#C8CCC7
+4-6,24,ubiquitous,2.84E-32,,,ubiquitous,unknown,,,#C8CCC7
+4-6,25,ubiquitous,6.34E-30,,,ubiquitous,unknown,,,#C8CCC7
+4-6,26,ubiquitous,2.34E-07,,,ubiquitous,unknown,,,#C8CCC7
+4-6,27,ventral nerve cord primordium P3,3.81E-25,,,ventral nerve cord primordium,neuroectoderm,,,#65A19D
+4-6,28,amnioserosa,7.60E-49,,,amnioserosa,extra-embryonic,,,#9B7171
+4-6,29,no staining,2.04E-11,,,tracheal primordium,ectoderm,,,#D5BC85
+4-6,30,dorsal ectoderm primordium,8.49E-19,,,foregut / hindgut primordium,ectoderm,,,#D1E188
+4-6,31,yolk nuclei,2.31E-30,,,yolk nuclei,extra-embryonic,,,#6E6363
+6-8,0,ubiquitous,4.44E-147,,,germ cell,germ cell,,,#AE9797
+6-8,1,dorsal epidermis primordium,4.01E-55,,,epidermis primordium,ectoderm,brain primordium,could be mixed epidermis and brain cells,#F7D286
+6-8,2,ubiquitous,7.63E-49,,,brain primordium,neuroectoderm,,,#6B8FBA
+6-8,3,ubiquitous,4.00E-190,,,brain primordium,neuroectoderm,,,#6B8FBA
+6-8,4,ubiquitous,1.22E-11,,,ubiquitous,unknown,,,#C8CCC7
+6-8,5,trunk mesoderm primordium,5.41E-11,,,trunk mesoderm primordium,mesoderm,,,#D0646A
+6-8,6,dorsal epidermis primordium,1.34E-44,,,epidermis primordium,ectoderm,,,#F7D286
+6-8,7,yolk nuclei,1.01E-116,,,yolk nuclei,extra-embryonic,,,#6E6363
+6-8,8,ubiquitous,3.59E-64,,,brain primordium,neuroectoderm,,,#6B8FBA
+6-8,9,brain primordium,1.29E-55,,,brain primordium,neuroectoderm,,,#6B8FBA
+6-8,10,dorsal epidermis primordium,1.01E-47,,,sensory nervous system primordium,neuroectoderm,,,#97DCD7
+6-8,11,visceral muscle primordium,9.88E-16,,,visceral muscle primordium,mesoderm,,,#DD3C47
+6-8,12,anterior midgut primordium,3.65E-38,,,midgut primordium,endoderm,,,#66A17C
+6-8,13,ubiquitous,5.88E-45,,,germ cell,germ cell,,,#AE9797
+6-8,14,amnioserosa,1.96E-76,,,amnioserosa,extra-embryonic,,,#9B7171
+6-8,15,dorsal epidermis primordium,1.05E-14,,,epidermis primordium,ectoderm,,,#F7D286
+6-8,16,ventral epidermis primordium,6.48E-42,,,epidermis primordium,ectoderm,,,#F7D286
+6-8,17,ventral epidermis primordium,2.27E-33,,,brain primordium,neuroectoderm,,,#65A19D
+6-8,18,ubiquitous,7.77E-104,,,ubiquitous,unknown,,probably mixed cluster,#C8CCC7
+6-8,19,dorsal epidermis primordium,3.56E-27,,,foregut / hindgut primordium,ectoderm,,,#D1E188
+6-8,20,tracheal primordium,8.63E-15,,,tracheal primordium,ectoderm,,,#D5BC85
+6-8,21,dorsal epidermis primordium,2.55E-26,,,salivary gland primordium,ectoderm,,,#E7C06B
+6-8,22,anterior midgut primordium,4.88E-63,,,trunk mesoderm primordium,mesoderm,,lots of the genes have no staining in BFGP at this stage - could it be of a later time window?,#D0646A
+6-8,23,posterior midgut primordium,1.99E-18,,,unknown,unknown,,lots of the genes have no staining in BFGP at this stage - could it be of a later time window?,#C8CCC7
+6-8,24,midline primordium,2.72E-21,,,midline primordium,neuroectoderm,,,#A8CAE0
+6-8,25,no staining,3.08E-26,,,unknown,unknown,,lots of the genes have no staining in BFGP at this stage - could it be of a later time window?,#C8CCC7
+6-8,26,yolk nuclei,3.65E-35,,,unknown,unknown,,"the genes are of fat body or plasmatocytes, but they are supposed to be expressed at later stages - couldit be contaminants from later windows?",#C8CCC7
+6-8,27,posterior midgut primordium,1.51E-40,,,Malpighian tubule,ectoderm,,"the genes are of Malpighian tubules, but they are supposed to be expressed at later stages - couldit be contaminants from later windows?",#F6D699
+8-10,0,ubiquitous,1.81E-202,,,germ cell,,midgut primordium,,#AE9797
+8-10,1,dorsal epidermis primordium,8.05E-22,,,epidermis primordium,ectoderm,,,#F7D286
+8-10,2,yolk nuclei,4.20E-146,,,yolk nuclei,extra-embryonic,,,#6E6363
+8-10,3,brain primordium,3.75E-36,,,brain primordium,neuroectoderm,ventral nerve cord primordium,,#6B8FBA
+8-10,4,ubiquitous,1.47E-46,,,brain primordium,neuroectoderm,,,#6B8FBA
+8-10,5,somatic muscle primordium,1.85E-14,,,somatic muscle primordium,mesoderm,,,#C05259
+8-10,6,amnioserosa,4.59E-76,,,amnioserosa,extra-embryonic,,,#9B7171
+8-10,7,visceral muscle primordium,5.59E-26,,,visceral muscle primordium,mesoderm,midline primordium,probably mixed cluster with some muscle and some midline cells,#DD3C47
+8-10,8,dorsal epidermis primordium,3.87E-39,,,peripheral nervous system,neuroectoderm,epidermis primordium,,#65A19D
+8-10,9,ubiquitous,2.31E-121,,,ubiquitous,unknown,,,#C8CCC7
+8-10,10,ubiquitous,1.05E-21,,,germ cell,,midgut primordium,,#AE9797
+8-10,11,dorsal epidermis primordium,4.35E-16,,,epidermis primordium,ectoderm,,,#F7D286
+8-10,12,ventral epidermis primordium,1.49E-36,,,hindgut primordium,ectoderm,,might be a bit mixed with mesodermal cells,#BAC57F
+8-10,13,ubiquitous,3.83E-241,,,ubiquitous,unknown,,,#C8CCC7
+8-10,14,dorsal epidermis primordium,3.05E-33,,,epidermis primordium,ectoderm,,,#F7D286
+8-10,15,ubiquitous,5.11E-42,,,epidermis primordium,ectoderm,tracheal system,,#F7D286
+8-10,16,brain primordium,1.54E-44,,,brain primordium,neuroectoderm,,,#6B8FBA
+8-10,17,NA,,,,unknown,unknown,,,#C8CCC7
+8-10,18,dorsal epidermis primordium,4.13E-44,,,peripheral nervous system,neuroectoderm,,,#65A19D
+8-10,19,ventral epidermis primordium,5.10E-44,,,brain primordium,neuroectoderm,epidermis primordium,,#6B8FBA
+8-10,20,anterior midgut primordium,1.95E-41,,,midgut primordium,endoderm,,,#66A17C
+8-10,21,ubiquitous,1.18E-59,,,ubiquitous,unknown,brain primordium,,#C8CCC7
+8-10,22,brain primordium,6.16E-12,,,procrystal cell,mesoderm,brain primordium,"I think the separation of clusters is not perfect here, and there are crystal cells that are part of cluster 22, 23 and 28",#743A44
+8-10,23,plasmatocytes anlage,7.82E-41,,,plasmatocytes anlage,mesoderm,,,#80154E
+8-10,24,ubiquitous,5.22E-16,,,ubiquitous,unknown,,,#C8CCC7
+8-10,25,tracheal primordium,6.27E-55,,,tracheal primordium,ectoderm,,,#D5BC85
+8-10,26,brain primordium,8.93E-42,,,brain primordium,neuroectoderm,ventral nervous cord,,#6B8FBA
+8-10,27,visceral muscle primordium,4.35E-14,,,visceral muscle primordium,mesoderm,,,#DD3C47
+8-10,28,ubiquitous,2.82E-148,,,ubiquitous,unknown,,probably mixed cluster with some mesoderm some ectoderm,#C8CCC7
+8-10,29,yolk nuclei,8.06E-122,,,yolk nuclei,extra-embryonic,,,#6E6363
+8-10,30,salivary gland body primordium,7.89E-59,,,salivary gland body primordium,ectoderm,,,#DDC28E
+8-10,31,midline primordium,2.98E-34,,,midline primordium,neuroectoderm,,,#A8CAE0
+8-10,32,brain primordium,2.36E-18,,,brain primordium,neuroectoderm,,,#6B8FBA
+8-10,33,anterior midgut primordium,3.93E-20,,,unknown,unknown,,cells might be from a later time window,#C8CCC7
+8-10,34,posterior midgut primordium,4.59E-14,,,unknown,unknown,,cells might be from a later time window,#C8CCC7
+8-10,35,anterior midgut primordium,8.22E-37,,,muscle,mesoderm,,cells might be from a later time window,#BC1F2A
+10-12,0,ubiquitous,4.21E-124,,,germ cell,,ubiquitous,,#AE9797
+10-12,1,ubiquitous,6.49E-29,,,brain,neuroectoderm,,,#4A78AF
+10-12,2,dorsal epidermis,1.52E-23,,,epidermis ,ectoderm,,,#F8D739
+10-12,3,dorsal epidermis,7.87E-68,,,epidermis ,ectoderm,foregut / hindgut,,#F8D739
+10-12,4,brain,3.88E-58,,,brain ,neuroectoderm,,,#4A78AF
+10-12,5,brain,2.41E-29,,,brain ,neuroectoderm,ventral nerve cord,probably mixed cluster with some neuronal and some muscle cells,#4A78AF
+10-12,6,midgut,1.25E-48,,,midgut,endoderm,,,#4B7258
+10-12,7,yolk nuclei,2.96E-135,,,yolk nuclei,extra-embryonic,,,#6E6363
+10-12,8,dorsal epidermis,7.31E-143,,,epidermis,ectoderm,,,#F8D739
+10-12,9,amnioserosa,8.12E-49,,,amnioserosa,extra-embryonic,,,#9B7171
+10-12,10,brain,1.75E-60,,,brain,neuroectoderm,ventral nerve cord,,#4A78AF
+10-12,11,somatic muscle,7.42E-29,,,somatic muscle,mesoderm,,,#9F3D55
+10-12,12,dorsal epidermis,3.52E-73,,,tracheal system,ectoderm,,,#CCB279
+10-12,13,salivary gland,2.79E-82,,,salivary gland,ectoderm,,,#D5AD5B
+10-12,14,yolk nuclei,1.60E-126,,,yolk nuclei,extra-embryonic,,,#6E6363
+10-12,15,plasmatocytes,1.28E-50,,,plasmatocytes,mesoderm,,,#80154E
+10-12,16,brain,3.58E-21,,,sensory nervous system primordium,neuroectoderm,,,#66AAA6
+10-12,17,ubiquitous,1.44E-180,,,muscle,mesoderm,hindgut,,#BC1F2A
+10-12,18,ubiquitous,3.90E-217,,,brain,neuroectoderm,,,#4A78AF
+10-12,19,ubiquitous,1.10E-59,,,brain,neuroectoderm,,,#4A78AF
+10-12,20,somatic muscle,1.69E-33,,,somatic muscle,mesoderm,,,#9F3D55
+10-12,21,optic lobe,1.88E-12,,,epidermis,ectoderm,,,#F8D739
+10-12,22,hindgut,1.46E-33,,,hindgut / anal pad,ectoderm,,,#A4AC79
+10-12,23,muscle,2.18E-12,,,muscle,mesoderm,brain,,#BC1F2A
+10-12,24,ventral midline,2.76E-30,,,glia,neuroectoderm,,,#7DA3BA
+10-12,25,fat body,2.33E-84,,,fat body,mesoderm,,,#671A29
+10-12,26,dorsal epidermis,2.37E-80,,,hindgut / anal pad,ectoderm,,,#A4AC79
+10-12,27,dorsal epidermis,1.28E-93,,,tracheal system,ectoderm,,,#CCB279
+10-12,28,crystal cell,1.34E-15,,,crystal cell,mesoderm,,,#722C3A
+10-12,29,dorsal epidermis,2.31E-54,,,salivary gland,ectoderm,,,#D5AD5B
+10-12,30,muscle,1.23E-135,,,muscle,mesoderm,,,#BC1F2A
+12-14,0,brain,5.24E-110,,,brain,neuroectoderm,,,#4A78AF
+12-14,1,somatic muscle,3.74E-53,,,somatic muscle,mesoderm,,,#9F3D55
+12-14,2,brain,2.41E-92,,,ventral nerve cord ,neuroectoderm,,"the annotation looks fine, but according to Sanky the cluster originates from muscle",#8DB4CA
+12-14,3,dorsal epidermis,9.38E-127,,,epidermis,ectoderm,,,#F8D739
+12-14,4,ubiquitous,1.13E-99,,,germ cell,,midgut,could be of an earlier time window?,#AE9797
+12-14,5,yolk nuclei,2.20E-125,,,yolk nuclei,extra-embryonic,,,#6E6363
+12-14,6,fat body,5.92E-74,,,fat body,mesoderm,,,#671A29
+12-14,7,dorsal epidermis,1.83E-22,,,epidermis,ectoderm,brain,this cluster may contain smaller subclusters,#F8D739
+12-14,8,midgut,1.58E-61,,,midgut,endoderm,,,#4B7258
+12-14,9,ubiquitous,5.83E-53,,,brain,neuroectoderm,,,#4A78AF
+12-14,10,hindgut,2.50E-75,,,hindgut / anal pad,ectoderm,,,#A4AC79
+12-14,11,midgut,8.63E-57,,,midgut,endoderm,,,#4B7258
+12-14,12,ubiquitous,7.72E-82,,,muscle,mesoderm,,,#BC1F2A
+12-14,13,yolk nuclei,7.73E-105,,,yolk nuclei,extra-embryonic,amnioserosa,,#6E6363
+12-14,14,dorsal epidermis,5.06E-87,,,tracheal system,ectoderm,,,#CCB279
+12-14,15,dorsal epidermis,1.91E-142,,,epidermis,ectoderm,,,#F8D739
+12-14,16,dorsal epidermis,4.72E-91,,,tracheal system,ectoderm,,,#CCB279
+12-14,17,proventriculus,5.08E-41,,,proventriculus,ectoderm,,,#E4EDB8
+12-14,18,salivary gland,3.55E-77,,,salivary gland,ectoderm,,,#D5AD5B
+12-14,19,plasmatocytes,5.21E-55,,,plasmatocytes,mesoderm,,,#80154E
+12-14,20,dorsal epidermis,6.36E-153,,,epidermis,ectoderm,,,#F8D739
+12-14,21,dorsal epidermis,1.79E-114,,,epidermis,ectoderm,,,#F8D739
+12-14,22,somatic muscle,6.15E-33,,,somatic muscle,mesoderm,visceral muscle,,#9F3D55
+12-14,23,dorsal epidermis,4.96E-93,,,foregut / hindgut / anal pad,ectoderm,,,#DFF098
+12-14,24,amnioserosa,1.11E-35,,,amnioserosa,extra-embryonic,,,#9B7171
+12-14,25,brain,3.13E-60,,,sensory nervous system,neuroectoderm,midline neuron,,#66AAA6
+12-14,26,ventral epidermis,2.16E-19,,,sensory nervous system,neuroectoderm,,,#66AAA6
+12-14,27,brain,3.77E-73,,,brain,neuroectoderm,,,#4A78AF
+12-14,28,ventral nerve cord,7.99E-29,,,ventral nerve cord,neuroectoderm,,"yes - annotation seems fine, but in the Sanky it comes from muscle cluster",#8DB4CA
+12-14,29,visceral muscle,3.60E-25,,,visceral muscle,mesoderm,dorsal vessel,,#BB2F39
+12-14,30,dorsal epidermis,4.30E-86,,,spiracles (tracheal system),ectoderm,,,#BCA676
+12-14,31,Malpighian tubule,2.94E-27,,,Malpighian tubule,ectoderm,,,#F6D699
+12-14,32,dorsal epidermis,3.47E-50,,,epidermis,ectoderm,,,#F8D739
+12-14,33,ventral midline,4.05E-31,,,glia,neuroectoderm,,,#7DA3BA
+12-14,34,ubiquitous,5.07E-153,,,brain,neuroectoderm,,,#4A78AF
+12-14,35,dorsal epidermis,5.61E-92,,,epidermis,ectoderm,,,#F8D739
+12-14,36,midgut,7.74E-93,,,tracheal system,ectoderm,,,#CCB279
+14-16,0,dorsal epidermis,2.79E-50,,,epidermis,ectoderm,,,#F8D739
+14-16,1,brain,8.55E-86,,,ventral nerve cord,neuroectoderm,,,#8DB4CA
+14-16,2,dorsal epidermis,8.52E-122,,,epidermis,ectoderm,,,#F8D739
+14-16,3,ubiquitous,2.57E-57,,,ubiquitous,unknown,probably mixed with some muscle / crystal cells,probably some crystal cells as well,#C8CCC7
+14-16,4,ubiquitous,1.32E-32,,,ubiquitous,unknown,,,#C8CCC7
+14-16,5,ventral epidermis,1.51E-132,,,epidermis,ectoderm,,,#F8D739
+14-16,6,plasmatocytes,8.96E-51,,,plasmatocytes,mesoderm,,,#80154E
+14-16,7,somatic muscle,3.55E-61,,,somatic muscle,mesoderm,,,#9F3D55
+14-16,8,midgut,4.13E-57,,,midgut,endoderm,,,#4B7258
+14-16,9,ubiquitous,4.82E-126,,,brain,neuroectoderm,,,#4A78AF
+14-16,10,fat body,6.23E-66,,,fat body,mesoderm,,,#671A29
+14-16,11,dorsal epidermis,6.16E-93,,,tracheal system,ectoderm,,,#CCB279
+14-16,12,ventral epidermis,6.32E-131,,,epidermis,ectoderm,,,#F8D739
+14-16,13,yolk nuclei,1.15E-99,,,yolk nuclei,extra-embryonic,,,#6E6363
+14-16,14,ventral epidermis,1.55E-104,,,foregut / hindgut / anal pad,ectoderm,,,#DFF098
+14-16,15,yolk nuclei,3.52E-108,,,yolk nuclei,extra-embryonic,,,#6E6363
+14-16,16,ventral nerve cord,4.63E-69,,,ventral nerve cord,neuroectoderm,sensory nervous system,yes,#8DB4CA
+14-16,17,brain,1.47E-58,,,brain,neuroectoderm,ventral nerve cord,,#4A78AF
+14-16,18,somatic muscle,4.82E-45,,,somatic muscle,mesoderm,,,#9F3D55
+14-16,19,somatic muscle,4.17E-40,,,somatic muscle,mesoderm,,,#9F3D55
+14-16,20,ubiquitous,4.48E-81,,,ubiquitous,unknown,,,#C8CCC7
+14-16,21,brain,1.39E-89,,,sensory nervous system,neuroectoderm,brain,,#66AAA6
+14-16,22,salivary gland,2.35E-57,,,salivary gland,ectoderm,,,#D5AD5B
+14-16,23,ventral epidermis,9.70E-104,,,spiracle (tracheal system),ectoderm,epidermis,,#BCA676
+14-16,24,proventriculus,3.47E-40,,,proventriculus,ectoderm,midgut,this cluster probably contains subclusters,#E4EDB8
+14-16,25,amnioserosa,4.68E-39,,,amnioserosa,extra-embryonic,,,#9B7171
+14-16,26,brain,4.99E-51,,,brain,neuroectoderm,,,#4A78AF
+14-16,27,brain,1.32E-22,,,brain,neuroectoderm,,,#4A78AF
+14-16,28,dorsal epidermis,3.12E-54,,,epidermis,ectoderm,,,#F8D739
+14-16,29,foregut,1.44E-14,,,sensory nervous system,neuroectoderm,,,#66AAA6
+14-16,30,midgut,1.03E-28,,,midgut,endoderm,,,#4B7258
+14-16,31,ubiquitous,2.15E-205,,,brain,neuroectoderm,,,#4A78AF
+14-16,32,tracheal system,1.79E-60,,,tracheal system,ectoderm,,,#CCB279
+14-16,33,muscle,2.75E-164,,,muscle,mesoderm,,,#BC1F2A
+14-16,34,brain,1.48E-51,,,brain,neuroectoderm,,,#4A78AF
+14-16,35,ventral epidermis,1.15E-36,,,foregut / hindgut / anal pad,ectoderm,,,#DFF098
+16-18,0,brain,1.88E-55,,,brain,neuroectoderm,,,#4A78AF
+16-18,1,somatic muscle,4.05E-57,,,somatic muscle,mesoderm,,,#9F3D55
+16-18,2,ubiquitous,3.85E-08,,,ubiquitous,unknown,,,#C8CCC7
+16-18,3,ventral epidermis,6.91E-20,,,foregut / hindgut / anal pad,ectoderm,,,#DFF098
+16-18,4,ventral epidermis,4.06E-13,,,ubiquitous,unknown,,,#C8CCC7
+16-18,5,dorsal epidermis,4.19E-90,,,epidermis,ectoderm,,,#F8D739
+16-18,6,brain,2.45E-67,,,brain,neuroectoderm,ventral nerve cord,,#4A78AF
+16-18,7,ventral epidermis,2.40E-59,,,epidermis,ectoderm,,,#F8D739
+16-18,8,head epidermis,2.23E-05,,,epidermis,ectoderm,,,#F8D739
+16-18,9,dorsal epidermis,1.01E-07,,,muscle,mesoderm,,,#BC1F2A
+16-18,10,ubiquitous,1.13E-16,,,brain,neuroectoderm,,,#4A78AF
+16-18,11,dorsal epidermis,3.97E-26,,,epidermis,ectoderm,ubiquitous,,#F8D739
+16-18,12,foregut,1.20E-08,,,epidermis,ectoderm,ubiquitous,,#F8D739
+16-18,13,ubiquitous,1.64E-05,,,ubiquitous,unknown,,,#C8CCC7
+16-18,14,midgut,2.03E-26,,,midgut,endoderm,,,#4B7258
+16-18,15,tracheal system,2.16E-57,,,tracheal system,ectoderm,,,#CCB279
+16-18,16,salivary gland,1.23E-14,,,midgut,endoderm,,,#4B7258
+16-18,17,ubiquitous,9.79E-07,,,ubiquitous,unknown,,,#C8CCC7
+16-18,18,ubiquitous,2.46E-05,,,ubiquitous,unknown,muscle,,#C8CCC7
+16-18,19,somatic muscle,8.32E-21,,,somatic muscle,mesoderm,,,#9F3D55
+16-18,20,plasmatocytes,3.14E-39,,,plasmatocytes,mesoderm,,,#80154E
+16-18,21,hypopharynx,2.12E-11,,,foregut / hindgut / anal pad,ectoderm,,,#DFF098
+16-18,22,ubiquitous,1.19E-55,,,ubiquitous,unknown,,,#C8CCC7
+16-18,23,fat body,3.13E-57,,,fat body,mesoderm,,,#671A29
+16-18,24,head epidermis,4.39E-17,,,epidermis,ectoderm,,,#F8D739
+16-18,25,yolk nuclei,3.37E-100,,,yolk nuclei,extra-embryonic,,,#6E6363
+16-18,26,yolk nuclei,5.44E-95,,,yolk nuclei,extra-embryonic,,,#6E6363
+16-18,27,ventral nerve cord,1.70E-54,,,sensory nervous system,neuroectoderm,brain,,#66AAA6
+16-18,28,oenocyte,0.000159335,,,ubiquitous,unknown,oenocytes,,#C8CCC7
+16-18,29,brain,2.23E-56,,,brain,neuroectoderm,,,#4A78AF
+16-18,30,head epidermis,5.66E-11,,,epidermis,ectoderm,,,#F8D739
+16-18,31,brain,5.97E-14,,,ubiquitous,unknown,brain,,#C8CCC7
+16-18,32,head epidermis,2.23E-15,,,epidermis,ectoderm,,,#F8D739
+16-18,33,Malpighian tubule,1.38E-51,,,Malpighian tubule,ectoderm,,,#F6D699
+16-18,34,midgut,2.76E-31,,,midgut,endoderm,,,#4B7258
+18-20,0,ventral epidermis,0.00034176,,,epidermis,ectoderm,,all annotaions for this time window are not good,#F8D739
+18-20,1,dorsal epidermis,9.70E-12,,,epidermis,ectoderm,,all annotaions for this time window are not good,#F8D739
+18-20,2,ubiquitous,0.10599415,,,ubiquitous,unknown,,all annotaions for this time window are not good,#C8CCC7
+18-20,3,atrium,0.34369359,,,ubiquitous,unknown,,all annotaions for this time window are not good,#C8CCC7
+18-20,4,dorsal prothoracic pharyngeal muscle,0.00945754,,,ubiquitous,unknown,,all annotaions for this time window are not good,#C8CCC7
+18-20,5,anterior spiracle,0.13241755,,,ubiquitous,unknown,,all annotaions for this time window are not good,#C8CCC7
+18-20,6,brain,3.59E-59,,,brain,neuroectoderm,,all annotaions for this time window are not good,#4A78AF
+18-20,7,midgut,2.09E-05,,,midgut,endoderm,,all annotaions for this time window are not good,#4B7258
+18-20,8,atrium,0.34369359,,,ubiquitous,unknown,,all annotaions for this time window are not good,#C8CCC7
+18-20,9,ubiquitous,0.05622327,,,ubiquitous,unknown,,all annotaions for this time window are not good,#C8CCC7
+18-20,10,ubiquitous,0.11129064,,,ubiquitous,unknown,,all annotaions for this time window are not good,#C8CCC7
+18-20,11,brain,1.04E-57,,,brain,neuroectoderm,,all annotaions for this time window are not good,#4A78AF
+18-20,12,brain,1.17E-23,,,muscle,mesoderm,,all annotaions for this time window are not good,#BC1F2A
+18-20,13,brain,3.93E-27,,,brain,neuroectoderm,,all annotaions for this time window are not good,#4A78AF
+18-20,14,ventral epidermis,1.08E-65,,,epidermis,ectoderm,,all annotaions for this time window are not good,#F8D739
+18-20,15,unknown,,,,ubiquitous,unknown,,all annotaions for this time window are not good,#C8CCC7
+18-20,16,unknown,,,,ubiquitous,unknown,,all annotaions for this time window are not good,#C8CCC7
+18-20,17,brain,6.34E-08,,,ubiquitous,unknown,,all annotaions for this time window are not good,#C8CCC7
+18-20,18,brain,5.60E-45,,,brain,neuroectoderm,,all annotaions for this time window are not good,#4A78AF

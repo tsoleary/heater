@@ -10,6 +10,9 @@ heater.Rproj
 scratch/*
 data/raw/seq/*
 data/processed/seq/*
+data/processed/seurat_object/*
+docs/analysis_cache/*
+output/*
 
 
 # Specific files extensions to ignore
