@@ -8,8 +8,11 @@ library(tidyverse)
 library(Seurat)
 library(Signac)
 
-# Output fig dir
-fig_dir <- "output/figs/markers"
+# Load plot themes 
+source(here::here("src/04_plots/00_plot_themes.R"))
+
+# # Output fig dir
+# fig_dir <- "output/figs/markers"
 
 # Load data
 dat <- readRDS(here::here("data/processed/seurat_object/07_dat_cluster.rds"))
@@ -39,7 +42,7 @@ for (i in 1:nrow(top_markers)) {
   p1 <- VlnPlot(dat,
                 top_markers$gene[i],
                 slot = "counts",
-                cols = c("#43aa8b", "#f3722c"),
+                cols = acc_colors,
                 split.by = "acc_temp", 
                 pt.size = 0) +
     labs(

@@ -35,5 +35,6 @@ dat <- LinkPeaks(
 saveRDS(dat, here::here("data/processed/seurat_object/10_dat_linked.rds"))
 SeuratDisk::as.loom(
   dat, 
-  filename = here::here("data/processed/seurat_object/10_dat_linked.loom")
+  filename = here::here("data/processed/seurat_object/10_dat_linked.loom"),
+  overwrite = TRUE
 )

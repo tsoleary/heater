@@ -133,14 +133,13 @@ dat@meta.data <- dat@meta.data |>
     cell_type = 
       case_match(
         seurat_clusters,
-        c("2", "11") ~ "ectoderm prim.",
+        c("2") ~ "ectoderm prim.",
         c("3") ~ "endoderm prim.",
         c("0", "6") ~ "mesoderm prim.",
         c("1") ~ "ventral nerve cord prim.",
-        c("4") ~ "peripheral nervous system prim.",
+        c("4", "11") ~ "peripheral nervous system prim.",
         c("7") ~ "tracheal prim.",
-        c("8") ~ "foregut prim.",
-        c("9") ~ "hindgut prim.",
+        c("8", "9") ~ "foregut & hindgut prim.",
         c("10") ~ "amnioserosa",
         c("5") ~ "germ cell")
     )

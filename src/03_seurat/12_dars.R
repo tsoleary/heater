@@ -64,14 +64,29 @@ dars <- dars |>
 # Save the dars cell-type
 saveRDS(dars, here::here(out_dir, "dars_cell-type.rds"))
 
+
 # Total number of DARs
 dars |> 
   filter(padj < 0.05) |>
   tally()
 
-# Number of DARs per cell-type -----
+# Number of DARs per cell-type
 dars |>
   filter(padj < 0.05) |>
+  group_by(cell_type) |>
+  tally() |> 
+  arrange(desc(n))
+
+# If not used double adjusted p-values -------
+
+# Total number of DARs
+dars |> 
+  filter(p_val_adj < 0.05) |>
+  tally()
+
+# Number of DARs per cell-type
+dars |>
+  filter(p_val_adj < 0.05) |>
   group_by(cell_type) |>
   tally() |> 
   arrange(desc(n))

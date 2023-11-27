@@ -12,6 +12,9 @@ library(clustree)
 # Output fig dir
 fig_dir <- "output/figs/cluster"
 
+# Load plot themes 
+source(here::here("src/04_plots/00_plot_themes.R"))
+
 # Load data --------------------------------------------------------------------
 # Joint dim reduction
 dat <- readRDS(
@@ -85,20 +88,20 @@ ggsave(here::here(fig_dir, "qc", "elbow_plot.pdf"),
 DimPlot(dat,
         group.by = "acc_temp") +
   scale_color_manual(name = element_blank(),
-                     values = c("#43aa8b", "#f3722c")) +
+                     values = acc_colors) +
   labs(title = element_blank()) +
   theme_void() +
   theme(legend.position = "bottom") +
   guides(color = guide_legend(byrow = TRUE,
                               nrow = 1,
-                              override.aes = list(size = 2)))
+                              override.aes = list(size = 3)))
 
 # Save plot
-ggsave(here::here(fig_dir, "overlay", "variable_features", "100_joint_umap.pdf"),
+ggsave(here::here(fig_dir, "overlay", "joint_umap.pdf"),
        height = 20,
        width = 20,
        units = "cm")
-ggsave(here::here(fig_dir, "overlay", "variable_features", "100_joint_umap.png"),
+ggsave(here::here(fig_dir, "overlay", "joint_umap.png"),
        height = 20,
        width = 20,
        units = "cm")
@@ -109,7 +112,7 @@ DimPlot(dat,
         group.by = "acc_temp",
         pt.size = 0.2) +
   scale_color_manual(name = element_blank(),
-                     values = c("#43aa8b", "#f3722c")) +
+                     values = acc_colors) +
   labs(title = element_blank()) +
   theme_void() +
   theme(legend.position = "bottom") +
@@ -133,7 +136,7 @@ ggsave(here::here(fig_dir, "overlay", "joint_tsne.png"),
 DimPlot(dat_rna,
         group.by = "acc_temp") +
   scale_color_manual(name = element_blank(),
-                     values = c("#43aa8b", "#f3722c")) +
+                     values = acc_colors) +
   labs(title = element_blank()) +
   theme_void() +
   theme(legend.position = "bottom") +
@@ -158,7 +161,7 @@ DimPlot(dat_rna,
         group.by = "acc_temp",
         pt.size = 0.2) +
   scale_color_manual(name = element_blank(),
-                     values = c("#43aa8b", "#f3722c")) +
+                     values = acc_colors) +
   labs(title = element_blank()) +
   theme_void() +
   theme(legend.position = "bottom") +
@@ -182,7 +185,7 @@ ggsave(here::here(fig_dir, "overlay", "rna_tsne.png"),
 DimPlot(dat_atac,
         group.by = "acc_temp") +
   scale_color_manual(name = element_blank(),
-                     values = c("#43aa8b", "#f3722c")) +
+                     values = acc_colors) +
   labs(title = element_blank()) +
   theme_void() +
   theme(legend.position = "bottom") +
@@ -206,7 +209,7 @@ DimPlot(dat_atac,
         group.by = "acc_temp",
         pt.size = 0.5) +
   scale_color_manual(name = element_blank(),
-                     values = c("#43aa8b", "#f3722c")) +
+                     values = acc_colors) +
   labs(title = element_blank()) +
   theme_void() +
   theme(legend.position = "bottom") +
@@ -333,7 +336,7 @@ for (res in res_list) {
     labs(y = "Number of cells",
          x = "Cluster") +
     scale_fill_manual(name = element_blank(),
-                      values = c("#43aa8b", "#f3722c")) +
+                      values = acc_colors) +
     scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
     cowplot::theme_minimal_hgrid()
   

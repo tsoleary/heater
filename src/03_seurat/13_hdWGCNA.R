@@ -1,5 +1,6 @@
 # ------------------------------------------------------------------------------
-# Annotating Seurat Clusters using Fisher's enrichment of BDGP in situ data
+# High dimensional weighted gene co-expression analysis (hdWGCNA) of RNA and 
+#   ATAC data 
 # TS O'Leary
 # ------------------------------------------------------------------------------
 
@@ -90,6 +91,28 @@ DMEs <- FindDMEs(
 # Save DMEs
 saveRDS(DMEs, here::here(out_dir, "DMEs.rds"))
 
+# Module connectivity
+# compute eigengene-based connectivity (kME):
+dat <- ModuleConnectivity(
+  dat,
+  group.by = "acc_temp", 
+  group_name = "25°C"
+)
+
+PlotKMEs(
+  dat,
+  ncol = 3,
+  plot_widths = c(3, 1),
+  text_size = 3,
+  n_hubs = 8
+)
+
+# Save
+ggsave(here::here(fig_dir, "kMEs.png"),
+       height = 20,
+       width = 25,
+       units = "cm")
+
 # Gene module assignment
 modules <- GetModules(dat)
 
@@ -103,10 +126,16 @@ red <- modules |>
   filter(module == "red") |> 
   pull(gene_name)
 
+# Get genes from green
+green <- modules |> 
+  filter(module == "green") |> 
+  pull(gene_name)
+
 # Save modules
 saveRDS(modules, here::here(out_dir, "modules.rds"))
 write_csv(brown |> as_tibble(), here::here(out_dir, "brown.csv"))
 write_csv(red |> as_tibble(), here::here(out_dir, "red.csv"))
+write_csv(green |> as_tibble(), here::here(out_dir, "green.csv"))
 
 # Save dat with hdWGCNA in it for plotting
 saveRDS(dat, here::here("data/processed/seurat_object/13_dat_wgcna.rds"))
@@ -193,6 +222,22 @@ DMEs <- FindDMEs(
 # Save DMEs
 saveRDS(DMEs, here::here(out_dir, "DMEs.rds"))
 
+# Module connectivity
+# compute eigengene-based connectivity (kME):
+dat <- ModuleConnectivity(
+  dat,
+  group.by = "acc_temp", 
+  group_name = "25°C"
+)
+
+PlotKMEs(
+  dat,
+  ncol = 3,
+  plot_widths = c(3, 1),
+  text_size = 3,
+  n_hubs = 8
+)
+
 # Gene module assignment
 modules <- GetModules(dat)
 
@@ -202,14 +247,32 @@ brown <- modules |>
   pull(gene_name)
 
 # Get regions from significant modules
-turquoise <- modules |> 
-  filter(module == "turquoise") |> 
+blue <- modules |> 
+  filter(module == "blue") |> 
   pull(gene_name)
 
 # Save modules
 saveRDS(modules, here::here(out_dir, "modules.rds"))
 write_csv(brown |> as_tibble(), here::here(out_dir, "brown.csv"))
-write_csv(turquoise |> as_tibble(), here::here(out_dir, "turquoise.csv"))
+write_csv(blue |> as_tibble(), here::here(out_dir, "blue.csv"))
+
+# Get genes linked to the blue peaks
+blue_genes <- GetLinkedGenes(
+  dat, 
+  features = blue,
+  min.abs.score = 0.1
+)
+
+# Get genes linked to the brown peaks
+brown_genes <- GetLinkedGenes(
+  dat, 
+  features = brown,
+  min.abs.score = 0.1
+)
+
+# Save the list of linked peaks
+write_csv(brown_genes |> as_tibble(), here::here(out_dir, "brown_genes_0.1.csv"))
+write_csv(blue_genes |> as_tibble(), here::here(out_dir, "blue_genes_0.1.csv"))
 
 # Save dat with hdWGCNA in it for plotting
 saveRDS(dat, here::here("data/processed/seurat_object/13_dat_wgcna_atac.rds"))
