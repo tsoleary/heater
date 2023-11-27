@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Run cellranger-arc count for each sample separately --------------------------
+
 # Directions for running this script -------------------------------------------
 # 0. Be sure the following things have happened before beginning
 #   - Demultiplex all samples
