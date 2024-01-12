@@ -16,13 +16,31 @@ The files in this project are organized into the following directory structure:
     - `raw/` - all raw data
     - `processed/` - all processed data
     
+- `src/` - all source files
+    - `00_pheno/` - acclimation phenotype
+    - `01_nuclei/` - nuclei isolation
+    - `02_cellranger-arc` - mapping sn-multiome reads
+    - `03_seurat` - all analysis in Seurat
+    - `04_plots` - scripts used to generate plots
+    - `scenic_plus.ipynb` - python notebook for SCENIC+ analysis
+    
+- `output/` - all output files
+    - `figs/`
+    - `dars/`
+    - `degs/`
+    - `markers/`
+    - `pheno/`
+    - `tf_motif/`
+    - `wgcna/`
+    
+- `docs/` - summary and public facing documents
+    - `analysis.html` - summary of all analysis
+    - `shiny/` - Shiny App for exploring the data
+    
 - `scratch/` - auxiliary data analysis that is not a part of the final product
   - `calderon/` information and analysis from Calderon _et al._ 2022
     - `nuclei/` info and analysis related to nuclei troubleshooting
         - `flow/` flow cytometry data and analysis
     - `pbmc/` practice pbmc data set
     - `writing` scraps methods sections scratch writing 
-    
-- `output/` - all output
-    - `figs/` - figures
 
