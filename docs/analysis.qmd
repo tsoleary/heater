@@ -35,20 +35,18 @@ library(tidyverse)
 
 #### Major {-}
 
-- Figure sketch for Brent Talk?
-- Cell annotations for new clusters
-- QC figures updated
-- Marker gene violin plots
-
+- Figure sketch for paper
+- Finish introduction
+- Meet with Sara, Seth, Brent
 
 #### Minor {-}
 
 - I am [regressing out cell cycle genes](https://satijalab.org/seurat/articles/cell_cycle_vignette.html) from downstream analysis. Should I include supplementary figures for this or is it standard enough not to include?
-
-- Optimizing kNN and clustering resolution
 - Shiny app minimal implementation
 - Plotting themes and script and file standardization
+- Consolidate script files and outputs
 - Driver script
+
 :::
 
 # **Code** {-}
@@ -1358,6 +1356,16 @@ knitr::include_graphics(
 ```{r}
 knitr::include_graphics(
   here::here("output/figs/wgcna/atac/brown_20.png")
+)
+```
+
+# **SCENIC+**
+
+Check out [this link](https://github.com/tsoleary/heater/blob/main/src/scenic_plus.ipynb) for the full `scenic_plus.ipynb` script and output!
+
+```{r}
+knitr::include_graphics(
+  here::here("output/figs/scenicplus/eRegulon_dotheatmap.png")
 )
 ```
 

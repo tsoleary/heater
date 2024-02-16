@@ -58,7 +58,7 @@ dat <- AddMotifs(
   pfm = pfm
 )
 
-# Save dat with hdWGCNA in it for plotting
+# Save dat with motifs
 saveRDS(dat, here::here("data/processed/seurat_object/14_dat_tf_motif.rds"))
 
 # Test motif enrichment -----
