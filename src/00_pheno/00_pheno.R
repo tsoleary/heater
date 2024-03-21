@@ -14,6 +14,13 @@ dat |>
   group_by(acc_temp) |>
   summarise(total_eggs = sum(n_eggs))
 
+# Proportion hatched
+dat |>
+  group_by(acc_temp) |>
+  summarise(total_hatched = sum(n_hatched),
+            total_eggs = sum(n_eggs)) |> 
+  mutate(prop_hatched = total_hatched/total_eggs)
+
 # Acclimation effect
 mod <- dat |> 
   with(glm(n_hatched/n_eggs ~ acc_temp,

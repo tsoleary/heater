@@ -18,16 +18,29 @@ DefaultAssay(dat) <- "SCT"
 
 # Differential expression bulk between two conditions regardless of cluster ----
 Idents(dat) <- "acc_temp"
-degs <- FindMarkers(dat, 
-                    ident.1 = "18°C",
-                    ident.2 = "25°C")
+dat2 <- PrepSCTFindMarkers(dat)
 
-# Filter only padj < 0.05
-degs |>
-  filter(p_val_adj < 0.05)
+degs <- FindMarkers(
+  dat2, 
+  ident.1 = "18°C",
+  ident.2 = "25°C",
+  min.pct = 0,
+  logfc.threshold = 0,
+  min.cells.feature = 0
+)
+
+degs |> 
+  filter(abs(avg_log2FC) >= 0.25 &
+           p_val_adj < 0.05) |> 
+  filter(pct.1 >= 0.1 | pct.2 >= 0.1)
+
+degs |> 
+  ggplot() +
+  geom_histogram(aes(x = avg_log2FC)) +
+  scale_y_continuous(trans = "log10") 
 
 # Save degs regardless of cluster
-saveRDS(degs, here::here(out_dir, "degs.rds"))
+saveRDS(degs, here::here(out_dir, "degs_bulk.rds"))
 
 # Differential expression between conditions within clusters -------------------
 
@@ -46,8 +59,11 @@ for (i in unique(dat$cell_type)) {
     dat, 
     ident.1 = paste0(i, "_18°C"),
     ident.2 = paste0(i, "_25°C"),
+    test.use = "MAST",
+    min.pct = 0,
     logfc.threshold = 0,
-    min.pct = 0.02) |>
+    min.cells.feature = 0
+    ) |>
     rownames_to_column("gene")
 }
 
@@ -59,28 +75,26 @@ degs <- bind_rows(degs, .id = "cell_type")
 degs <- degs |> 
   dplyr::rename("avg_log2FC_18_25" = "avg_log2FC",
          "pct.18" = "pct.1",
-         "pct.25" = "pct.2") |> 
-  mutate(padj = p.adjust(p_val_adj, method = "BH"))
+         "pct.25" = "pct.2")
 
 # Save the degs cell types
-saveRDS(degs, here::here(out_dir, "degs_cell-type_lfc_0_min.pct_0.02.rds"))
+saveRDS(degs, here::here(out_dir, "degs_cell-type_MAST.rds"))
 
 # Total number of DEGs
 degs |>
-  filter(padj < 0.05) |>
+  filter(abs(avg_log2FC_18_25) > 0.25 &
+         p_val_adj < 0.05) |> 
+  filter(pct.18 > 0.1 | pct.25 > 0.1) |> 
   tally()
 
 # Number of DEGs per cell-type -----
 degs |>
   group_by(cell_type) |> 
-  add_tally(name = "n_genes") |> 
-  filter(padj < 0.05) |>
+  filter(abs(avg_log2FC_18_25) > 0.25 &
+           p_val_adj < 0.05) |> 
+  filter(pct.18 > 0.1 | pct.25 > 0.1) |> 
   group_by(cell_type) |>
-  add_tally() |> 
-  mutate(prop_deg = n/n_genes) |> 
-  distinct(cell_type, .keep_all = TRUE) |> 
-  select(cell_type, n , n_genes, prop_deg) |> 
-  arrange(desc(prop_deg))
+  tally()
 
 # Pseudobulk analysis with DESeq2 ----------------------------------------------
 

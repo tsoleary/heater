@@ -35,9 +35,9 @@ library(tidyverse)
 
 #### Major {-}
 
-- Figure sketch for paper
 - Finish introduction
-- Meet with Sara, Seth, Brent
+- Differential network analysis
+- Complete manuscript figures
 
 #### Minor {-}
 
@@ -253,8 +253,34 @@ knitr::include_graphics(
 
 ## Fig. 2 {-}
 
-- Unknown
-- UMAP with cell-type annotations
+```{r fig-2}
+#| fig-cap: "..."
+
+
+knitr::include_graphics(
+  here::here("output/figs/final/fig_2.png")
+)
+```
+
+## Fig. 3 {-}
+
+```{r fig-3}
+#| fig-cap: "..."
+
+knitr::include_graphics(
+  here::here("output/figs/final/fig_3.png")
+)
+```
+
+## Fig. 4 {-}
+
+```{r fig-4}
+#| fig-cap: "..."
+
+knitr::include_graphics(
+  here::here("output/figs/scenicplus/eRegulon_heatmap_dots_activator.png")
+)
+```
 
 ## Fig. S1 {-}
 
@@ -280,9 +306,13 @@ knitr::include_graphics(
 
 Clusters and cell-type annotations
 
-- Cluster UMAP split
-- Number of cells per cluster
-- Number of cells per cell-type annotation
+- ATAC & RNA only UMAPs
+
+## Fig. S4 {-}
+
+WGCNA, cisTopic, cisTarget,
+
+
 
 :::
 
