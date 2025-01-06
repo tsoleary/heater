@@ -1,12 +1,8 @@
-# HEATER Project
-
-## **H**ow **E**mbryos **A**cclimate to **T**emperature through **E**pigenetic **R**egulation
-
-All analysis and code is summarized [here](https://tsoleary.github.io/heater/docs/analysis.html).
+# Single-nuclei multiome ATAC and RNA sequencing reveals the molecular basis of thermal plasticity in Drosophila melanogaster embryos
 
 ### Project Goal
 
-The aim of this project is to use 10X Genomics Multiome (ATAC + GEX) Single Nuclei Sequencing to understand the way that genes are regulated and expressed in response to warm and cool thermal acclimation during embryonic development in _D. melanogaster_.
+All code used for analysis for the manuscript available <INSERT LINK TO BioRxiv Preprint>.
 
 ### File structure
 
@@ -21,7 +17,8 @@ The files in this project are organized into the following directory structure:
     - `01_nuclei/` - nuclei isolation
     - `02_cellranger-arc` - mapping sn-multiome reads
     - `03_seurat` - all analysis in Seurat
-    - `04_plots` - scripts used to generate plots
+    - `04_scenic` - all analysis for the SCENIC+ pipeline
+    - `05_plots` - scripts used to generate plots
     - `scenic_plus.ipynb` - python notebook for SCENIC+ analysis
     
 - `output/` - all output files

@@ -123,7 +123,7 @@ MEs_umap <- GetMEs(dat) |>
 
 # Brown module feature plot
 MEs_umap_rank <- MEs_umap |> 
-  mutate(rank = dense_rank(desc(brown))) 
+  mutate(rank = dense_rank(brown)) 
 
 
 ggplot() +

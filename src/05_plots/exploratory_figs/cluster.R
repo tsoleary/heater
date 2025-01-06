@@ -13,7 +13,7 @@ library(clustree)
 fig_dir <- "output/figs/cluster"
 
 # Load plot themes 
-source(here::here("src/04_plots/00_plot_themes.R"))
+source(here::here("src/05_plots/00_plot_themes.R"))
 
 # Load data --------------------------------------------------------------------
 # Joint dim reduction

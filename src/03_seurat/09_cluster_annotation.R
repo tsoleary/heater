@@ -155,3 +155,118 @@ annot <- dat@meta.data |>
   arrange(seurat_clusters)
 
 saveRDS(annot, here::here("data/processed/annot", "annot.rds"))
+
+# Analyze the number of cells in each cluster and annotation per replicate -----
+
+# Plot the percentage of cells in each cell type
+dat@meta.data |> 
+  group_by(cell_type, acc_temp) |> 
+  tally() |> 
+  ungroup(cell_type) |> 
+  group_by(acc_temp) |> 
+  mutate(percent = (n/sum(n))) |> 
+  mutate(cell_type = fct_reorder(cell_type, percent)) |> 
+  ggplot() +
+  geom_col(aes(y = cell_type, 
+               x = percent,
+               fill = acc_temp),
+           color = "grey80",
+           position = "dodge") +
+  scale_fill_manual(values = c("#8698C0", "#D09F7B"),
+                    name = element_blank()) +
+  cowplot::theme_minimal_vgrid() +
+  scale_x_continuous(expand = c(0, 0), 
+                     labels = scales::percent,
+                     name = "Cell-type composition",
+                     position = "top") +
+  theme(legend.position = "bottom",
+        axis.title.y = element_blank())
+
+
+# Plot the percentage of well
+dat@meta.data |> 
+  group_by(cell_type, sample_name) |> 
+  tally() |> 
+  ungroup(cell_type) |> 
+  group_by(sample_name) |> 
+  mutate(percent = (n/sum(n))) |> 
+  mutate(cell_type = fct_reorder(cell_type, percent)) |> 
+  ggplot() +
+  geom_col(aes(y = cell_type, 
+               x = percent,
+               fill = sample_name),
+           color = "grey80",
+           position = "dodge") +
+  scale_fill_manual(values = c("#668CDE","#8698C0","#D08956", "#D09F7B"),
+                    name = element_blank()) +
+  cowplot::theme_minimal_vgrid() +
+  scale_x_continuous(expand = c(0, 0), 
+                     labels = scales::percent,
+                     name = "Cell-type composition",
+                     position = "top") +
+  theme(legend.position = "bottom",
+        axis.title.y = element_blank())
+
+# Create contingency table
+t <- dat@meta.data |> 
+  group_by(cell_type, sample_name) |> 
+  tally() |> 
+  pivot_wider(names_from = sample_name,
+              values_from = n) |> 
+  column_to_rownames("cell_type")
+
+# Run a chi-square test
+chisq <- chisq.test(t)
+print(chisq)
+
+
+# Create contingency table
+t <- dat@meta.data |> 
+  group_by(cell_type, acc_temp) |> 
+  tally() |> 
+  pivot_wider(names_from = acc_temp,
+              values_from = n) |> 
+  column_to_rownames("cell_type")
+
+# Run a chi-square test
+chisq <- chisq.test(t)
+print(chisq)
+
+# Plot out the residuals ----
+chisq$residuals |> 
+  as.data.frame() |> 
+  rownames_to_column("sample_name") |> 
+  pivot_longer(cols = amnioserosa:`ventral nerve cord prim.`,
+               values_to = "residuals",
+               names_to = "cell_type") |> 
+  ggplot() +
+  geom_point(
+    aes(x = sample_name,
+        y = cell_type,
+        fill = residuals,
+        size = abs(residuals)),
+    color = "grey70",
+    shape = 21) +
+  scale_fill_gradient2(low = scales::muted("blue"), 
+                       high = scales::muted("red")) +
+  cowplot::theme_minimal_grid() +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank()) +
+  guides(size = "none")
+
+# Alternative method directly accounting for replication
+t <- dat@meta.data |> 
+  group_by(cell_type, sample_name, acc_temp) |> 
+  tally() |> 
+  mutate(replicate = str_extract(sample_name, "\\d$"))
+
+model <- lme4::glmer(
+  n ~ acc_temp * cell_type + (1 | cell_type/replicate), 
+  data = t, 
+  family = poisson)
+
+summary(model)
+
+
+# Chi-square individually 
+

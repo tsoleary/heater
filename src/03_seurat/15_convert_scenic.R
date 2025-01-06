@@ -37,7 +37,7 @@ dat@meta.data |>
 
 # Save the count matrix
 
-  # Create peaks_matrix object
+# Create peaks_matrix object
 peaks_matrix <- dat@assays$peaks@counts
 
 # Change region naming to chr:111-112 format
@@ -55,9 +55,7 @@ peaks_matrix |>
 # Save DARs in format that can be moved to python for SCENIC+ ------------------
 
 dars <- readRDS(here::here("output/dars/dars.rds"))
-
 dars_celltype <- readRDS(here::here("output/dars/dars_cell-type.rds"))
-
 
 dars |> 
   dplyr::filter(p_val_adj < 0.05) |> 
@@ -71,21 +69,3 @@ dars_celltype |>
   dplyr::filter(p_val_adj < 0.05) |> 
   mutate(region = str_replace(region, "-", ":")) |> 
   write_csv(here::here("output/dars/dars_cell-type.csv"))
-
-
-# Get the TSS sites
-TSS_sites <- GetTSSPositions(
-  dat@assays$ATAC@annotation
-)
-
-library(tidyverse)
-ggplot(dat@meta.data,
-  aes(
-    y = nFeature_RNA,
-    x = nCount_RNA
-  )
-) +
-  geom_point()
-
-
-

@@ -16,15 +16,6 @@ dars <- readRDS(here::here("output/dars/dars_cell-type_MAST.rds")) |>
                         (pct.18 >= 0.10 | pct.25 >= 0.10), 
                       TRUE, FALSE)) 
 
-degs <- readRDS(here::here("output/degs/degs_cell-type.rds")) |> 
-  mutate(sig = ifelse(abs(avg_log2FC_18_25) >= 0.25 & p_val_adj < 0.05 &
-                        (pct.18 >= 0.10 | pct.25 >= 0.10), 
-                      TRUE, FALSE))
-dars <- readRDS(here::here("output/dars/dars_cell-type.rds")) |> 
-  mutate(sig = ifelse(abs(avg_log2FC_18_25) >= 0.25 & p_val_adj < 0.05 &
-                        (pct.18 >= 0.10 | pct.25 >= 0.10), 
-                      TRUE, FALSE)) 
-
 
 # eRegulon data
 eReg <- read_csv(here::here("data/processed/scenic/eRegulon_data.csv")) |> 
@@ -121,13 +112,7 @@ GRNs <- target_gene_t |>
   mutate(p.value.adj.peak = p.adjust(p.value.peak, method = "BH", n = 26),
          p.value.adj.gene = p.adjust(p.value.gene, method = "BH", n = 26))
 
-# Print out GRNs that pass three filter
-GRNs |> 
-  select(Region_signature_name, avg_log2FC_18_25, estimate.peak, 
-         estimate.gene, p_val_adj, p.value.adj.peak, p.value.adj.gene) |> 
-  filter(Region_signature_name %in% unique(dotplot_dat$Region_signature_name)) |> 
-  filter(p_val_adj < 0.05 & p.value.adj.peak < 0.05 & p.value.adj.gene < 0.05)
-
+# Print out GRNs that pass three filters
 diffGRN <- GRNs |> 
   select(Region_signature_name, avg_log2FC_18_25, estimate.peak, 
          estimate.gene, p_val_adj, p.value.peak, p.value.gene) |> 
@@ -138,7 +123,7 @@ diffGRN <- GRNs |>
 
 
 
-# Print out GRNs that pass three filter
+# Print out GRNs that pass three filters
 GRNs |> 
   select(Region_signature_name, avg_log2FC_18_25, estimate.peak, 
          estimate.gene, p_val_adj, p.value.peak, p.value.gene) |> 
