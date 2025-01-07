@@ -13,7 +13,6 @@ The files in this project are organized into the following directory structure:
     - `03_seurat` - all analysis in Seurat
     - `04_scenic` - all analysis for the SCENIC+ pipeline
     - `05_plots` - scripts used to generate plots
-    - `scenic_plus.ipynb` - python notebook for SCENIC+ analysis
 
 **Untracked directories with large file sizes**
 
