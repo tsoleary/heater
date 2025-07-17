@@ -7,14 +7,12 @@
 library(tidyverse)
 
 # Load all cell-type specific acclimation comparisons
-degs <- readRDS(here::here("output/degs/degs_cell-type_MAST.rds")) |> 
-  mutate(sig = ifelse(abs(avg_log2FC_18_25) >= 0.25 & p_val_adj < 0.05 &
-                        (pct.18 >= 0.10 | pct.25 >= 0.10), 
-                      TRUE, FALSE))
-dars <- readRDS(here::here("output/dars/dars_cell-type_MAST.rds")) |> 
-  mutate(sig = ifelse(abs(avg_log2FC_18_25) >= 0.25 & p_val_adj < 0.05 &
-                        (pct.18 >= 0.10 | pct.25 >= 0.10), 
-                      TRUE, FALSE)) 
+degs <- readRDS(here::here("output/degs/degs_all.rds")) |> 
+  select(cell_type, gene, contains(".all"), sig) |> 
+  rename_with(~str_remove(.x, ".all"), .cols = contains(".all"))
+dars <- readRDS(here::here("output/dars/dars_all.rds")) |> 
+  select(cell_type, region, contains(".all"), sig) |> 
+  rename_with(~str_remove(.x, ".all"), .cols = contains(".all"))
 
 
 # eRegulon data
@@ -121,7 +119,7 @@ diffGRN <- GRNs |>
   mutate(cell_type_eGRN = paste(Region_signature_name, cell_type, sep = "\n")) |> 
   pull(cell_type_eGRN)
 
-
+saveRDS(diffGRN, here::here("output/GRN/diffGRN.rds"))
 
 # Print out GRNs that pass three filters
 GRNs |> 

@@ -46,25 +46,22 @@ dat@meta.data <- dat@meta.data |>
 meta <- dat@meta.data |> 
   rownames_to_column("cell")
 
-# Load all cell-type specific acclimation comparisons
-degs <- readRDS(here::here("output/degs/degs_cell-type_MAST.rds")) |> 
-  mutate(sig = ifelse(abs(avg_log2FC_18_25) >= 0.25 & p_val_adj < 0.05 &
-                        (pct.18 >= 0.10 | pct.25 >= 0.10), 
-         TRUE, FALSE)) 
-dars <- readRDS(here::here("output/dars/dars_cell-type_MAST.rds")) |> 
-  mutate(sig = ifelse(abs(avg_log2FC_18_25) >= 0.25 & p_val_adj < 0.05 &
-                        (pct.18 >= 0.10 | pct.25 >= 0.10), 
-                      TRUE, FALSE)) 
+# Marker gene dot plot
+markers <- read_csv(here::here("output/markers/cluster_markers_all.csv"))
 
-dars_bulk <- readRDS(here::here("output/dars/dars_bulk.rds")) |> 
-  as.data.frame() |> 
-  mutate(sig = ifelse(abs(avg_log2FC) >= 0.25 & p_val_adj < 0.05 &
-                        (pct.1 >= 0.10 | pct.2 >= 0.10), 
-                      TRUE, FALSE)) 
-degs_bulk <- readRDS(here::here("output/degs/pseudobulk_DESeq_res.rds")) 
+# Load all cell-type specific acclimation comparisons
+degs_all <- readRDS(here::here("output/degs/degs_all.rds"))
+degs <- degs_all |> 
+  select(cell_type, gene, contains(".all"), sig) |> 
+  rename_with(~str_remove(.x, ".all"), .cols = contains(".all"))
+dars_all <- readRDS(here::here("output/dars/dars_all.rds"))
+dars <- dars_all |> 
+  select(cell_type, region, contains(".all"), sig) |> 
+  rename_with(~str_remove(.x, ".all"), .cols = contains(".all"))
 
 # eRegulon data
 eReg <- read_csv(here::here("data/processed/scenic/eRegulon_data.csv"))
+diffGRN <- readRDS(here::here("output/GRN/diffGRN.rds"))
 
 # ------------------------------------------------------------------------------
 # Manuscript figures -----------------------------------------------------------
@@ -225,7 +222,7 @@ hmap_exp <- hmap_exp |>
   ggplotify::as.ggplot() +
   theme(legend.key.size = unit(0.25, "cm"))
 
-# For ATAC ----
+# For ATAC
 DefaultAssay(dat) <- "peaks"
 
 # Save all peaks that are linked to marker genes for plotting purposes
@@ -278,6 +275,62 @@ p_heatmaps <- cowplot::plot_grid(
   hjust = 1,
   nrow = 2)
 
+
+
+link_gene_peak <- linked_marker_peaks |> 
+  select(gene, peak)
+
+atac_hmap_data <- atac_min_max_norm |> 
+  as.data.frame() |> 
+  rownames_to_column("peak") |> 
+  as_tibble()
+
+exp_hmap_data <- dat_agg@assays$SCT$scale.data |> 
+  as.data.frame() |> 
+  rownames_to_column("gene") |> 
+  as_tibble()
+
+corr_links_df <- link_gene_peak |> 
+  left_join(atac_hmap_data, 
+            by = "peak")
+
+corr_links_df <- corr_links_df |>   
+  left_join(exp_hmap_data, 
+            by = "gene",
+            suffix = c("_ATAC", "_RNA")) |> 
+  pivot_longer(contains("_ATAC"), 
+               names_to = "cell_type_ATAC",
+               values_to = "ATAC") |> 
+  pivot_longer(contains("_RNA"), 
+               names_to = "cell_type_RNA",
+               values_to = "RNA") |> 
+  mutate(cell_type_ATAC = str_remove_all(cell_type_ATAC, "_ATAC")) |> 
+  mutate(cell_type_RNA = str_remove_all(cell_type_RNA, "_RNA")) |> 
+  filter(cell_type_ATAC == cell_type_RNA) |> 
+  mutate(cell_type = cell_type_RNA) |> 
+  select(gene, peak, cell_type, ATAC, RNA)
+
+p_corr <- corr_links_df |> 
+  ggplot(aes(x = ATAC,
+             y = RNA)) +
+  geom_point(alpha = 0.2,
+             color = "grey20") +
+  geom_smooth(method = "lm",
+              color = "grey50",
+              se = FALSE,
+              linetype = 2) +
+  ggpubr::stat_cor(geom = "label",
+                   alpha = 0.6,
+                   aes(label = after_stat(r.label))) +
+  facet_wrap(~cell_type, ncol = 5) +
+  scale_x_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1),
+                     labels = c("0", "0.25", "0.5", "0.75", "1"),
+                     name = "ATAC-Seq (normalized min to max)") +
+  scale_y_continuous(name = "RNA-Seq (centered and scaled)") +
+  theme_minimal() +
+  theme(strip.background = element_rect(fill = "grey90",
+                                        color = "grey50"))
+
 # Save individual parts of the figures ---
 ggsave(here::here(fig_dir, "fig_2/umaps.svg"),
        plot = p_umaps,
@@ -294,7 +347,11 @@ ggsave(here::here(fig_dir, "fig_2/heatmaps.svg"),
        height = 10,
        width = 30,
        units = "cm")
-
+ggsave(here::here(fig_dir, "fig_2/corr_plot.svg"),
+       plot = p_corr,
+       height = 10,
+       width = 20,
+       units = "cm")
 
 
 # Figure 3 ---------------------------------------------------------------------
@@ -361,6 +418,25 @@ p_zelda <- dars_bulk |>
   labs(x = "log2(fold-change)",
        y = "Number of DARs") +
   theme_minimal_hgrid()
+
+####
+# Testing
+hsf <- dars_bulk |>
+  rownames_to_column("region") |>
+  mutate(hsf = ifelse(region %in% hsf_target$peaks, TRUE, FALSE)) |>
+  filter(hsf)
+
+Links(dat) |> 
+  as_tibble() |> 
+  filter(str_detect(gene, "Hsp")) |> 
+  arrange(gene) |> 
+  pull(gene) |> 
+  unique() |> 
+  paste(collapse = ", ")
+  
+
+####
+
 
 # HSF DARs
 p_hsf <- dars_bulk |>
@@ -679,55 +755,40 @@ DMEs <- readRDS(here::here("output/wgcna/DMEs.rds"))
 
 DMEs <- DMEs |>
   rownames_to_column("mod") |> 
-  mutate(mod = fct_relevel(mod, DMEs |> arrange(avg_log2FC) |> pull(module)))
+  as_tibble() |> 
+  arrange(desc(avg_log2FC)) |> 
+  mutate(mod_n = factor(paste("Module", 1:7), levels = c(paste("Module", 7:1))))
 
-mod_colors <- c(
-  "red", 
-  "brown", 
-  "blue", 
-  "turquoise", 
-  "black", 
-  "yellow", 
-  "green"
-) |> colorspace::desaturate(amount = 0.5)
+# mod_colors <- c(
+#   "red", 
+#   "brown", 
+#   "blue", 
+#   "turquoise", 
+#   "black", 
+#   "yellow", 
+#   "green"
+# ) |> colorspace::desaturate(amount = 0.5)
 
 mod_tally <- GetModules(dat) |> 
   group_by(module) |> 
   tally()
 
 p_wgcna <- left_join(DMEs, mod_tally) |> 
-  ggplot(aes(y = mod,
+  ggplot(aes(y = mod_n,
              x = -avg_log2FC)) +
   geom_segment(aes(xend = 0, 
-                   yend = mod,
-                   color = mod),
-               linewidth = 1) +
-  # annotate(geom = "text", 
-  #          y = "red", 
-  #          x = -0.18, 
-  #          color = "grey20",
-  #          label = "*", 
-  #          vjust = 0.8, 
-  #          size = 10) +
-  # annotate(geom = "text", 
-  #          y = "brown", 
-  #          x = -0.18, 
-  #          color = "grey20",
-  #          label = "*", 
-  #          vjust = 0.8, 
-  #          size = 10) +
-  geom_point(aes(fill = mod, 
-                 size = n), 
-             color = "grey80",
+                   yend = mod_n),
+               linewidth = 0.5,
+               color = "grey20") +
+  geom_point(aes(size = n), 
+             color = "grey20",
+             fill = "grey80",
              shape = 21) +
   geom_text(aes(label = n),
-            color = c("grey90", "grey90", "grey90", "grey30",
-                      "grey30", "grey95", "grey20")) +
+            color = "grey20") +
   geom_vline(xintercept = 0, color = "grey50") +
   scale_x_continuous(name = "log2(fold-change)",
                      limits = c(-0.25, 0.25)) +
-  scale_fill_manual(values = rev(mod_colors)) +
-  scale_color_manual(values = rev(mod_colors)) +
   scale_size_continuous(range = c(7, 12),
                         name = "Number of\ngenes",
                         breaks = c(75, 100, 250, 500)) +
@@ -748,16 +809,18 @@ MEs_umap <- GetMEs(dat) |>
                values_to = "value",
                names_to = "module")
 
-# Save module colors and desaturate for prettier plotting
-mod_colors <- c(
-  "turquoise", 
-  "brown",
-  "yellow", 
-  "blue", 
-  "green",
-  "black", 
-  "red"
-) |> colorspace::desaturate(amount = 0.5)
+# # Save module colors and desaturate for prettier plotting
+# mod_colors <- c(
+#   "turquoise", 
+#   "brown",
+#   "yellow", 
+#   "blue", 
+#   "green",
+#   "black", 
+#   "red"
+# ) |> colorspace::desaturate(amount = 0.5)
+
+mod_colors <- rep("forestgreen", 7)
 
 # Reset the module colors for plotting
 dat <- ResetModuleColors(dat, mod_colors)
@@ -788,22 +851,23 @@ red_go <- read_csv(here::here("output/wgcna/red_go.csv"))
 brown_go <- read_csv(here::here("output/wgcna/brown_go.csv"))
 green_go <- read_csv(here::here("output/wgcna/green_go.csv"))
 
-go <- bind_rows(list("red" = red_go, 
-                     "brown" = brown_go,
-                     "green" = green_go), .id = "group") |> 
-  mutate(group = factor(group, levels = c("red", "brown", "green")))
-  
-# GO dot plot
-p_go <- go |> 
+go <- bind_rows(list("Module 1" = red_go, 
+                     "Module 2" = brown_go,
+                     "Module 7" = green_go), .id = "group") |> 
+  mutate(group = factor(group, levels = c("Module 1", "Module 2", "Module 7"))) |> 
   group_by(group) |> 
   slice_min(FDR, n = 10) |> 
-  mutate(Description = fct_reorder(Description, Ratio)) |> 
-  ggplot() +
-  geom_point(aes(y = Description,
-                 x = Ratio,
-                 size = Size,
-                 fill = FDR),
-             shape = 21,
+  mutate(Description = 
+           fct_reorder(Description, Ratio, .desc = FALSE)) |>  
+  ungroup()
+
+# GO dot plot
+p_go <- go |> 
+  ggplot(aes(y = Description,
+             x = Ratio,
+             size = Size,
+             fill = FDR)) +
+  geom_point(shape = 21,
              color = "grey30") +
   scale_size(range = c(1, 5),
              breaks = c(30, 50, 100, 150),
@@ -812,8 +876,10 @@ p_go <- go |>
   scale_y_discrete(name = element_blank()) +
   scale_x_continuous(name = "Gene Ratio") +
   theme_minimal() +
-  facet_wrap(~ group, nrow = 3, scales = "free") +
-  ggh4x::force_panelsizes(rows = c(0.3, 1.2, 1.2)) 
+  facet_grid(group ~ ., scales = "free_y", space = "free_y") +
+  theme(panel.spacing    = unit(1, "lines"),
+        strip.text.y     = element_text(angle = 0),
+        axis.title.y     = element_blank())
 
 p_2_col <- cowplot::plot_grid(
   p_wgcna, 
@@ -835,13 +901,13 @@ f5 <- cowplot::plot_grid(
 ggsave(here::here(fig_dir, "fig_5.pdf"),
        plot = f5,
        height= 25,
-       width = 40,
+       width = 50,
        bg = "white",
        units = "cm")
 ggsave(here::here(fig_dir, "fig_5.png"),
        plot = f5,
        height= 25,
-       width = 40,
+       width = 50,
        bg = "white",
        units = "cm")
 ggsave(here::here(fig_dir, "fig_5.svg"),
@@ -854,11 +920,11 @@ ggsave(here::here(fig_dir, "fig_5.svg"),
 # Figure 6 ---------------------------------------------------------------------
 
 # Data frame for DARs and DEGS with tally for plotting 
-degs_df <- degs |>  
-  filter(sig == TRUE) |> 
-  group_by(cell_type) |> 
-  add_tally() |> 
-  full_join(color_cell_type) 
+degs_df <- degs |>
+  filter(sig == TRUE) |>
+  group_by(cell_type) |>
+  add_tally() |>
+  full_join(color_cell_type)
 
 dars_df <- dars |>  
   filter(sig == TRUE) |> 
@@ -881,13 +947,17 @@ p_degs <- degs_df |>
   ggbeeswarm::geom_beeswarm(
     shape = 21,
     color = "grey60",
-    size = 0.7,
-    cex = 0.6,
+    size = 1,
+    cex = 0.75,
     side = 1,
     alpha = 0.8) +
   geom_vline(xintercept = 0,
              color = "grey30",
              linetype = 5) +
+  ggridges::geom_density_ridges(
+    aes(height = after_stat(count)),
+    stat  = "density",
+    alpha = 0.5) +
   geom_label(data = degs_df |> distinct(cell_type, n, colors),
              aes(x = -2.75,
                  y = cell_type,
@@ -897,12 +967,12 @@ p_degs <- degs_df |>
              alpha = 0.4) +
   scale_y_discrete(name = element_blank(), 
                    expand = c(0, 0.05)) +
-  scale_x_continuous(name = "Log2 fold-change",
+  scale_x_continuous(name = expression("log"[2]*"(fold-difference)"),
                      limits = c(-3, 3.2),
-                     breaks = -3:3) +
+                     breaks = -4:4) +
   scale_fill_identity() +
   scale_color_identity() +
-  ggridges::geom_density_ridges(alpha = 0.5) +
+
   theme_minimal_hgrid() +
   theme(axis.text.y = element_blank())
 
@@ -922,6 +992,10 @@ p_dars <- dars_df |>
   geom_vline(xintercept = 0,
              color = "grey30",
              linetype = 5) +
+  ggridges::geom_density_ridges(
+    aes(height = after_stat(count)),
+    stat  = "density",
+    alpha = 0.5) +
   geom_label(data = dars_df |> distinct(cell_type, n, colors) |> 
                mutate(n = ifelse(is.na(n), 0, n)),
              aes(x = -3,
@@ -932,24 +1006,27 @@ p_dars <- dars_df |>
              alpha = 0.4) +
   scale_y_discrete(name = element_blank(),
                    expand = c(0, 0.05)) +
-  scale_x_continuous(name = "Log2 fold-change",
+  scale_x_continuous(name = expression("log"[2]*"(fold-difference)"),
                      limits = c(-3.25, 3.25),
                      breaks = c(-3:3)) +
   scale_fill_identity() +
   scale_color_identity() +
-  ggridges::geom_density_ridges(alpha = 0.5) +
   theme_minimal_hgrid()
+
+cowplot::plot_grid(
+  p_dars,
+  p_degs,
+  rel_widths = c(1, 0.6)
+)
 
 # Save
 ggsave(here::here(fig_dir, "fig_6.svg"),
-       plot = p_ridge,
-       height = 20,
+       height = 15,
        width = 25,
        bg = "white",
        units = "cm")
 ggsave(here::here(fig_dir, "fig_6.pdf"),
-       plot = p_ridge,
-       height = 20,
+       height = 15,
        width = 25,
        bg = "white",
        units = "cm")
@@ -1580,9 +1657,6 @@ ggsave(here::here(fig_dir, "fig_s4.pdf"),
 
 # Figure S5 --------------------------------------------------------------------
 
-# Marker gene dot plot
-markers <- read_csv(here::here("output/markers/cluster_markers_all.csv"))
-
 # Top three markers for each cluster
 top_markers <- markers |>
   group_by(cluster) |>
@@ -2010,14 +2084,29 @@ PlotDendrogram(
 dev.off()
 
 # Cell-type specific mean module eigengene score
+MEs <- GetMEs(dat) |>
+  select(-grey) |>
+  rownames_to_column("cell") |>
+  as_tibble() |>
+  pivot_longer(-cell,
+               names_to = "module",
+               values_to = "mod_eigengene") |>
+  group_by(module) |>
+  mutate(threshold = quantile(mod_eigengene, probs = 0)) |>
+  left_join(as.data.frame(dat@meta.data) |>
+              rownames_to_column("cell") |>
+              dplyr::select(cell, acc_temp))
+
+
 fs9b_only <- MEs |> 
   full_join(dat@meta.data |> rownames_to_column("cell") |> select(cell, cell_type)) |> 
   group_by(module, cell_type) |> 
   summarize(avg_mod = mean(mod_eigengene)) |> 
-  mutate(module = factor(module, 
-                         levels = c("red", "brown", "blue", 
-                                    "black", "green", "yellow", "turquoise"))) |> 
-  full_join(color_cell_type) |> 
+
+  left_join(color_cell_type) |> 
+  left_join(DMEs, by = "module") |> 
+  mutate(mod_n = factor(mod_n, 
+                         levels = paste("Module", 1:7))) |> 
   ggplot(aes(y = forcats::fct_rev(cell_type), 
              x = avg_mod,
              alpha = avg_mod > 0,
@@ -2029,7 +2118,7 @@ fs9b_only <- MEs |>
                      breaks = c(-8, -4, 0 , 4, 8),
                      name = "mean module eigengene score") +
   scale_fill_identity() +
-  facet_wrap(~ module, nrow = 2) +
+  facet_wrap(~ mod_n, nrow = 2) +
   scale_alpha_discrete(range = c(0.3, 1)) +
   cowplot::theme_minimal_grid() +
   theme(legend.position = "none",
@@ -2043,8 +2132,11 @@ fs9c_only <- MEs |>
   ungroup(cell_type) |> 
   summarize(sd = sd(avg_mod)) |> 
   arrange(sd) |> 
-  mutate(module = fct_reorder(module, sd, .desc = TRUE)) |> 
-  ggplot(aes(y = module, 
+  left_join(DMEs, by = "module") |> 
+  mutate(mod_n = factor(mod_n, 
+                        levels = paste("Module", 1:7))) |> 
+  mutate(mod_n = fct_reorder(mod_n, sd, .desc = TRUE)) |> 
+  ggplot(aes(y = mod_n, 
              x = sd)) +
   geom_col(color = "grey20",
            fill = "grey80", 
@@ -2055,7 +2147,9 @@ fs9c_only <- MEs |>
   scale_x_continuous(expand = c(0,0.01),
                      name = "cell-type specificity index") +
   cowplot::theme_minimal_vgrid() +
-  theme(axis.title.y = element_blank())
+  theme(axis.title.y = element_blank())x
+
+
 
 
 fs9b <- cowplot::plot_grid(
@@ -2301,7 +2395,159 @@ ggsave(here::here(fig_dir, "fig_s10.svg"),
        width = 35,
        units = "cm")
 
-# Figure S11 --------------------------------------------------------------------
+# Figure S11 NEW? -------------------------------------------------------------------
+
+lim_size <- 3.5
+
+# Scatter plot of all points and DARs
+p_dars <- dars_all |> 
+  ggplot(aes(x = avg_log2FC_18_25.18.1,
+             y = avg_log2FC_18_25.18.2)) +
+  geom_vline(xintercept = 0) +
+  geom_hline(yintercept = 0) +
+  geom_point(shape = 21, 
+             fill = "grey90", 
+             color = "grey70",
+             alpha = 0.8, size = 0.5) +
+  geom_abline(slope = 1, intercept = 0,
+              linetype = 2) +
+  geom_smooth(data = dars_all |> 
+                filter(sig),
+              method = "lm",
+              color = "tomato3",
+              fullrange = TRUE,
+              se = FALSE,
+              linewidth = 0.75,
+              linetype = 3) +
+  geom_point(data = dars_all |> 
+               filter(sig),
+             color = "grey20",
+             fill = "tomato3",
+             stroke = 0.25,
+             shape = 21) +
+  ggpmisc::stat_poly_eq(data = dars_all |> 
+                          filter(sig),
+                        formula = y ~ x,
+                        aes(label = ..rr.label..),
+                        parse = TRUE,
+                        geom = "label",
+                        label.x = 2,
+                        label.y = 2.5,
+                        alpha = 0.8,
+                        size = 3,
+                        color = "tomato3",
+                        fill = "white") +
+  lims(x = c(-lim_size, lim_size),
+       y = c(-lim_size, lim_size)) +
+  labs(x = expression("log"[2]*"(fold-difference) 18°C Rep 1 vs. 25°C"),
+       y = expression("log"[2]*"(fold-difference) 18°C Rep 2 vs. 25°C")) + 
+  facet_wrap(~cell_type) +
+  theme_bw()
+
+lim_size <- 6.6
+
+p_degs <- degs_all |> 
+  ggplot(aes(x = avg_log2FC_18_25.18.1,
+             y = avg_log2FC_18_25.18.2)) +
+  geom_vline(xintercept = 0) +
+  geom_hline(yintercept = 0) +
+  geom_point(shape = 21, 
+             fill = "grey90", 
+             color = "grey70",
+             alpha = 0.8, size = 0.5) +
+  geom_abline(slope = 1, intercept = 0,
+              linetype = 2) +
+  geom_smooth(data = degs_all |> 
+                filter(sig),
+              method = "lm",
+              color = "tomato3",
+              fullrange = TRUE,
+              se = FALSE,
+              linewidth = 0.75,
+              linetype = 3) +
+  geom_point(data = degs_all |> 
+               filter(sig),
+             color = "grey20",
+             fill = "tomato3",
+             stroke = 0.75,
+             shape = 21) +
+  ggpmisc::stat_poly_eq(data = degs_all |> 
+                          filter(sig),
+                        formula = y ~ x,
+                        aes(label = ..rr.label..),
+                        parse = TRUE,
+                        geom = "label",
+                        label.x = 4.5,
+                        label.y = 5.5,
+                        alpha = 0.8,
+                        size = 3,
+                        color = "tomato3",
+                        fill = "white") +
+  lims(x = c(-lim_size, lim_size),
+       y = c(-lim_size, lim_size)) +
+  labs(x = expression("log"[2]*"(fold-difference) 18°C Rep 1 vs. 25°C"),
+       y = expression("log"[2]*"(fold-difference) 18°C Rep 2 vs. 25°C")) + 
+  facet_wrap(~cell_type) +
+  theme_bw()
+
+
+# now add the title
+title <- ggdraw() + 
+  draw_label(
+    "ATAC-Seq DARs: Sample exclusion analysis",
+    fontface = 'bold',
+    x = 0.5,
+    hjust = 0.5) +
+  theme(plot.margin = margin(0, 0, 0, 7))
+
+
+p_dars_title <- plot_grid(
+  title, p_dars,
+  ncol = 1,
+  rel_heights = c(0.1, 1)
+)
+
+# now add the title
+title <- ggdraw() + 
+  draw_label(
+    "RNA-Seq DEGs: Sample exclusion analysis",
+    fontface = 'bold',
+    x = 0.5,
+    hjust = 0.5) +
+  theme(plot.margin = margin(0, 0, 0, 7))
+
+p_degs_title <- plot_grid(
+  title, p_degs,
+  ncol = 1,
+  rel_heights = c(0.1, 1)
+)
+
+
+
+cowplot::plot_grid(
+  p_dars_title,
+  p_degs_title,
+  labels = c("A", "B"),
+  nrow = 2
+)
+
+ggsave(here::here(fig_dir, "fig_s_sample_exclusion.pdf"),
+       height = 35,
+       width = 17.5,
+       units = "cm"
+)
+ggsave(here::here(fig_dir, "fig_s_sample_exclusion.png"),
+       height = 35,
+       width = 17.5,
+       units = "cm"
+)
+
+
+
+
+
+
+# Figure S11 -------------------------------------------------------------------
 
 # Representative DEGs and DARs
 

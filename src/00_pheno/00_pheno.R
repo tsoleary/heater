@@ -7,7 +7,7 @@
 library(tidyverse)
 
 # Load data
-dat <- read_csv(here::here("data/raw/pheno/acc_hs_survival.csv"))
+dat <- read_csv(here::here("data/raw/pheno/acc_hs_survival.csv")) 
 
 # Count the number of eggs per acclimation treatment
 dat |>
@@ -23,6 +23,7 @@ dat |>
 
 # Acclimation effect
 mod <- dat |> 
+  #mutate(acc_temp = factor(acc_temp)) |> 
   with(glm(n_hatched/n_eggs ~ acc_temp,
       weights = n_eggs,
       family = quasibinomial())) |> 
@@ -33,3 +34,13 @@ mod
 
 # Save results of model
 saveRDS(mod, here::here("output/pheno/mod.rds"))
+
+# Test pairwise groups against eachother ----
+emmeans::emmeans(
+  glm(n_hatched/n_eggs ~ acc_temp,
+      weights = n_eggs,
+      family = quasibinomial(),
+      data = dat |> mutate(acc_temp = factor(acc_temp))), ~ acc_temp) |>
+  pairs()
+
+

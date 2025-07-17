@@ -29,19 +29,6 @@ degs <- FindMarkers(
   min.cells.feature = 0
 )
 
-degs |> 
-  filter(abs(avg_log2FC) >= 0.25 &
-           p_val_adj < 0.05) |> 
-  filter(pct.1 >= 0.1 | pct.2 >= 0.1) |> 
-  tally()
-
-bind_rows(degs, degs_1, .id = "test") |> 
-  as.data.frame(row.names = "gene") |> 
-  pivot_wider(names_from = "gene")
-  ggplot() +
-  geom_histogram(aes(x = avg_log2FC)) +
-  scale_y_continuous(trans = "log10") + facet_wrap(~test)
-
 # Save degs regardless of cluster
 saveRDS(degs, here::here(out_dir, "degs_bulk.rds"))
 
@@ -82,19 +69,3 @@ degs <- degs |>
 
 # Save the degs cell types
 saveRDS(degs, here::here(out_dir, "degs_cell-type_MAST.rds"))
-
-# Total number of DEGs
-degs |>
-  filter(abs(avg_log2FC_18_25) > 0.25 &
-         p_val_adj < 0.05) |> 
-  filter(pct.18 > 0.1 | pct.25 > 0.1) |> 
-  tally()
-
-# Number of DEGs per cell-type -----
-degs |>
-  group_by(cell_type) |> 
-  filter(abs(avg_log2FC_18_25) > 0.25 &
-           p_val_adj < 0.05) |> 
-  filter(pct.18 > 0.1 | pct.25 > 0.1) |> 
-  group_by(cell_type) |>
-  tally()
